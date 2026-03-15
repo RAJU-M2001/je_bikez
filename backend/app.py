@@ -28,31 +28,33 @@ def home():
 
 @app.route("/book-slot", methods=["POST"])
 def book_slot():
+    try:
+        data = request.get_json()
 
-    data = request.get_json()
+        if not data:
+            return jsonify({"error": "No data received"}), 400
 
-    if not data:
-        return jsonify({"error": "No data received"}), 400
+        name = data.get("name")
+        phone = data.get("phone")
+        bike = data.get("bike")
+        date = data.get("date")
 
-    name = data.get("name")
-    phone = data.get("phone")
-    bike = data.get("bike")
-    date = data.get("date")
+        if not name or not phone or not bike or not date:
+            return jsonify({"error": "All fields are required"}), 400
 
-    if not name or not phone or not bike or not date:
-        return jsonify({"error": "All fields are required"}), 400
+        booking = {
+            "name": name,
+            "phone": phone,
+            "bike": bike,
+            "date": date
+        }
 
-    booking = {
-        "name": name,
-        "phone": phone,
-        "bike": bike,
-        "date": date
-    }
+        collection.insert_one(booking)
 
-    collection.insert_one(booking)
+        return jsonify({"message": "Slot booked successfully"})
 
-    return jsonify({"message": "Slot booked successfully"})
-
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))

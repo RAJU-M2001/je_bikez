@@ -1,58 +1,84 @@
-function scrollToWorks() {
-    document.getElementById("works").scrollIntoView({ behavior: "smooth" })
-}
+// WAIT UNTIL PAGE LOADS
+document.addEventListener("DOMContentLoaded", function () {
 
-function openBooking() {
-    document.getElementById("bookingDialog").style.display = "flex"
-}
+    // SCROLL FUNCTION
+    window.scrollToWorks = function () {
+        document.getElementById("works").scrollIntoView({ behavior: "smooth" })
+    }
 
-function closeBooking() {
-    document.getElementById("bookingDialog").style.display = "none"
-}
+    // OPEN BOOKING POPUP
+    window.openBooking = function () {
+        document.getElementById("bookingDialog").style.display = "flex"
+    }
 
-function openAbout() {
-    document.getElementById("aboutDialog").style.display = "flex"
-}
+    // CLOSE BOOKING POPUP
+    window.closeBooking = function () {
+        document.getElementById("bookingDialog").style.display = "none"
+    }
 
-function closeAbout() {
-    document.getElementById("aboutDialog").style.display = "none"
-}
+    // OPEN ABOUT POPUP
+    window.openAbout = function () {
+        document.getElementById("aboutDialog").style.display = "flex"
+    }
+
+    // CLOSE ABOUT POPUP
+    window.closeAbout = function () {
+        document.getElementById("aboutDialog").style.display = "none"
+    }
 
 
-// BOOK SLOT API CONNECTION
+    // BOOK SLOT API CONNECTION
+    const bookingForm = document.getElementById("bookingForm")
 
-document.getElementById("bookingForm").addEventListener("submit", async function (e) {
+    if (bookingForm) {
 
-    e.preventDefault()
+        bookingForm.addEventListener("submit", async function (e) {
 
-    const name = document.getElementById("name").value
-    const phone = document.getElementById("phone").value
-    const bike = document.getElementById("bike").value
-    const date = document.getElementById("date").value
+            e.preventDefault()
 
-    const response = await fetch("https://bike-modification-api.onrender.com/book-slot", {
+            const name = document.getElementById("name").value
+            const phone = document.getElementById("phone").value
+            const bike = document.getElementById("bike").value
+            const date = document.getElementById("date").value
 
-        method: "POST",
+            try {
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+                const response = await fetch("https://bike-modification-api.onrender.com/book-slot", {
 
-        body: JSON.stringify({
-            name: name,
-            phone: phone,
-            bike: bike,
-            date: date
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        name: name,
+                        phone: phone,
+                        bike: bike,
+                        date: date
+                    })
+
+                })
+
+                const data = await response.json()
+
+                if (response.ok) {
+                    alert(data.message)
+                    bookingForm.reset()
+                    closeBooking()
+                } else {
+                    alert("Error: " + data.error)
+                }
+
+            } catch (error) {
+
+                console.error("API Error:", error)
+                alert("Server error. Please try again later.")
+
+            }
+
         })
 
-    })
-
-    const data = await response.json()
-
-    alert(data.message)
-
-    document.getElementById("bookingForm").reset()
-
-    closeBooking()
+    }
 
 })

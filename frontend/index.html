@@ -24,7 +24,7 @@
     </nav>
 
 
-    <!-- SECTION 1 : HERO -->
+    <!-- HERO SECTION -->
 
     <section class="hero">
 
@@ -40,7 +40,7 @@
     </section>
 
 
-    <!-- SECTION 2 : RECENT WORKS -->
+    <!-- RECENT WORKS -->
 
     <section id="works" class="works">
 
@@ -88,20 +88,24 @@
 
             <h2>Book Modification Slot</h2>
 
-            <form>
+            <form id="bookingForm">
 
-                <input type="text" placeholder="Name" required>
-                <input type="text" placeholder="Phone Number" required>
-                <input type="text" placeholder="Bike Model" required>
-                <input type="date" required>
+                <input id="name" type="text" placeholder="Name" required>
 
-                <button class="submit-btn">Book Now</button>
+                <input id="phone" type="text" placeholder="Phone Number" required>
+
+                <input id="bike" type="text" placeholder="Bike Model" required>
+
+                <input id="date" type="date" required>
+
+                <button class="submit-btn" type="submit">Book Now</button>
 
             </form>
 
         </div>
 
     </div>
+
 
     <script src="script.js"></script>
 

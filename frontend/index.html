@@ -1,111 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Bike Modification Studio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="JE BikeZ - Premium Custom Bike Modification Studio for LED upgrades, paint, and performance.">
+
+    <title>JE BikeZ | Bike Modification Studio</title>
+
+    <link rel="icon" type="image/png"
+        href="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- STICKY NAVBAR -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">JE BikeZ</div>
+            <div class="menu">
+                <button type="button" onclick="scrollToWorks()">Our Works</button>
+                <button type="button" onclick="openAbout()">About</button>
+                <button type="button" class="book-btn" onclick="openBooking()">Book Slot</button>
+            </div>
+        </nav>
+    </header>
 
-    <nav class="navbar">
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Custom Bike Modification Studio</h1>
+                <p>Transform Your Ride With Premium Modifications</p>
+                <button type="button" onclick="scrollToWorks()">View Our Work</button>
+            </div>
+        </section>
 
-        <div class="logo">JE BikeZ</div>
+        <section id="works" class="works">
+            <h2>Our Recent Works</h2>
+            <div class="carousel">
+                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike1_ez7ug0.avif"
+                    alt="Modified Bike 1">
+                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg"
+                    alt="Modified Bike 2">
+                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png"
+                    alt="Modified Bike 3">
+                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
+                    alt="Modified Bike 4">
+            </div>
+        </section>
+    </main>
 
-        <div class="menu">
-            <button onclick="scrollToWorks()">Our Works</button>
-            <button onclick="openAbout()">About</button>
-            <button class="book-btn" onclick="openBooking()">Book Slot</button>
-        </div>
-
-    </nav>
-
-
-    <!-- HERO SECTION -->
-
-    <section class="hero">
-
-        <div class="hero-content">
-
-            <h1>Custom Bike Modification Studio</h1>
-            <p>Transform Your Ride With Premium Modifications</p>
-
-            <button onclick="scrollToWorks()">View Our Work</button>
-
-        </div>
-
-    </section>
-
-
-    <!-- RECENT WORKS -->
-
-    <section id="works" class="works">
-
-        <h2>Our Recent Works</h2>
-
-        <div class="carousel">
-
-            <img src="images/bike1.jpg">
-            <img src="images/bike2.jpg">
-            <img src="images/bike3.jpg">
-            <img src="images/bike4.jpg">
-
-        </div>
-
-    </section>
-
-
-    <!-- ABOUT DIALOG -->
-
-    <div id="aboutDialog" class="dialog">
-
+    <aside id="aboutDialog" class="dialog" aria-hidden="true">
         <div class="dialog-box">
-
-            <button class="close-btn" onclick="closeAbout()">✖</button>
-
+            <button class="close-btn" onclick="closeAbout()" aria-label="Close">&times;</button>
             <h2>About Our Shop</h2>
-
             <p>
                 We provide premium bike modifications including LED upgrades,
                 custom paint, body kits, and performance tuning.
             </p>
-
         </div>
+    </aside>
 
-    </div>
-
-
-    <!-- BOOKING DIALOG -->
-
-    <div id="bookingDialog" class="dialog">
-
+    <aside id="bookingDialog" class="dialog" aria-hidden="true">
         <div class="dialog-box">
-
-            <button class="close-btn" onclick="closeBooking()">✖</button>
-
+            <button class="close-btn" onclick="closeBooking()" aria-label="Close">&times;</button>
             <h2>Book Modification Slot</h2>
-
             <form id="bookingForm">
-
-                <input id="name" type="text" placeholder="Name" required>
-
-                <input id="phone" type="text" placeholder="Phone Number" required>
-
-                <input id="bike" type="text" placeholder="Bike Model" required>
-
-                <input id="date" type="date" required>
-
+                <div class="form-group">
+                    <input id="name" type="text" placeholder="Name" required>
+                    <input id="phone" type="tel" placeholder="Phone Number" required>
+                    <input id="bike" type="text" placeholder="Bike Model" required>
+                    <input id="date" type="date" required>
+                </div>
                 <button class="submit-btn" type="submit">Book Now</button>
-
             </form>
-
         </div>
-
-    </div>
-
+    </aside>
 
     <script src="script.js"></script>
 

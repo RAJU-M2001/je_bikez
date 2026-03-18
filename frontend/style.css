@@ -484,8 +484,135 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     transition: all 0.3s ease;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(229, 57, 53, 0.5);
     background: linear-gradient(45deg, #ff5252, #ff1744);
+}
+
+.submit-btn:disabled {
+    background: #555;
+    box-shadow: none;
+    transform: none;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    margin-left: 10px;
+    vertical-align: middle;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* MOBILE RESPONSIVE CSS */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .logo img {
+        height: 35px !important;
+    }
+
+    .menu {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .menu button {
+        font-size: 11px;
+    }
+
+    .hero {
+        padding-top: 110px;
+    }
+
+    .hero-content h1 {
+        font-size: 36px;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+    }
+
+    .hero-content p {
+        font-size: 15px;
+        padding: 0 20px;
+        margin-bottom: 25px;
+    }
+
+    .hero-content button {
+        padding: 12px 30px;
+        font-size: 13px;
+    }
+
+    .works {
+        padding: 60px 0 40px;
+    }
+
+    .works h2 {
+        font-size: 30px;
+        margin-bottom: 30px;
+    }
+
+    .carousel {
+        padding: 20px 0;
+    }
+
+    .carousel img {
+        width: 260px;
+        height: 180px;
+        border-radius: 10px;
+    }
+
+    .site-footer {
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+
+    .footer-upper {
+        padding: 40px 20px;
+    }
+
+    .footer-upper h2 {
+        font-size: 26px;
+    }
+
+    .footer-upper p {
+        font-size: 14px;
+    }
+
+    .footer-lower {
+        padding: 30px 20px;
+        flex-direction: column;
+        gap: 35px;
+        text-align: center;
+    }
+
+    .social-links {
+        align-items: center;
+    }
+
+    .dialog-box {
+        width: 90%;
+        padding: 30px 20px;
+    }
+
+    .dialog-box h2 {
+        font-size: 20px;
+    }
 }

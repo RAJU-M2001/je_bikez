@@ -35,6 +35,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         e.preventDefault()
 
+        const submitBtn = document.getElementById("submitBtn");
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Booking... <span class="spinner"></span>';
+
         const name = document.getElementById("name").value
         const phone = document.getElementById("phone").value
         const bike = document.getElementById("bike").value
@@ -87,6 +91,9 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("errorDialog").style.display = "flex";
             setTimeout(() => document.getElementById("errorDialog").style.display = "none", 10000);
 
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = "Book Now";
         }
 
     })

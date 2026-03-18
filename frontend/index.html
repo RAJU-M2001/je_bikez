@@ -19,11 +19,14 @@
 
     <header>
         <nav class="navbar">
-            <div class="logo">JE BikeZ</div>
+            <div class="logo">
+                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                    alt="JE BikeZ Logo" style="height: 40px;">
+            </div>
             <div class="menu">
-                <button type="button" onclick="scrollToWorks()">Our Works</button>
-                <button type="button" onclick="openAbout()">About</button>
-                <button type="button" class="book-btn" onclick="openBooking()">Book Slot</button>
+                <button type="button" class="book-btn" onclick="openBooking()">BOOK SLOT</button>
+                <button type="button" onclick="scrollToWorks()">OUR WORKS</button>
+                <button type="button" onclick="openAbout()">ABOUT</button>
             </div>
         </nav>
     </header>
@@ -38,19 +41,58 @@
         </section>
 
         <section id="works" class="works">
-            <h2>Our Recent Works</h2>
+            <h2>FEATURED BUILDS</h2>
             <div class="carousel">
-                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike1_ez7ug0.avif"
-                    alt="Modified Bike 1">
-                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg"
-                    alt="Modified Bike 2">
-                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png"
-                    alt="Modified Bike 3">
-                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
-                    alt="Modified Bike 4">
+                <div class="carousel-track">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike1_ez7ug0.avif"
+                        alt="Modified Bike 1">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg"
+                        alt="Modified Bike 2">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png"
+                        alt="Modified Bike 3">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
+                        alt="Modified Bike 4">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike1_ez7ug0.avif"
+                        alt="Modified Bike 1">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg"
+                        alt="Modified Bike 2">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png"
+                        alt="Modified Bike 3">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
+                        alt="Modified Bike 4">
+                </div>
             </div>
         </section>
     </main>
+
+    <footer class="site-footer">
+        <div class="footer-upper">
+            <h2>JE BikeZ Studio</h2>
+            <p>Elevating the riding experience. We specialize in premium custom modifications, high-visibility LED
+                upgrades, bespoke paint jobs, and performance tuning that turns heads and commands the streets.</p>
+        </div>
+        <div class="footer-lower">
+            <div class="footer-col">
+                <h3>Location</h3>
+                <p>123 Modification Alley,<br>Downtown Moto District<br>New York, NY 10001</p>
+            </div>
+            <div class="footer-col">
+                <h3>Get In Touch</h3>
+                <p>Phone: +1 (234) 567-8900<br>Email: build@jebikez.com</p>
+            </div>
+            <div class="footer-col">
+                <h3>Social Media</h3>
+                <div class="social-links">
+                    <a href="#">Instagram</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">YouTube</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom-bar">
+            &copy; 2026 JE BikeZ Studio. All rights reserved.
+        </div>
+    </footer>
 
     <aside id="aboutDialog" class="dialog" aria-hidden="true">
         <div class="dialog-box">
@@ -66,7 +108,7 @@
     <aside id="bookingDialog" class="dialog" aria-hidden="true">
         <div class="dialog-box">
             <button class="close-btn" onclick="closeBooking()" aria-label="Close">&times;</button>
-            <h2>Book Modification Slot</h2>
+            <h2>Book Your Slot</h2>
             <form id="bookingForm">
                 <div class="form-group">
                     <input id="name" type="text" placeholder="Name" required>
@@ -76,6 +118,22 @@
                 </div>
                 <button class="submit-btn" type="submit">Book Now</button>
             </form>
+        </div>
+    </aside>
+
+    <!-- SUCCESS DIALOG -->
+    <aside id="successDialog" class="dialog" aria-hidden="true">
+        <div class="dialog-box" style="text-align: center; border-top: 4px solid #4caf50;">
+            <h2 style="color: #4caf50;">Success!</h2>
+            <p id="successMsg">Your slot has been booked successfully.</p>
+        </div>
+    </aside>
+
+    <!-- ERROR DIALOG -->
+    <aside id="errorDialog" class="dialog" aria-hidden="true">
+        <div class="dialog-box" style="text-align: center; border-top: 4px solid #ff3b3b;">
+            <h2 style="color: #ff3b3b;">Booking Failed</h2>
+            <p id="errorMsg">There was an error booking your slot.</p>
         </div>
     </aside>
 

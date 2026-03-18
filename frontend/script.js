@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // CLOSE BOOKING POPUP
     window.closeBooking = function () {
         document.getElementById("bookingDialog").style.display = "none"
+        document.getElementById("bookingForm").reset()
     }
 
     // OPEN ABOUT POPUP
@@ -62,7 +63,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok) {
 
-                alert(data.message)
+                document.getElementById("successMsg").innerText = data.message || "Your slot has been booked successfully.";
+                document.getElementById("successDialog").style.display = "flex";
+                setTimeout(() => document.getElementById("successDialog").style.display = "none", 10000);
 
                 bookingForm.reset()
 
@@ -70,7 +73,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             } else {
 
-                alert("Error: " + data.error)
+                document.getElementById("errorMsg").innerText = "Error: " + (data.error || "Failed to book slot.");
+                document.getElementById("errorDialog").style.display = "flex";
+                setTimeout(() => document.getElementById("errorDialog").style.display = "none", 10000);
 
             }
 
@@ -78,7 +83,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             console.error("API Error:", error)
 
-            alert("Server error. Please try again later.")
+            document.getElementById("errorMsg").innerText = "Server error. Please try again later.";
+            document.getElementById("errorDialog").style.display = "flex";
+            setTimeout(() => document.getElementById("errorDialog").style.display = "none", 10000);
 
         }
 

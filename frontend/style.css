@@ -52,13 +52,15 @@ input:-webkit-autofill:active {
     left: 0;
     width: 100%;
     box-sizing: border-box;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(15px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
-    z-index: 1000;
+    z-index: 10000;
+    /* FORCE STICKY ABOVE EVERYTHING */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .menu {
@@ -848,11 +850,16 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
     .site-footer {
         height: auto;
-        min-height: 100%;
-        /* Better for mobile stretching */
-        overflow-y: visible;
-        scroll-snap-align: end;
-        /* CRITICAL FIX: Ensures bottom of the footer is visible when swiped, preventing cutoff */
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-top: 80px;
+        /* SPACE FOR STICKY HEADER */
+        box-sizing: border-box;
+        overflow: visible;
+        scroll-snap-align: start;
+        /* CHANGED: better for long footers on mobile */
     }
 
     .footer-upper {

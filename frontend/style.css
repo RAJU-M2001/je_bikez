@@ -12,16 +12,25 @@
 }
 
 html {
+    scroll-behavior: smooth;
     scroll-snap-type: y mandatory;
-    overflow-y: scroll;
-    overscroll-behavior-y: none;
 }
 
 body {
     margin: 0;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     background: #0f0f0f;
     color: white;
+    width: 100%;
+    overflow-x: hidden;
+    /* SMART FIX: Prevents horizontal shifting on mobile */
+}
+
+/* LOCK SCROLLING WHEN DIALOG IS OPEN */
+html.no-scroll,
+body.no-scroll {
+    overflow: hidden !important;
+    height: 100vh !important;
 }
 
 /* Autofill styling for dark mode inputs */
@@ -106,6 +115,12 @@ input:-webkit-autofill:active {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(229, 57, 53, 0.5);
     background: linear-gradient(45deg, #ff5252, #ff1744);
+}
+
+.book-btn:focus-visible,
+.menu button:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 4px;
 }
 
 
@@ -516,30 +531,264 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     }
 }
 
+/* PREMIUM UNIQUE PRELOADER */
+.premium-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    /* Allows clicking below once split starts */
+}
+
+.loader-curtain {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50vh;
+    background: #050505;
+    z-index: 1;
+    transition: transform 0.8s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.loader-curtain-top {
+    top: 0;
+}
+
+.loader-curtain-bottom {
+    bottom: 0;
+}
+
+.loader-center {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.loader-logo {
+    height: 70px;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 0 20px rgba(255, 59, 59, 0.6));
+    animation: engineThrob 0.5s infinite alternate;
+}
+
+.loader-line-track {
+    width: 200px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.loader-line-fill {
+    height: 100%;
+    width: 0%;
+    background: #ff3b3b;
+    box-shadow: 0 0 10px #ff3b3b;
+    animation: speedLoad 1.5s ease-out forwards;
+}
+
+.loader-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: #ff3b3b;
+    text-transform: uppercase;
+    animation: textFlicker 2s infinite;
+}
+
+@keyframes engineThrob {
+    0% {
+        transform: scale(0.98);
+        filter: drop-shadow(0 0 15px rgba(255, 59, 59, 0.4));
+    }
+
+    100% {
+        transform: scale(1.02);
+        filter: drop-shadow(0 0 30px rgba(255, 59, 59, 0.8));
+    }
+}
+
+@keyframes speedLoad {
+    0% {
+        width: 0%;
+    }
+
+    40% {
+        width: 60%;
+    }
+
+    80% {
+        width: 85%;
+    }
+
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes textFlicker {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* STATE: FINISHED LOADING */
+.premium-loader.loaded .loader-center {
+    opacity: 0;
+    transform: scale(1.2);
+}
+
+.premium-loader.loaded .loader-curtain-top {
+    transform: translateY(-100%);
+}
+
+.premium-loader.loaded .loader-curtain-bottom {
+    transform: translateY(100%);
+}
+
+.hamburger-btn,
+.mobile-book-btn,
+.close-menu-btn,
+.menu-overlay {
+    display: none;
+}
+
 /* MOBILE RESPONSIVE CSS */
 @media (max-width: 768px) {
     .navbar {
-        padding: 15px;
-        flex-direction: column;
-        gap: 12px;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 15px 25px;
+    }
+
+    .nav-mobile-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        order: 2;
+    }
+
+    .hamburger-btn {
+        display: flex;
+        align-items: center;
+        background: transparent;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .logo {
+        order: 1;
     }
 
     .logo img {
-        height: 35px !important;
+        height: 30px !important;
     }
 
+    .mobile-book-btn {
+        display: inline-block;
+        padding: 8px 16px !important;
+        font-size: 11px !important;
+    }
+
+    .desktop-book-btn {
+        display: none !important;
+    }
+
+    /* Small Floating Dialog Menu */
     .menu {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
+        position: absolute;
+        top: 70px;
+        right: 25px;
+        left: auto;
+        width: 180px;
+        height: auto;
+        background: rgba(15, 15, 15, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 20px;
+        padding: 25px 20px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9);
+        box-sizing: border-box;
+        z-index: 10005;
+
+        /* Pop-out Animation */
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(0.8) translateY(-20px);
+        transform-origin: top right;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .menu.open {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1) translateY(0);
+        left: auto;
     }
 
     .menu button {
-        font-size: 11px;
+        font-size: 14px;
+        margin: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    .close-menu-btn {
+        display: none;
+    }
+
+    .menu-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+        z-index: 10000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease;
+    }
+
+    .menu-overlay.open {
+        opacity: 1;
+        visibility: visible;
     }
 
     .hero {
-        padding-top: 110px;
+        height: 100vh;
+        width: 100vw;
+        padding-top: 100px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        scroll-snap-align: start;
     }
 
     .hero-content h1 {
@@ -560,7 +809,15 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     }
 
     .works {
+        height: 100vh;
+        width: 100vw;
         padding: 60px 0 40px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
     }
 
     .works h2 {
@@ -570,18 +827,32 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
     .carousel {
         padding: 20px 0;
+        width: 100vw;
+        overflow: hidden;
+    }
+
+    .carousel-track {
+        display: flex;
+        gap: 30px;
+        /* Matched to keyframes for seamless loop */
+        width: max-content;
+        animation: scroll 25s linear infinite;
     }
 
     .carousel img {
-        width: 260px;
-        height: 180px;
-        border-radius: 10px;
+        width: 280px;
+        height: 200px;
+        border-radius: 15px;
+        flex-shrink: 0;
     }
 
     .site-footer {
         height: auto;
-        min-height: 100vh;
-        overflow-y: auto;
+        min-height: 100%;
+        /* Better for mobile stretching */
+        overflow-y: visible;
+        scroll-snap-align: end;
+        /* CRITICAL FIX: Ensures bottom of the footer is visible when swiped, preventing cutoff */
     }
 
     .footer-upper {
@@ -607,12 +878,50 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
         align-items: center;
     }
 
+    .dialog {
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+    }
+
     .dialog-box {
-        width: 90%;
-        padding: 30px 20px;
+        width: 100%;
+        max-width: 320px;
+        max-height: 85vh;
+        overflow-y: auto;
+        margin: 0;
+        padding: 25px 20px;
+        border-radius: 16px;
     }
 
     .dialog-box h2 {
         font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .dialog-box p {
+        font-size: 14px;
+    }
+
+    .form-group {
+        margin-top: 15px;
+        gap: 10px;
+    }
+
+    .dialog-box input {
+        padding: 12px 15px;
+        font-size: 13px;
+        border-radius: 8px;
+    }
+
+    .submit-btn {
+        margin-top: 20px;
+        padding: 14px;
+        font-size: 14px;
     }
 }

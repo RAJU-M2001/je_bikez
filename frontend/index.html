@@ -17,17 +17,48 @@
 
 <body>
 
+    <!-- UNIQUE PREMIUM PRELOADER -->
+    <div id="preloader" class="premium-loader">
+        <div class="loader-curtain loader-curtain-top"></div>
+        <div class="loader-curtain loader-curtain-bottom"></div>
+        <div class="loader-center">
+            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                alt="JE BikeZ Logo" class="loader-logo">
+            <div class="loader-line-track">
+                <div class="loader-line-fill"></div>
+            </div>
+            <div class="loader-text">IGNITING ENGINE...</div>
+        </div>
+    </div>
+
     <header>
         <nav class="navbar">
             <div class="logo">
-                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
-                    alt="JE BikeZ Logo" style="height: 40px;">
+                <a href="index.html">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                        alt="JE BikeZ Logo" style="height: 40px;">
+                </a>
             </div>
-            <div class="menu">
-                <button type="button" class="book-btn" onclick="openBooking()">BOOK SLOT</button>
-                <button type="button" onclick="scrollToWorks()">OUR WORKS</button>
-                <button type="button" onclick="openAbout()">ABOUT</button>
+            <div class="nav-mobile-controls">
+                <button type="button" class="book-btn mobile-book-btn" onclick="openBooking()">BOOK SLOT</button>
+                <button class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+                    <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
             </div>
+            <div class="menu" id="navMenu">
+                <button class="close-menu-btn" aria-label="Close Mobile Menu"
+                    onclick="toggleMobileMenu()">&times;</button>
+                <button type="button" class="book-btn desktop-book-btn" onclick="openBooking()">BOOK SLOT</button>
+                <button type="button" onclick="scrollToWorks(); window.innerWidth <= 768 && toggleMobileMenu()">OUR
+                    WORKS</button>
+                <button type="button"
+                    onclick="openAbout(); window.innerWidth <= 768 && toggleMobileMenu()">ABOUT</button>
+            </div>
+            <div class="menu-overlay" id="menuOverlay" onclick="toggleMobileMenu()"></div>
         </nav>
     </header>
 

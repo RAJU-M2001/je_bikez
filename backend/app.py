@@ -8,9 +8,7 @@ import os
 # Load .env variables
 load_dotenv()
 
-# Configure Flask to serve the frontend folder
-FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend"))
-app = Flask(__name__, static_folder=FRONTEND_DIR)
+app = Flask(__name__)
 CORS(app)
 auth = HTTPBasicAuth()
 
@@ -37,16 +35,9 @@ db = client[db_name]
 collection = db[collection_name]
 
 
-# ✅ Use Native HTTP Basic Auth for the FRONTEND entry
 @app.route("/")
-@auth.login_required
 def home():
-    return send_from_directory(FRONTEND_DIR, "index.html")
-
-
-@app.route("/<path:path>")
-def serve_static(path):
-    return send_from_directory(FRONTEND_DIR, path)
+    return jsonify({"message": "Bike Modification API Running"})
 
 
 @app.route("/book-slot", methods=["POST"])

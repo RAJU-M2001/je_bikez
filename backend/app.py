@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_httpauth import HTTPBasicAuth
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
@@ -9,6 +10,19 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
+auth = HTTPBasicAuth()
+
+# ✅ User credentials for HTTP Basic Auth
+USERS = {
+    "admin": "jebikez"
+}
+
+
+@auth.verify_password
+def verify_password(username, password):
+    if username in USERS and USERS.get(username) == password:
+        return username
+    return None
 
 # Read values from .env
 mongo_uri = os.getenv("MONGO_URI")
@@ -22,11 +36,13 @@ collection = db[collection_name]
 
 
 @app.route("/")
+@auth.login_required
 def home():
     return jsonify({"message": "Bike Modification API Running"})
 
 
 @app.route("/book-slot", methods=["POST"])
+@auth.login_required
 def book_slot():
     try:
         data = request.get_json()

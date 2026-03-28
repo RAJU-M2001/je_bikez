@@ -54,6 +54,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 dialog.setAttribute('aria-hidden', 'true');
             }
         });
+        const phoneWarning = document.getElementById("phoneWarning");
+        if (phoneWarning) phoneWarning.style.display = "none";
         setScrollLock(false);
     }
 
@@ -80,6 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("bookingDialog").style.display = "none";
         document.getElementById("bookingDialog").setAttribute('aria-hidden', 'true');
         document.getElementById("bookingForm").reset();
+        document.getElementById("phoneWarning").style.display = "none";
         setScrollLock(false);
     }
 
@@ -133,13 +136,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Additional smart validation to ensure valid phone number
         const phone = document.getElementById("phone").value;
+        const phoneWarning = document.getElementById("phoneWarning");
+
         if (phone.length < 10) {
-            document.getElementById("errorMsg").innerText = "Please enter a valid phone number.";
-            document.getElementById("errorDialog").style.display = "flex";
-            setTimeout(() => document.getElementById("errorDialog").style.display = "none", 5000);
+            phoneWarning.style.display = "block";
             submitBtn.disabled = false;
             submitBtn.innerHTML = "Book Now";
             return;
+        } else {
+            phoneWarning.style.display = "none";
         }
 
         const name = document.getElementById("name").value

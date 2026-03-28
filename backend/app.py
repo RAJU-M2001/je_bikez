@@ -1,7 +1,6 @@
 import os
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from flask_httpauth import HTTPBasicAuth
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
@@ -15,29 +14,6 @@ FRONTEND_DIR = os.path.abspath(
 
 app = Flask(__name__, static_folder=FRONTEND_DIR)
 CORS(app)
-
-auth = HTTPBasicAuth()
-
-# 🔐 Read credentials from ENV
-USERNAME = os.getenv("AUTH_USER", "admin")
-PASSWORD = os.getenv("AUTH_PASS", "jebikez123")
-
-
-@auth.verify_password
-def verify_password(username, password):
-    if username == USERNAME and password == PASSWORD:
-        return username
-    return None
-
-
-# 🔐 GLOBAL AUTH LOCK (applies to ALL routes)
-@app.before_request
-def require_auth():
-    # Allow health check (needed for Render)
-    if request.path == "/health":
-        return "OK", 200
-
-    return auth.login_required(lambda: None)()
 
 
 # ✅ Serve index.html
@@ -62,9 +38,8 @@ db = client[db_name]
 collection = db[collection_name]
 
 
-# 📦 BOOK SLOT API (also protected)
+# 📦 BOOK SLOT API
 @app.route("/book-slot", methods=["POST"])
-@auth.login_required
 def book_slot():
     try:
         data = request.get_json()

@@ -1,46 +1,70 @@
+import os
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_httpauth import HTTPBasicAuth
 from pymongo import MongoClient
 from dotenv import load_dotenv
-import os
 
-# Load .env variables
+# Load environment variables
 load_dotenv()
 
-app = Flask(__name__)
+# Flask setup
+FRONTEND_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "frontend")
+)
+
+app = Flask(__name__, static_folder=FRONTEND_DIR)
 CORS(app)
+
 auth = HTTPBasicAuth()
 
-# ✅ User credentials for HTTP Basic Auth
-USERS = {
-    "admin": "jebikez"
-}
+# 🔐 Read credentials from ENV
+USERNAME = os.getenv("AUTH_USER", "admin")
+PASSWORD = os.getenv("AUTH_PASS", "jebikez123")
 
 
 @auth.verify_password
 def verify_password(username, password):
-    if username in USERS and USERS.get(username) == password:
+    if username == USERNAME and password == PASSWORD:
         return username
     return None
 
-# Read values from .env
+
+# 🔐 GLOBAL AUTH LOCK (applies to ALL routes)
+@app.before_request
+def require_auth():
+    # Allow health check (needed for Render)
+    if request.path == "/health":
+        return "OK", 200
+
+    return auth.login_required(lambda: None)()
+
+
+# ✅ Serve index.html
+@app.route("/")
+def home():
+    return send_from_directory(FRONTEND_DIR, "index.html")
+
+
+# ✅ Serve all static files (CSS, JS, images)
+@app.route("/<path:path>")
+def serve_static(path):
+    return send_from_directory(FRONTEND_DIR, path)
+
+
+# 🔗 MongoDB Setup
 mongo_uri = os.getenv("MONGO_URI")
 db_name = os.getenv("DB_NAME")
 collection_name = os.getenv("COLLECTION_NAME")
 
-# ✅ Create MongoDB connection
 client = MongoClient(mongo_uri, tls=True)
 db = client[db_name]
 collection = db[collection_name]
 
 
-@app.route("/")
-def home():
-    return jsonify({"message": "Bike Modification API Running"})
-
-
+# 📦 BOOK SLOT API (also protected)
 @app.route("/book-slot", methods=["POST"])
+@auth.login_required
 def book_slot():
     try:
         data = request.get_json()
@@ -70,6 +94,8 @@ def book_slot():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+# 🚀 Run app
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)

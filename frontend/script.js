@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
-            const response = await fetch("/book-slot", {
+            const response = await fetch("https://bike-modification-api.onrender.com/book-slot", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

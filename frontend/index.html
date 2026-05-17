@@ -53,6 +53,8 @@
                 <button class="close-menu-btn" aria-label="Close Mobile Menu"
                     onclick="toggleMobileMenu()">&times;</button>
                 <button type="button" class="book-btn desktop-book-btn" onclick="openBooking()">BOOK SLOT</button>
+                <button type="button" onclick="scrollToSales(); window.innerWidth <= 768 && toggleMobileMenu()">SALES
+                    BIKES</button>
                 <button type="button" onclick="scrollToWorks(); window.innerWidth <= 768 && toggleMobileMenu()">OUR
                     WORKS</button>
                 <button type="button"
@@ -91,6 +93,62 @@
                         alt="Modified Bike 3">
                     <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
                         alt="Modified Bike 4">
+                </div>
+            </div>
+        </section>
+
+        <section id="sales" class="sales-section">
+            <h2>BIKES FOR SALE</h2>
+
+            <div class="category-showcase">
+                <!-- Adventure Category -->
+                <div class="cat-card" onclick="window.location.href='sales-category.html?category=adventure'">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
+                        alt="Adventure Bikes">
+                    <div class="cat-content">
+                        <h3>Adventure</h3>
+                        <button class="book-btn">View Bikes</button>
+                    </div>
+                </div>
+
+                <!-- Naked Category -->
+                <div class="cat-card" onclick="window.location.href='sales-category.html?category=naked'">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg"
+                        alt="Naked Bikes">
+                    <div class="cat-content">
+                        <h3>Naked</h3>
+                        <button class="book-btn">View Bikes</button>
+                    </div>
+                </div>
+
+                <!-- Sports Category -->
+                <div class="cat-card" onclick="window.location.href='sales-category.html?category=sports'">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png"
+                        alt="Sports Bikes">
+                    <div class="cat-content">
+                        <h3>Sports</h3>
+                        <button class="book-btn">View Bikes</button>
+                    </div>
+                </div>
+
+                <!-- Cruiser Category -->
+                <div class="cat-card" onclick="window.location.href='sales-category.html?category=cruiser'">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png"
+                        alt="Cruiser Bikes">
+                    <div class="cat-content">
+                        <h3>Cruiser</h3>
+                        <button class="book-btn">View Bikes</button>
+                    </div>
+                </div>
+
+                <!-- Tourer Category -->
+                <div class="cat-card" onclick="window.location.href='sales-category.html?category=tourer'">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png"
+                        alt="Tourer Bikes">
+                    <div class="cat-content">
+                        <h3>Tourer</h3>
+                        <button class="book-btn">View Bikes</button>
+                    </div>
                 </div>
             </div>
         </section>

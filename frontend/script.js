@@ -33,6 +33,34 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("works").scrollIntoView({ behavior: "smooth" })
     }
 
+    // SCROLL TO SALES
+    window.scrollToSales = function () {
+        document.getElementById("sales").scrollIntoView({ behavior: "smooth" })
+    }
+
+    // FILTER SALES BIKES
+    window.filterSales = function (category) {
+        const buttons = document.querySelectorAll('.filter-btn');
+        const cards = document.querySelectorAll('.sale-card');
+
+        // Update active button state
+        buttons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('onclick').includes(`'${category}'`)) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Filter cards
+        cards.forEach(card => {
+            if (category === 'all' || card.getAttribute('data-category') === category) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
     // MODAL STATE MANAGEMENT
     const dialogs = ['aboutDialog', 'bookingDialog', 'successDialog', 'errorDialog'];
 

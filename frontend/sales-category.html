@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JE BikeZ | Category Sales</title>
+    <link rel="icon" type="image/png"
+        href="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                        alt="JE BikeZ Logo" style="height: 40px;">
+                </a>
+            </div>
+            <div class="nav-mobile-controls">
+                <button type="button" class="book-btn mobile-book-btn" onclick="openBooking()">BOOK SLOT</button>
+                <button class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+                    <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="menu" id="navMenu">
+                <button class="close-menu-btn" aria-label="Close Mobile Menu"
+                    onclick="toggleMobileMenu()">&times;</button>
+                <button type="button" class="book-btn desktop-book-btn" onclick="openBooking()">BOOK SLOT</button>
+                <button type="button" onclick="window.location.href='index.html'">HOME</button>
+                <button type="button" class="active" onclick="window.location.href='index.html#sales'">ALL
+                    CATEGORIES</button>
+            </div>
+            <div class="menu-overlay" id="menuOverlay" onclick="toggleMobileMenu()"></div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="sales-section" style="padding-top: 150px; min-height: 80vh;">
+            <h2 id="categoryTitle">BIKES FOR SALE</h2>
+
+            <div class="sales-grid" id="categoryGrid">
+                <!-- Bike Card 1 -->
+                <div class="sale-card" data-category="cruiser">
+                    <div class="sale-card-main">
+                        <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png"
+                            alt="Custom Cruiser X">
+                        <h3>Custom Cruiser X</h3>
+                        <p class="price">$15,000</p>
+                    </div>
+                    <div class="sale-hover-dialog">
+                        <div class="hover-images">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png"
+                                alt="img1">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg"
+                                alt="img2">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png"
+                                alt="img3">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
+                                alt="img4">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png"
+                                alt="img5">
+                        </div>
+                        <div class="hover-details">
+                            <h4>Custom Cruiser X</h4>
+                            <p><strong>Model:</strong> 2026 X-Series</p>
+                            <p><strong>Color:</strong> Matte Black / Red</p>
+                            <p><strong>Price:</strong> $15,000</p>
+                            <button class="book-btn" onclick="openBooking()">Inquire Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bike Card 2 -->
+                <div class="sale-card" data-category="naked">
+                    <div class="sale-card-main">
+                        <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg"
+                            alt="Neon Street Fighter">
+                        <h3>Neon Street Fighter</h3>
+                        <p class="price">$18,500</p>
+                    </div>
+                    <div class="sale-hover-dialog">
+                        <div class="hover-images">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg"
+                                alt="img1">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png"
+                                alt="img2">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png"
+                                alt="img3">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
+                                alt="img4">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg"
+                                alt="img5">
+                        </div>
+                        <div class="hover-details">
+                            <h4>Neon Street Fighter</h4>
+                            <p><strong>Model:</strong> 2025 Z-Line</p>
+                            <p><strong>Color:</strong> Neon Green / Carbon</p>
+                            <p><strong>Price:</strong> $18,500</p>
+                            <button class="book-btn" onclick="openBooking()">Inquire Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bike Card 3 -->
+                <div class="sale-card" data-category="sports">
+                    <div class="sale-card-main">
+                        <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png"
+                            alt="Cafe Racer Classic">
+                        <h3>Cafe Racer Classic</h3>
+                        <p class="price">$12,000</p>
+                    </div>
+                    <div class="sale-hover-dialog">
+                        <div class="hover-images">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png"
+                                alt="img1">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
+                                alt="img2">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png"
+                                alt="img3">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg"
+                                alt="img4">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png"
+                                alt="img5">
+                        </div>
+                        <div class="hover-details">
+                            <h4>Cafe Racer Classic</h4>
+                            <p><strong>Model:</strong> 2024 Classic Series</p>
+                            <p><strong>Color:</strong> Vintage Silver</p>
+                            <p><strong>Price:</strong> $12,000</p>
+                            <button class="book-btn" onclick="openBooking()">Inquire Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bike Card 4 -->
+                <div class="sale-card" data-category="adventure">
+                    <div class="sale-card-main">
+                        <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
+                            alt="Desert Storm Explorer">
+                        <h3>Desert Storm Explorer</h3>
+                        <p class="price">$16,500</p>
+                    </div>
+                    <div class="sale-hover-dialog">
+                        <div class="hover-images">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
+                                alt="img1">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg"
+                                alt="img2">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png"
+                                alt="img3">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png"
+                                alt="img4">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
+                                alt="img5">
+                        </div>
+                        <div class="hover-details">
+                            <h4>Desert Storm Explorer</h4>
+                            <p><strong>Model:</strong> 2025 ADV Series</p>
+                            <p><strong>Color:</strong> Desert Sand</p>
+                            <p><strong>Price:</strong> $16,500</p>
+                            <button class="book-btn" onclick="openBooking()">Inquire Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bike Card 5 -->
+                <div class="sale-card" data-category="tourer">
+                    <div class="sale-card-main">
+                        <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png"
+                            alt="Grand Touring Pro">
+                        <h3>Grand Touring Pro</h3>
+                        <p class="price">$22,000</p>
+                    </div>
+                    <div class="sale-hover-dialog">
+                        <div class="hover-images">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png"
+                                alt="img1">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png"
+                                alt="img2">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg"
+                                alt="img3">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg"
+                                alt="img4">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png"
+                                alt="img5">
+                        </div>
+                        <div class="hover-details">
+                            <h4>Grand Touring Pro</h4>
+                            <p><strong>Model:</strong> 2026 Touring Edition</p>
+                            <p><strong>Color:</strong> Midnight Blue</p>
+                            <p><strong>Price:</strong> $22,000</p>
+                            <button class="book-btn" onclick="openBooking()">Inquire Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p id="noBikesMsg" style="display:none; color:#a0a0aa; font-size:18px;">No bikes available in this category
+                yet.</p>
+
+        </section>
+    </main>
+
+    <aside id="bookingDialog" class="dialog" aria-hidden="true">
+        <div class="dialog-box">
+            <button class="close-btn" onclick="closeBooking()" aria-label="Close">&times;</button>
+            <h2>Book Your Slot</h2>
+            <form id="bookingForm">
+                <div class="form-group">
+                    <input id="name" type="text" placeholder="Name" required>
+                    <input id="phone" type="tel" placeholder="Phone Number" required>
+                    <span id="phoneWarning" class="warning-text"
+                        style="display: none; color: #ff3b3b; font-size: 0.8rem; margin-top: -10px; margin-bottom: 10px; text-align: left; width: 100%;">Phone
+                        number must be at least 10 digits</span>
+                    <input id="bike" type="text" placeholder="Bike Model" required>
+                    <input id="date" type="date" required>
+                </div>
+                <button id="submitBtn" class="submit-btn" type="submit">Book Now</button>
+            </form>
+        </div>
+    </aside>
+
+    <aside id="successDialog" class="dialog" aria-hidden="true">
+        <div class="dialog-box" style="text-align: center; border-top: 4px solid #4caf50;">
+            <h2 style="color: #4caf50;">Success!</h2>
+            <p id="successMsg">Your slot has been booked successfully.</p>
+        </div>
+    </aside>
+
+    <aside id="errorDialog" class="dialog" aria-hidden="true">
+        <div class="dialog-box" style="text-align: center; border-top: 4px solid #ff3b3b;">
+            <h2 style="color: #ff3b3b;">Booking Failed</h2>
+            <p id="errorMsg">There was an error booking your slot.</p>
+        </div>
+    </aside>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            const category = params.get('category');
+
+            if (category) {
+                document.getElementById('categoryTitle').innerText = category.toUpperCase() + ' BIKES';
+                let found = false;
+                document.querySelectorAll('.sale-card').forEach(card => {
+                    if (card.getAttribute('data-category') === category) {
+                        card.style.display = 'block';
+                        found = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                if (!found) {
+                    document.getElementById('noBikesMsg').style.display = 'block';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

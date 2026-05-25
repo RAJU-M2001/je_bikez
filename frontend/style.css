@@ -672,6 +672,308 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     display: none;
 }
 
+/* SALES BIKES SECTION */
+.sales-hero {
+    padding-top: 140px;
+    text-align: center;
+    background: linear-gradient(to bottom, #0a0a0c, #0f0f0f);
+    padding-bottom: 40px;
+}
+
+.sales-hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 50px;
+    color: #ffffff;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    letter-spacing: 3px;
+}
+
+.sales-hero p {
+    font-size: 18px;
+    color: #a0a0aa;
+}
+
+.sales-section {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    width: 100vw;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    scroll-margin-top: 80px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 0 80px;
+    text-align: center;
+    background: #0f0f0f;
+}
+
+.sales-section h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 45px;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+    letter-spacing: 4px;
+    background: linear-gradient(45deg, #ffffff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.category-filters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    padding: 0 20px;
+}
+
+.filter-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: #ff3b3b;
+    border-color: #ff3b3b;
+    box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4);
+}
+
+.sales-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.sale-card {
+    width: 320px;
+    flex-shrink: 0;
+    position: relative;
+    background: #1a1a1f;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Unique Category Showcase */
+.category-showcase {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    gap: 15px;
+}
+
+.cat-card {
+    flex: 1;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.cat-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+    filter: brightness(0.6);
+}
+
+.cat-card:hover {
+    flex: 3;
+}
+
+.cat-card:hover img {
+    transform: scale(1.05);
+    filter: brightness(0.9);
+}
+
+.cat-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    opacity: 0.8;
+    transition: opacity 0.4s ease;
+}
+
+.cat-card:hover .cat-content {
+    opacity: 1;
+}
+
+.cat-content h3 {
+    margin: 0 0 15px 0;
+    font-size: 24px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.cat-content .book-btn {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+    padding: 12px 30px !important;
+}
+
+.cat-card:hover .cat-content .book-btn {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.sale-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(229, 57, 53, 0.2);
+}
+
+.sale-card-main img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+
+.sale-card-main h3 {
+    font-family: 'Montserrat', sans-serif;
+    margin: 20px 20px 5px;
+    font-size: 22px;
+    color: #fff;
+}
+
+.sale-card-main .price {
+    margin: 0 20px 20px;
+    font-size: 18px;
+    color: #ff3b3b;
+    font-weight: bold;
+}
+
+/* Hover Dialog implementation */
+.sale-hover-dialog {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 12, 0.96);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    box-sizing: border-box;
+    transition: all 0.4s ease;
+    transform: scale(0.95);
+    z-index: 10;
+}
+
+.sale-card:hover .sale-hover-dialog {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+.hover-images {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    width: 100%;
+    padding-bottom: 8px;
+}
+
+.hover-images::-webkit-scrollbar {
+    height: 4px;
+    display: block;
+}
+
+.hover-images::-webkit-scrollbar-thumb {
+    background: #ff3b3b;
+    border-radius: 4px;
+}
+
+.hover-images::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.hover-images img {
+    width: 65px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hover-details {
+    text-align: left;
+    width: 100%;
+}
+
+.hover-details h4 {
+    margin: 0 0 10px;
+    color: #ff3b3b;
+    font-size: 18px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+}
+
+.hover-details p {
+    margin: 6px 0;
+    font-size: 14px;
+    color: #cccccc;
+    display: flex;
+    justify-content: space-between;
+}
+
+.hover-details strong {
+    color: #ffffff;
+}
+
+.hover-details .book-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px !important;
+    font-size: 13px;
+    display: block;
+    text-align: center;
+}
+
 /* MOBILE RESPONSIVE CSS */
 @media (max-width: 768px) {
     .navbar {
@@ -930,5 +1232,87 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
         margin-top: 20px;
         padding: 14px;
         font-size: 14px;
+    }
+
+    .sales-hero {
+        padding-top: 100px;
+    }
+
+    .sales-hero h1 {
+        font-size: 32px;
+    }
+
+    .sales-section {
+        position: relative;
+        z-index: 10;
+        min-height: 100vh;
+        width: 100vw;
+        padding: 100px 0 40px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        scroll-margin-top: 80px;
+    }
+
+    .category-showcase {
+        flex-direction: column;
+        height: auto;
+        min-height: 600px;
+    }
+
+    .cat-card {
+        height: 80px;
+        flex: none;
+    }
+
+    .cat-card:hover,
+    .cat-card:active {
+        flex: none;
+        height: 250px;
+    }
+
+    .cat-content {
+        padding: 15px;
+        justify-content: center;
+    }
+
+    .cat-content h3 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .cat-card:hover .cat-content .book-btn,
+    .cat-card:active .cat-content .book-btn {
+        opacity: 1;
+        transform: translateY(0);
+        padding: 8px 15px !important;
+        font-size: 12px;
+    }
+
+    .sales-section h2 {
+        font-size: 30px;
+        margin-bottom: 20px;
+    }
+
+    .category-filters {
+        gap: 10px;
+        margin-bottom: 25px;
+        padding: 0 15px;
+    }
+
+    .filter-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+
+    .sale-card-main img {
+        height: 200px;
+    }
+
+    .hover-images img {
+        width: 55px;
+        height: 40px;
     }
 }

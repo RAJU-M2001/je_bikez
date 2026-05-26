@@ -7,7 +7,16 @@
     <title>JE BikeZ | Category Sales</title>
     <link rel="icon" type="image/png"
         href="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
 </head>
 
 <body>
@@ -20,6 +29,14 @@
                 </a>
             </div>
             <div class="nav-mobile-controls">
+                <div class="theme-switch-wrapper">
+                    <input type="checkbox" class="checkbox theme-toggle-checkbox" id="themeToggleMobile">
+                    <label for="themeToggleMobile" class="checkbox-label">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <span class="ball"></span>
+                    </label>
+                </div>
                 <button type="button" class="book-btn mobile-book-btn" onclick="openBooking()">BOOK SLOT</button>
                 <button class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none">
@@ -32,10 +49,18 @@
             <div class="menu" id="navMenu">
                 <button class="close-menu-btn" aria-label="Close Mobile Menu"
                     onclick="toggleMobileMenu()">&times;</button>
+                <div class="theme-switch-wrapper">
+                    <input type="checkbox" class="checkbox theme-toggle-checkbox" id="themeToggleDesktop">
+                    <label for="themeToggleDesktop" class="checkbox-label">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <span class="ball"></span>
+                    </label>
+                </div>
                 <button type="button" class="book-btn desktop-book-btn" onclick="openBooking()">BOOK SLOT</button>
                 <button type="button" onclick="window.location.href='index.html'">HOME</button>
-                <button type="button" class="active" onclick="window.location.href='index.html#sales'">ALL
-                    CATEGORIES</button>
+                <!-- <button type="button" class="active" onclick="window.location.href='index.html#sales'">ALL -->
+                <!-- CATEGORIES</button> -->
             </div>
             <div class="menu-overlay" id="menuOverlay" onclick="toggleMobileMenu()"></div>
         </nav>

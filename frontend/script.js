@@ -13,6 +13,36 @@ window.addEventListener("load", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    // THEME SWITCH LOGIC
+    const themeCheckboxes = document.querySelectorAll('.theme-toggle-checkbox');
+
+    function setTheme(theme) {
+        if (theme === 'light') {
+            document.documentElement.classList.add('light-mode');
+            document.body.classList.add('light-mode');
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.classList.remove('light-mode');
+            document.body.classList.remove('light-mode');
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    // Initialize theme based on saved preference and sync checkboxes
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+    themeCheckboxes.forEach(cb => { cb.checked = (savedTheme === 'light'); });
+
+    // Listen for changes on any theme checkbox
+    themeCheckboxes.forEach(cb => {
+        cb.addEventListener('change', () => {
+            const newTheme = cb.checked ? 'light' : 'dark';
+            setTheme(newTheme);
+            // Sync all checkboxes to the same state
+            themeCheckboxes.forEach(other => { other.checked = cb.checked; });
+        });
+    });
+
     // MOBILE MENU TOGGLE
     window.toggleMobileMenu = function () {
         const menu = document.getElementById('navMenu');

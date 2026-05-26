@@ -1,5 +1,134 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,700;0,900;1,900&display=swap');
 
+:root {
+    /* Theme independent variables */
+    --transition-speed: 0.3s;
+
+    /* Dark Mode (default) colors */
+    --bg-primary: #0f0f0f;
+    --bg-secondary: #1a1a1f;
+    --bg-navbar: rgba(0, 0, 0, 0.9);
+    --bg-footer: #0a0a0c;
+    --bg-footer-upper: linear-gradient(135deg, #121216, #060608);
+    --bg-footer-lower: #030303;
+    --bg-footer-bottom: #000000;
+    --bg-input: rgba(0, 0, 0, 0.4);
+    --text-primary: #ffffff;
+    --light-mode-primary: #f1c40f;
+    --text-secondary: #a0a0aa;
+    --text-muted: #888888;
+    --border-color: rgba(255, 255, 255, 0.05);
+    --border-input: rgba(255, 255, 255, 0.1);
+    --navbar-border: rgba(255, 255, 255, 0.05);
+    --preloader-bg: #050505;
+    --dialog-bg: rgba(20, 20, 25, 0.95);
+    --dialog-border: rgba(255, 255, 255, 0.05);
+    --dialog-shadow: rgba(229, 57, 53, 0.15);
+    --accent-red: #ff3b3b;
+    --accent-red-hover: #e53935;
+    --menu-btn-color: #b3b3b3;
+    --menu-btn-hover: #ffffff;
+    --hero-overlay-start: rgba(15, 15, 15, 0.4);
+    --hero-overlay-end: rgba(15, 15, 15, 0.9);
+    --hero-text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+    --sales-hero-bg-start: #0a0a0c;
+    --sales-hero-bg-end: #0f0f0f;
+    --cat-content-bg-start: rgba(0, 0, 0, 0);
+    --cat-content-bg-end: rgba(0, 0, 0, 0.9);
+    --cat-text: #ffffff;
+    --hover-dialog-bg: rgba(10, 10, 12, 0.96);
+    --card-shadow: rgba(0, 0, 0, 0.3);
+    --card-shadow-hover: rgba(229, 57, 53, 0.2);
+    --close-btn-bg: rgba(255, 255, 255, 0.05);
+    --heading-gradient: linear-gradient(45deg, #ffffff, #ffffff);
+    --toggle-bg: rgba(255, 255, 255, 0.05);
+    --toggle-border: rgba(255, 255, 255, 0.1);
+    --calendar-filter: invert(1);
+}
+
+html.light-mode,
+body.light-mode {
+    /* Light Mode overrides */
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #ffffff;
+    --bg-navbar: rgba(255, 255, 255, 0.85);
+    --bg-footer: #f1f3f5;
+    --bg-footer-upper: linear-gradient(135deg, #f1f3f5, #e9ecef);
+    --bg-footer-lower: #dee2e6;
+    --bg-footer-bottom: #ced4da;
+    --bg-input: #ffffff;
+    --text-primary: #1a1a24;
+    --text-secondary: #495057;
+    --text-muted: #6c757d;
+    --border-color: rgba(0, 0, 0, 0.08);
+    --border-input: rgba(0, 0, 0, 0.15);
+    --navbar-border: rgba(0, 0, 0, 0.08);
+    --preloader-bg: #f8f9fa;
+    --dialog-bg: rgba(255, 255, 255, 0.98);
+    --dialog-border: rgba(0, 0, 0, 0.08);
+    --dialog-shadow: rgba(0, 0, 0, 0.1);
+    --accent-red: #e53935;
+    --accent-red-hover: #ff1744;
+    --menu-btn-color: #495057;
+    --menu-btn-hover: #1a1a24;
+    --hero-overlay-start: rgba(248, 249, 250, 0.35);
+    --hero-overlay-end: rgba(248, 249, 250, 0.85);
+    --hero-text-shadow: none;
+    --sales-hero-bg-start: #e9ecef;
+    --sales-hero-bg-end: #f8f9fa;
+    --cat-content-bg-start: rgba(255, 255, 255, 0);
+    --cat-content-bg-end: rgba(255, 255, 255, 0.95);
+    --cat-text: #1a1a24;
+    --hover-dialog-bg: rgba(255, 255, 255, 0.98);
+    --card-shadow: rgba(0, 0, 0, 0.08);
+    --card-shadow-hover: rgba(229, 57, 53, 0.15);
+    --close-btn-bg: rgba(0, 0, 0, 0.05);
+    --heading-gradient: linear-gradient(45deg, #1a1a24, #495057);
+    --toggle-bg: rgba(0, 0, 0, 0.05);
+    --toggle-border: rgba(0, 0, 0, 0.1);
+    --calendar-filter: invert(0);
+}
+
+/* Theme Toggle Checkbox Styles */
+.checkbox {
+    opacity: 0;
+    position: absolute;
+}
+
+.checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50px;
+    height: 21px;
+    background: var(--toggle-bg);
+    border-radius: 30px;
+    padding: 5px;
+    position: relative;
+    cursor: pointer;
+    transition: background var(--transition-speed);
+}
+
+.checkbox-label .fas {
+    color: var(--light-mode-primary);
+    font-size: 14px;
+}
+
+.checkbox-label .ball {
+    width: 25px;
+    height: 25px;
+    background: var(--bg-primary);
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform var(--transition-speed);
+}
+
+.checkbox:checked+.checkbox-label .ball {
+    transform: translateX(30px);
+}
+
 * {
     scrollbar-width: none;
     /* Firefox */
@@ -19,8 +148,8 @@ html {
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #0f0f0f;
-    color: white;
+    background: var(--bg-primary);
+    color: var(--text-primary);
     width: 100%;
     overflow-x: hidden;
     /* SMART FIX: Prevents horizontal shifting on mobile */
@@ -38,8 +167,8 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px #0c0c0f inset !important;
-    -webkit-text-fill-color: white !important;
+    -webkit-box-shadow: 0 0 0 30px var(--bg-secondary) inset !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
     transition: background-color 5000s ease-in-out 0s;
 }
 
@@ -52,7 +181,7 @@ input:-webkit-autofill:active {
     left: 0;
     width: 100%;
     box-sizing: border-box;
-    background: rgba(0, 0, 0, 0.9);
+    background: var(--bg-navbar);
     backdrop-filter: blur(15px);
     display: flex;
     justify-content: space-between;
@@ -60,20 +189,23 @@ input:-webkit-autofill:active {
     padding: 20px 40px;
     z-index: 10000;
     /* FORCE STICKY ABOVE EVERYTHING */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--navbar-border);
 }
 
 .menu {
     display: flex;
     align-items: center;
     gap: 30px;
+    border-radius: 15px;
+    background: var(--bg-navbar);
+    box-shadow: 0 8px 20px var(--card-shadow);
 }
 
 .menu button {
     padding: 10px 0;
     border: none;
     background: none;
-    color: #b3b3b3;
+    color: var(--menu-btn-color);
     cursor: pointer;
     font-size: 13px;
     font-weight: 700;
@@ -90,13 +222,13 @@ input:-webkit-autofill:active {
     height: 2px;
     bottom: 0;
     left: 50%;
-    background-color: #ff3b3b;
+    background-color: var(--accent-red);
     transition: all 0.3s ease;
     transform: translateX(-50%);
 }
 
 .menu button:not(.book-btn):hover {
-    color: #ffffff;
+    color: var(--menu-btn-hover);
 }
 
 .menu button:not(.book-btn):hover::after {
@@ -135,7 +267,7 @@ input:-webkit-autofill:active {
     scroll-snap-stop: always;
     box-sizing: border-box;
     padding-top: 80px;
-    background: linear-gradient(to bottom, rgba(15, 15, 15, 0.4), rgba(15, 15, 15, 0.9)), url("https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg") center/cover no-repeat;
+    background: linear-gradient(to bottom, var(--hero-overlay-start), var(--hero-overlay-end)), url("https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg") center/cover no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -149,8 +281,8 @@ input:-webkit-autofill:active {
     margin-bottom: 15px;
     text-transform: uppercase;
     letter-spacing: 4px;
-    color: #ffffff;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+    color: var(--text-primary);
+    text-shadow: var(--hero-text-shadow);
     line-height: 1.2;
 }
 
@@ -158,15 +290,15 @@ input:-webkit-autofill:active {
     font-size: 18px;
     letter-spacing: 1px;
     margin-bottom: 30px;
-    color: #d1d1d1;
+    color: var(--text-secondary);
 }
 
 .hero-content button {
     padding: 16px 45px;
     background: transparent;
-    border: 2px solid #e53935;
+    border: 2px solid var(--accent-red-hover);
     border-radius: 30px;
-    color: white;
+    color: var(--text-primary);
     font-size: 15px;
     font-weight: 700;
     letter-spacing: 2px;
@@ -185,13 +317,13 @@ input:-webkit-autofill:active {
     left: 0;
     width: 0%;
     height: 100%;
-    background: linear-gradient(45deg, #e53935, #ff5252);
+    background: linear-gradient(45deg, var(--accent-red-hover), var(--accent-red));
     transition: all 0.4s ease;
     z-index: -1;
 }
 
 .hero-content button:hover {
-    box-shadow: 0 8px 25px rgba(229, 57, 53, 0.4);
+    box-shadow: 0 8px 25px var(--card-shadow-hover);
     transform: translateY(-3px);
     border-color: transparent;
 }
@@ -224,7 +356,7 @@ input:-webkit-autofill:active {
     text-transform: uppercase;
     margin-bottom: 50px;
     letter-spacing: 4px;
-    background: linear-gradient(45deg, #ffffff);
+    background: var(--heading-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -284,14 +416,14 @@ input:-webkit-autofill:active {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background: #0a0a0c;
-    border-top: 3px solid #ff3b3b;
-    color: #e0e0e0;
+    background: var(--bg-footer);
+    border-top: 3px solid var(--accent-red);
+    color: var(--text-secondary);
     font-family: Arial, sans-serif;
 }
 
 .footer-upper {
-    background: linear-gradient(135deg, #121216, #060608);
+    background: var(--bg-footer-upper);
     padding: 70px 40px;
     text-align: center;
 }
@@ -301,7 +433,7 @@ input:-webkit-autofill:active {
     font-weight: 900;
     font-style: italic;
     font-size: 38px;
-    color: #ffffff;
+    color: var(--text-primary);
     margin-bottom: 20px;
     letter-spacing: 2px;
 }
@@ -311,7 +443,7 @@ input:-webkit-autofill:active {
     margin: 0 auto;
     font-size: 16px;
     line-height: 1.8;
-    color: #a0a0aa;
+    color: var(--text-secondary);
 }
 
 .footer-lower {
@@ -320,14 +452,14 @@ input:-webkit-autofill:active {
     padding: 60px 40px;
     flex-wrap: wrap;
     gap: 80px;
-    background: #030303;
+    background: var(--bg-footer-lower);
 }
 
 .footer-col h3 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     font-size: 16px;
-    color: #ff3b3b;
+    color: var(--accent-red);
     margin-top: 0;
     margin-bottom: 20px;
     text-transform: uppercase;
@@ -337,7 +469,7 @@ input:-webkit-autofill:active {
 .footer-col p {
     line-height: 1.8;
     font-size: 14px;
-    color: #888;
+    color: var(--text-muted);
     margin: 0;
 }
 
@@ -348,24 +480,24 @@ input:-webkit-autofill:active {
 }
 
 .social-links a {
-    color: #888;
+    color: var(--text-muted);
     text-decoration: none;
     font-size: 14px;
     transition: color 0.3s ease;
 }
 
 .social-links a:hover {
-    color: #ffffff;
+    color: var(--text-primary);
     text-decoration: underline;
-    text-decoration-color: #ff3b3b;
+    text-decoration-color: var(--accent-red);
 }
 
 .footer-bottom-bar {
     text-align: center;
     padding: 20px;
-    background: #000;
+    background: var(--bg-footer-bottom);
     font-size: 12px;
-    color: #444;
+    color: var(--text-muted);
     letter-spacing: 1px;
 }
 
@@ -387,13 +519,13 @@ input:-webkit-autofill:active {
 }
 
 .dialog-box {
-    background: rgba(20, 20, 25, 0.95);
-    color: #ffffff;
+    background: var(--dialog-bg);
+    color: var(--text-primary);
     padding: 40px;
     border-radius: 24px;
     width: 380px;
     position: relative;
-    box-shadow: 0 25px 50px rgba(229, 57, 53, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 25px 50px var(--dialog-shadow), 0 0 0 1px var(--dialog-border);
     animation: dialogPopup 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -401,12 +533,12 @@ input:-webkit-autofill:active {
     margin-top: 0;
     font-size: 24px;
     letter-spacing: 1px;
-    color: #ff3b3b;
+    color: var(--accent-red);
     text-transform: uppercase;
 }
 
 .dialog-box p {
-    color: #a0a0a0;
+    color: var(--text-secondary);
     line-height: 1.6;
 }
 
@@ -427,8 +559,8 @@ input:-webkit-autofill:active {
     top: 20px;
     right: 20px;
     border: none;
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
+    background: var(--close-btn-bg);
+    color: var(--text-primary);
     border-radius: 50%;
     width: 36px;
     height: 36px;
@@ -440,8 +572,9 @@ input:-webkit-autofill:active {
     transition: all 0.3s ease;
 }
 
+
 .close-btn:hover {
-    background: #e53935;
+    background: var(--accent-red-hover);
     transform: rotate(90deg) scale(1.1);
 }
 
@@ -455,10 +588,10 @@ input:-webkit-autofill:active {
 input {
     width: 100%;
     padding: 16px 20px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--bg-input);
+    border: 1px solid var(--border-input);
     border-radius: 12px;
-    color: white;
+    color: var(--text-primary);
     font-size: 14px;
     box-sizing: border-box;
     transition: all 0.3s ease;
@@ -470,12 +603,12 @@ input::placeholder {
 
 input:focus {
     outline: none;
-    border-color: #ff3b3b;
-    box-shadow: 0 0 15px rgba(229, 57, 53, 0.15);
+    border-color: var(--accent-red);
+    box-shadow: 0 0 15px var(--dialog-shadow);
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
+    filter: var(--calendar-filter);
     opacity: 0.5;
     cursor: pointer;
 }
@@ -488,7 +621,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     width: 100%;
     margin-top: 25px;
     padding: 16px;
-    background: linear-gradient(45deg, #e53935, #ff5252);
+    background: linear-gradient(45deg, var(--accent-red-hover), var(--accent-red));
     border: none;
     color: white;
     font-size: 15px;
@@ -497,14 +630,14 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     text-transform: uppercase;
     border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(229, 57, 53, 0.3);
+    box-shadow: 0 4px 15px var(--dialog-shadow);
     transition: all 0.3s ease;
 }
 
 .submit-btn:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(229, 57, 53, 0.5);
-    background: linear-gradient(45deg, #ff5252, #ff1744);
+    box-shadow: 0 8px 25px var(--card-shadow-hover);
+    background: linear-gradient(45deg, var(--accent-red), var(--accent-red-hover));
 }
 
 .submit-btn:disabled {
@@ -553,7 +686,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     left: 0;
     width: 100%;
     height: 50vh;
-    background: #050505;
+    background: var(--preloader-bg);
     z-index: 1;
     transition: transform 0.8s cubic-bezier(0.86, 0, 0.07, 1);
 }
@@ -578,7 +711,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 .loader-logo {
     height: 70px;
     margin-bottom: 30px;
-    filter: drop-shadow(0 0 20px rgba(255, 59, 59, 0.6));
+    filter: drop-shadow(0 0 20px var(--dialog-shadow));
     animation: engineThrob 0.5s infinite alternate;
 }
 
@@ -594,8 +727,8 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 .loader-line-fill {
     height: 100%;
     width: 0%;
-    background: #ff3b3b;
-    box-shadow: 0 0 10px #ff3b3b;
+    background: var(--accent-red);
+    box-shadow: 0 0 10px var(--accent-red);
     animation: speedLoad 1.5s ease-out forwards;
 }
 
@@ -604,7 +737,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 4px;
-    color: #ff3b3b;
+    color: var(--accent-red);
     text-transform: uppercase;
     animation: textFlicker 2s infinite;
 }
@@ -665,18 +798,65 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     transform: translateY(100%);
 }
 
+/* Mobile navigation controls */
 .hamburger-btn,
 .mobile-book-btn,
 .close-menu-btn,
+.menu-overlay,
+.nav-mobile-controls {
+    display: flex;
+    /* make visible */
+    align-items: center;
+    gap: 10px;
+}
+
+/* Position hamburger at right corner */
+.hamburger-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--menu-btn-color);
+    font-size: 24px;
+    margin-left: auto;
+}
+
+/* Mobile menu hidden by default */
+.menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--bg-navbar);
+    flex-direction: column;
+    padding: 10px 20px;
+    gap: 15px;
+    z-index: 10001;
+    min-width: 180px;
+    border: 1px solid var(--navbar-border);
+}
+
+.menu.open {
+    display: flex;
+}
+
+/* Overlay for mobile menu */
 .menu-overlay {
     display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+}
+
+.menu-overlay.open {
+    display: block;
 }
 
 /* SALES BIKES SECTION */
 .sales-hero {
     padding-top: 140px;
     text-align: center;
-    background: linear-gradient(to bottom, #0a0a0c, #0f0f0f);
+    background: linear-gradient(to bottom, var(--sales-hero-bg-start), var(--sales-hero-bg-end));
     padding-bottom: 40px;
 }
 
@@ -684,7 +864,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
     font-size: 50px;
-    color: #ffffff;
+    color: var(--text-primary);
     text-transform: uppercase;
     margin-bottom: 15px;
     letter-spacing: 3px;
@@ -692,7 +872,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 .sales-hero p {
     font-size: 18px;
-    color: #a0a0aa;
+    color: var(--text-secondary);
 }
 
 .sales-section {
@@ -708,7 +888,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     flex-direction: column;
     padding: 50px 0 80px;
     text-align: center;
-    background: #0f0f0f;
+    background: var(--bg-primary);
 }
 
 .sales-section h2 {
@@ -718,7 +898,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     text-transform: uppercase;
     margin-bottom: 50px;
     letter-spacing: 4px;
-    background: linear-gradient(45deg, #ffffff);
+    background: var(--heading-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -735,8 +915,8 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 .filter-btn {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
+    border: 1px solid var(--border-input);
+    color: var(--text-primary);
     padding: 10px 25px;
     border-radius: 25px;
     cursor: pointer;
@@ -749,9 +929,9 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 .filter-btn:hover,
 .filter-btn.active {
-    background: #ff3b3b;
-    border-color: #ff3b3b;
-    box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4);
+    background: var(--accent-red);
+    border-color: var(--accent-red);
+    box-shadow: 0 4px 15px var(--dialog-shadow);
 }
 
 .sales-grid {
@@ -768,12 +948,12 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     width: 320px;
     flex-shrink: 0;
     position: relative;
-    background: #1a1a1f;
+    background: var(--bg-secondary);
     border-radius: 15px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 15px var(--card-shadow);
 }
 
 /* Unique Category Showcase */
@@ -819,7 +999,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     left: 0;
     right: 0;
     padding: 30px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(to top, var(--cat-content-bg-end) 0%, var(--cat-content-bg-start) 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -839,7 +1019,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #fff;
+    color: var(--cat-text);
     white-space: nowrap;
 }
 
@@ -857,7 +1037,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 .sale-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 15px 35px rgba(229, 57, 53, 0.2);
+    box-shadow: 0 15px 35px var(--card-shadow-hover);
 }
 
 .sale-card-main img {
@@ -870,13 +1050,13 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     font-family: 'Montserrat', sans-serif;
     margin: 20px 20px 5px;
     font-size: 22px;
-    color: #fff;
+    color: var(--text-primary);
 }
 
 .sale-card-main .price {
     margin: 0 20px 20px;
     font-size: 18px;
-    color: #ff3b3b;
+    color: var(--accent-red);
     font-weight: bold;
 }
 
@@ -887,7 +1067,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(10, 10, 12, 0.96);
+    background: var(--hover-dialog-bg);
     backdrop-filter: blur(10px);
     opacity: 0;
     visibility: hidden;
@@ -923,12 +1103,12 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 }
 
 .hover-images::-webkit-scrollbar-thumb {
-    background: #ff3b3b;
+    background: var(--accent-red);
     border-radius: 4px;
 }
 
 .hover-images::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--border-color);
 }
 
 .hover-images img {
@@ -937,7 +1117,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     object-fit: cover;
     border-radius: 6px;
     flex-shrink: 0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-input);
 }
 
 .hover-details {
@@ -947,7 +1127,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 .hover-details h4 {
     margin: 0 0 10px;
-    color: #ff3b3b;
+    color: var(--accent-red);
     font-size: 18px;
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
@@ -956,13 +1136,13 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 .hover-details p {
     margin: 6px 0;
     font-size: 14px;
-    color: #cccccc;
+    color: var(--text-secondary);
     display: flex;
     justify-content: space-between;
 }
 
 .hover-details strong {
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 .hover-details .book-btn {
@@ -994,7 +1174,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
         align-items: center;
         background: transparent;
         border: none;
-        color: white;
+        color: var(--text-primary);
         cursor: pointer;
         padding: 0;
     }
@@ -1017,6 +1197,10 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
         display: none !important;
     }
 
+    .menu .theme-toggle-btn {
+        display: none !important;
+    }
+
     /* Small Floating Dialog Menu */
     .menu {
         position: absolute;
@@ -1025,16 +1209,16 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
         left: auto;
         width: 180px;
         height: auto;
-        background: rgba(15, 15, 15, 0.95);
+        background: var(--dialog-bg);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--dialog-border);
         border-radius: 15px;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
         gap: 20px;
         padding: 25px 20px;
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9);
+        box-shadow: 0 15px 40px var(--card-shadow);
         box-sizing: border-box;
         z-index: 10005;
 

@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // BOOK SLOT API CONNECTION
     const bookingForm = document.getElementById("bookingForm")
 
-    bookingForm.addEventListener("submit", async function (e) {
+    if (bookingForm) bookingForm.addEventListener("submit", async function (e) {
 
         e.preventDefault()
 
@@ -264,5 +264,131 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     })
+
+    // NEW MODAL LOGIC FOR LOGIN & BOOKING
+    let isLoggedIn = false;
+
+    const loginSignupBtn = document.getElementById("loginSignupBtn");
+    const bookServiceBtnHero = document.getElementById("bookServiceBtnHero");
+    const loginDialog = document.getElementById("loginDialog");
+    const signupDialog = document.getElementById("signupDialog");
+    const addBikeDialog = document.getElementById("addBikeDialog");
+    const statusDialog = document.getElementById("statusDialog");
+    const trackingDialog = document.getElementById("trackingDialog");
+    const goToSignup = document.getElementById("goToSignup");
+    const goToLogin = document.getElementById("goToLogin");
+    const loginBtnAction = document.getElementById("loginBtnAction");
+    const confirmBookingBtn = document.getElementById("confirmBookingBtn");
+    const cancelAddBike = document.getElementById("cancelAddBike");
+    const closeStatusDialogBtn = document.getElementById("closeStatusDialogBtn");
+    const closeLoginDialog = document.getElementById("closeLoginDialog");
+    const closeSignupDialog = document.getElementById("closeSignupDialog");
+
+    function hideAllModals() {
+        if (loginDialog) loginDialog.classList.remove("show");
+        if (signupDialog) signupDialog.classList.remove("show");
+        if (addBikeDialog) addBikeDialog.classList.remove("show");
+        if (statusDialog) statusDialog.classList.remove("show");
+        if (trackingDialog) trackingDialog.classList.remove("show");
+        // Ensure any dialog with .dialog class is also hidden via style for fallback
+        const allDialogs = document.querySelectorAll('.dialog');
+        allDialogs.forEach(d => { d.style.display = 'none'; d.setAttribute('aria-hidden', 'true'); });
+        setScrollLock(false);
+    }
+
+    function showModal(dialog) {
+        hideAllModals();
+        if (dialog) {
+            dialog.classList.add("show");
+            dialog.style.display = 'flex';
+            dialog.setAttribute('aria-hidden', 'false');
+            setScrollLock(true);
+        }
+    }
+
+    if (loginSignupBtn) {
+        loginSignupBtn.addEventListener("click", () => {
+            showModal(loginDialog);
+        });
+    }
+
+    // Close buttons
+    if (closeLoginDialog) {
+        closeLoginDialog.addEventListener("click", () => hideAllModals());
+    }
+    if (closeSignupDialog) {
+        closeSignupDialog.addEventListener("click", () => hideAllModals());
+    }
+
+    // Switch between login and signup
+    if (goToSignup) {
+        goToSignup.addEventListener("click", (e) => {
+            e.preventDefault();
+            showModal(signupDialog);
+        });
+    }
+
+    if (goToLogin) {
+        goToLogin.addEventListener("click", (e) => {
+            e.preventDefault();
+            showModal(loginDialog);
+        });
+    }
+
+    // Close dialog when clicking the backdrop (outside the dialog-box)
+    document.querySelectorAll('.dialog').forEach(dialog => {
+        dialog.addEventListener("click", (e) => {
+            if (e.target === dialog) {
+                hideAllModals();
+            }
+        });
+    });
+
+    if (loginBtnAction) {
+        loginBtnAction.addEventListener("click", () => {
+            isLoggedIn = true;
+            loginSignupBtn.innerText = "My Account";
+            hideAllModals();
+            alert("Logged in successfully!");
+        });
+    }
+
+    if (bookServiceBtnHero) {
+        bookServiceBtnHero.addEventListener("click", () => {
+            if (!isLoggedIn) {
+                alert("Please login first to book a service!");
+                hideAllModals();
+                loginDialog.classList.add("show");
+            } else {
+                hideAllModals();
+                addBikeDialog.classList.add("show");
+            }
+        });
+    }
+
+    if (cancelAddBike) {
+        cancelAddBike.addEventListener("click", (e) => {
+            e.preventDefault();
+            hideAllModals();
+        });
+    }
+
+    if (confirmBookingBtn) {
+        confirmBookingBtn.addEventListener("click", () => {
+            hideAllModals();
+            statusDialog.classList.add("show");
+            const todaySpan = document.getElementById("bookedDateSpan");
+            if (todaySpan) {
+                const date = new Date();
+                todaySpan.innerText = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+            }
+        });
+    }
+
+    if (closeStatusDialogBtn) {
+        closeStatusDialogBtn.addEventListener("click", () => {
+            hideAllModals();
+        });
+    }
 
 })

@@ -35,11 +35,12 @@ def serve_static(path):
 mongo_uri = os.getenv("MONGO_URI")
 db_name = os.getenv("DB_NAME")
 collection_name = os.getenv("COLLECTION_NAME")
+auth_user = os.getenv("AUTH_USER")
 
 client = MongoClient(mongo_uri, tls=True)
 db = client[db_name]
 collection = db[collection_name]
-collection = db["auth_user"]
+user_collection = db[auth_user]
 
 
 # 📦 BOOK SLOT API
@@ -102,7 +103,7 @@ def signup():
             "password": encrypted_password
         }
 
-        collection.insert_one(new_user)
+        user_collection.insert_one(new_user)
 
         return jsonify({"message": "Signup successful!"})
 
@@ -125,7 +126,7 @@ def login():
         if not email or not password:
             return jsonify({"error": "Email and password are required"}), 400
 
-        user = collection.find_one({"email": email})
+        user = user_collection.find_one({"email": email})
 
         if not user:
             return jsonify({"error": "This user is not available"}), 404

@@ -278,6 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const goToSignup = document.getElementById("goToSignup");
     const goToLogin = document.getElementById("goToLogin");
     const loginBtnAction = document.getElementById("loginBtnAction");
+    const signupBtnAction = document.getElementById("signupBtnAction");
     const confirmBookingBtn = document.getElementById("confirmBookingBtn");
     const cancelAddBike = document.getElementById("cancelAddBike");
     const closeStatusDialogBtn = document.getElementById("closeStatusDialogBtn");
@@ -344,12 +345,134 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    // PASSWORD VISIBILITY TOGGLES
+    const loginEye = document.getElementById("loginEye");
+    if (loginEye) {
+        loginEye.addEventListener("click", () => {
+            const pwdInput = document.getElementById("loginPwd");
+            if (pwdInput.type === "password") {
+                pwdInput.type = "text";
+                loginEye.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                pwdInput.type = "password";
+                loginEye.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        });
+    }
+
+    const signupEye = document.getElementById("signupEye");
+    if (signupEye) {
+        signupEye.addEventListener("click", () => {
+            const pwdInput = document.getElementById("signupPwd");
+            if (pwdInput.type === "password") {
+                pwdInput.type = "text";
+                signupEye.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                pwdInput.type = "password";
+                signupEye.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        });
+    }
+
+    // HELPER TO SHOW DIALOG ALERTS
+    function showDialogAlert(elementId, message, type) {
+        const alertEl = document.getElementById(elementId);
+        if (alertEl) {
+            alertEl.style.display = "block";
+            alertEl.innerText = message;
+            if (type === "success") {
+                alertEl.style.backgroundColor = "rgba(0, 255, 0, 0.1)";
+                alertEl.style.color = "#0f0";
+                alertEl.style.border = "1px solid #0f0";
+            } else {
+                alertEl.style.backgroundColor = "rgba(255, 0, 0, 0.1)";
+                alertEl.style.color = "#f00";
+                alertEl.style.border = "1px solid #f00";
+            }
+            setTimeout(() => {
+                alertEl.style.display = "none";
+            }, 5000);
+        }
+    }
+
     if (loginBtnAction) {
-        loginBtnAction.addEventListener("click", () => {
-            isLoggedIn = true;
-            loginSignupBtn.innerText = "My Account";
-            hideAllModals();
-            alert("Logged in successfully!");
+        loginBtnAction.addEventListener("click", async () => {
+            const email = document.getElementById("loginEmail").value;
+            const password = document.getElementById("loginPwd").value;
+
+            if (!email || !password) {
+                showDialogAlert("loginAlert", "Please enter email and password.", "error");
+                return;
+            }
+
+            loginBtnAction.disabled = true;
+            loginBtnAction.innerText = "Logging in...";
+
+            try {
+                const response = await fetch("/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    isLoggedIn = true;
+                    loginSignupBtn.innerText = "My Account";
+                    showDialogAlert("loginAlert", data.message || "Logged in successfully!", "success");
+                    setTimeout(() => hideAllModals(), 1500);
+                } else {
+                    showDialogAlert("loginAlert", data.error || "Login failed", "error");
+                }
+            } catch (error) {
+                console.error("Login error:", error);
+                showDialogAlert("loginAlert", "Server error. Please try again later.", "error");
+            } finally {
+                loginBtnAction.disabled = false;
+                loginBtnAction.innerText = "Login";
+            }
+        });
+    }
+
+    if (signupBtnAction) {
+        signupBtnAction.addEventListener("click", async () => {
+            const name = document.getElementById("signupName").value;
+            const phone = document.getElementById("signupPhone").value;
+            const email = document.getElementById("signupEmail").value;
+            const password = document.getElementById("signupPwd").value;
+
+            if (!name || !phone || !email || !password) {
+                showDialogAlert("signupAlert", "Please fill all fields.", "error");
+                return;
+            }
+
+            signupBtnAction.disabled = true;
+            signupBtnAction.innerText = "Signing up...";
+
+            try {
+                const response = await fetch("/signup", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, phone, email, password })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showDialogAlert("signupAlert", data.message || "Signup successful!", "success");
+                    setTimeout(() => {
+                        hideAllModals();
+                        showModal(loginDialog);
+                    }, 1500);
+                } else {
+                    showDialogAlert("signupAlert", "Error: " + data.error, "error");
+                }
+            } catch (error) {
+                console.error("Signup error:", error);
+                showDialogAlert("signupAlert", "Server error. Please try again later.", "error");
+            } finally {
+                signupBtnAction.disabled = false;
+                signupBtnAction.innerText = "Sign Up";
+            }
         });
     }
 

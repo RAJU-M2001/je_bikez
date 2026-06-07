@@ -535,10 +535,12 @@
                 </h4>
                 <p style="font-size: 20px; color: white; margin-bottom: 25px;">Welcome Back!</p>
 
+                <div id="loginAlert" style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;"></div>
+
                 <div style="margin-bottom: 15px;">
                     <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email
                         Address</label>
-                    <input type="text" id="loginPhone" placeholder="johndoe@gmail.com"
+                    <input type="text" id="loginEmail" placeholder="johndoe@gmail.com"
                         style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
                 </div>
 
@@ -547,7 +549,7 @@
                     <div style="position: relative;">
                         <input type="password" id="loginPwd" placeholder="••••••••"
                             style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
-                        <i class="far fa-eye"
+                        <i class="far fa-eye" id="loginEye"
                             style="position: absolute; right: 15px; top: 15px; color: #666; cursor: pointer;"></i>
                     </div>
                 </div>
@@ -592,37 +594,39 @@
                     UP</h4>
                 <p style="font-size: 20px; color: white; margin-bottom: 25px;">Create Account</p>
 
+                <div id="signupAlert" style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;"></div>
+
                 <div style="margin-bottom: 15px;">
                     <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Full Name</label>
-                    <input type="text" placeholder="Enter your name"
+                    <input type="text" id="signupName" placeholder="Enter your name"
                         style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
                 </div>
 
                 <div style="margin-bottom: 15px;">
                     <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Mobile
                         Number</label>
-                    <input type="text" placeholder="+91 98765 43210"
+                    <input type="text" id="signupPhone" placeholder="+91 98765 43210"
                         style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
                 </div>
 
                 <div style="margin-bottom: 15px;">
                     <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email
                         Address</label>
-                    <input type="email" placeholder="Enter your email"
+                    <input type="email" id="signupEmail" placeholder="Enter your email"
                         style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
                 </div>
 
                 <div style="margin-bottom: 25px;">
                     <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Password</label>
                     <div style="position: relative;">
-                        <input type="password" placeholder="Enter password"
+                        <input type="password" id="signupPwd" placeholder="Enter password"
                             style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
-                        <i class="far fa-eye"
+                        <i class="far fa-eye" id="signupEye"
                             style="position: absolute; right: 15px; top: 15px; color: #666; cursor: pointer;"></i>
                     </div>
                 </div>
 
-                <button
+                <button id="signupBtnAction"
                     style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 20px;">Sign
                     Up</button>
 

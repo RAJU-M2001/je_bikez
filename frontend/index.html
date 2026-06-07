@@ -25,7 +25,9 @@
             <div class="nav-left">
                 <div class="logo">
                     <a href="index.html">
-                        <span class="logo-text">JE <span>BIKEZ</span></span>
+                        <span class="logo-text"><img
+                                src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                                alt="Bike" style="width: 50px; height: 50px;"></span>
                     </a>
                 </div>
                 <div class="nav-links" id="navLinks">
@@ -319,19 +321,46 @@
                     <!-- Popular Services -->
                     <div class="panel-box services-panel">
                         <div class="section-header"
-                            style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                            <h2 class="section-title" style="margin:0;">POPULAR SERVICES</h2>
-                            <a href="#" class="view-all-btn" style="color: var(--accent);">View All</a>
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h2 class="section-title"
+                                style="margin:0; flex-grow: 1; min-width: 0; word-wrap: break-word;">POPULAR SERVICES
+                            </h2>
+                            <a href="#" class="view-all-btn"
+                                style="color: var(--accent); white-space: nowrap; flex-shrink: 0; margin-left: 10px;">View
+                                All</a>
                         </div>
-                        <div class="popular-services-grid">
-                            <div class="service-card"><i class="fas fa-wrench"></i><span>General Service</span></div>
-                            <div class="service-card"><i class="fas fa-tachometer-alt"></i><span>Performance
-                                    Upgrade</span></div>
-                            <div class="service-card"><i class="fas fa-paint-roller"></i><span>Custom Paint</span></div>
-                            <div class="service-card"><i class="fas fa-lightbulb"></i><span>LED Setup</span></div>
-                            <div class="service-card"><i class="fas fa-circle-notch"></i><span>Tyre Replacement</span>
+                        <div class="popular-services-grid"
+                            style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; overflow: hidden;">
+                            <div class="service-card"
+                                style="padding: 12px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 8px;">
+                                <i class="fas fa-wrench" style="margin:0; font-size: 20px;"></i><span
+                                    style="font-size: 11px; line-height: 1.2;">General Service</span>
                             </div>
-                            <div class="service-card"><i class="fas fa-cog"></i><span>Engine Work</span></div>
+                            <div class="service-card"
+                                style="padding: 12px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 8px;">
+                                <i class="fas fa-tachometer-alt" style="margin:0; font-size: 20px;"></i><span
+                                    style="font-size: 11px; line-height: 1.2;">Performance Upgrade</span>
+                            </div>
+                            <div class="service-card"
+                                style="padding: 12px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 8px;">
+                                <i class="fas fa-paint-roller" style="margin:0; font-size: 20px;"></i><span
+                                    style="font-size: 11px; line-height: 1.2;">Custom Paint</span>
+                            </div>
+                            <div class="service-card"
+                                style="padding: 12px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 8px;">
+                                <i class="fas fa-lightbulb" style="margin:0; font-size: 20px;"></i><span
+                                    style="font-size: 11px; line-height: 1.2;">LED Setup</span>
+                            </div>
+                            <div class="service-card"
+                                style="padding: 12px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 8px;">
+                                <i class="fas fa-circle-notch" style="margin:0; font-size: 20px;"></i><span
+                                    style="font-size: 11px; line-height: 1.2;">Tyre Replacement</span>
+                            </div>
+                            <div class="service-card"
+                                style="padding: 12px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 8px;">
+                                <i class="fas fa-cog" style="margin:0; font-size: 20px;"></i><span
+                                    style="font-size: 11px; line-height: 1.2;">Engine Work</span>
+                            </div>
                         </div>
                     </div>
 
@@ -507,9 +536,9 @@
                 <p style="font-size: 20px; color: white; margin-bottom: 25px;">Welcome Back!</p>
 
                 <div style="margin-bottom: 15px;">
-                    <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Mobile
-                        Number</label>
-                    <input type="text" id="loginPhone" placeholder="+91 98765 43210"
+                    <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email
+                        Address</label>
+                    <input type="text" id="loginPhone" placeholder="johndoe@gmail.com"
                         style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
                 </div>
 
@@ -541,7 +570,7 @@
 
                 <button
                     style="width: 100%; background: transparent; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <img src="/frontend/assets/Logo-google-icon-PNG.avif" alt="Google" style="width: 18px;"> Continue
+                    <img src="assets/google-icon.svg" alt="Google" style="width: 18px;"> Continue
                     with
                     Google
                 </button>
@@ -607,7 +636,7 @@
 
                 <button
                     style="width: 100%; background: transparent; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <img src="/frontend/assets/Logo-google-icon-PNG.avif" alt="Google" style="width: 18px;"> Continue
+                    <img src="assets/google-icon.svg" alt="Google" style="width: 18px;"> Continue
                     with
                     Google
                 </button>
@@ -800,6 +829,82 @@
         </div>
 
     </main>
+
+    <!-- ═══════════ FOOTER ═══════════ -->
+    <footer style="background: #080808; border-top: 1px solid #222; padding: 50px 20px 20px; margin-top: 40px;">
+        <div class="container-fluid"
+            style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 40px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                        alt="JE BikeZ" style="width: 30px;">
+                    <h4 style="color: white; margin: 0; font-size: 16px;">JE BikeZ</h4>
+                </div>
+                <p style="color: #888; font-size: 12px; line-height: 1.6; margin: 0;">Premium bike modification studio.
+                    Everything your bike needs, under one roof.</p>
+            </div>
+            <div>
+                <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 15px; text-transform: uppercase;">Quick
+                    Links</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <a href="#services"
+                        style="color: #888; text-decoration: none; font-size: 12px; transition: color 0.2s;"
+                        onmouseover="this.style.color='white'" onmouseout="this.style.color='#888'">Services</a>
+                    <a href="#builds"
+                        style="color: #888; text-decoration: none; font-size: 12px; transition: color 0.2s;"
+                        onmouseover="this.style.color='white'" onmouseout="this.style.color='#888'">Builds</a>
+                    <a href="#sales"
+                        style="color: #888; text-decoration: none; font-size: 12px; transition: color 0.2s;"
+                        onmouseover="this.style.color='white'" onmouseout="this.style.color='#888'">Sales</a>
+                </div>
+            </div>
+            <div>
+                <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 15px; text-transform: uppercase;">
+                    Contact</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px; color: #888; font-size: 12px;">
+                    <span><i class="fas fa-map-marker-alt" style="width: 20px; color: var(--accent);"></i>
+                        Mayiladuthurai, TN, India</span>
+                    <span><i class="fas fa-phone-alt" style="width: 20px; color: var(--accent);"></i> +91 98765
+                        43210</span>
+                    <span><i class="fas fa-envelope" style="width: 20px; color: var(--accent);"></i>
+                        jebikeztn82@gmail.com</span>
+                </div>
+            </div>
+            <div>
+                <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 15px; text-transform: uppercase;">
+                    Follow Us</h4>
+                <div style="display: flex; gap: 15px;">
+                    <a href="#"
+                        style="width: 35px; height: 35px; border-radius: 50%; background: #111; border: 1px solid #222; display: flex; align-items: center; justify-content: center; color: white; transition: all 0.3s;"
+                        onmouseover="this.style.background='var(--accent)'; this.style.color='black';"
+                        onmouseout="this.style.background='#111'; this.style.color='white';"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="#"
+                        style="width: 35px; height: 35px; border-radius: 50%; background: #111; border: 1px solid #222; display: flex; align-items: center; justify-content: center; color: white; transition: all 0.3s;"
+                        onmouseover="this.style.background='var(--accent)'; this.style.color='black';"
+                        onmouseout="this.style.background='#111'; this.style.color='white';"><i
+                            class="fab fa-facebook-f"></i></a>
+                    <a href="#"
+                        style="width: 35px; height: 35px; border-radius: 50%; background: #111; border: 1px solid #222; display: flex; align-items: center; justify-content: center; color: white; transition: all 0.3s;"
+                        onmouseover="this.style.background='var(--accent)'; this.style.color='black';"
+                        onmouseout="this.style.background='#111'; this.style.color='white';"><i
+                            class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div style="border-top: 1px solid #222; padding-top: 20px; text-align: center; color: #666; font-size: 11px;">
+            &copy; 2024 JE BikeZ. Built With Passion. Perfected By Experts.
+        </div>
+    </footer>
+
+    <!-- ═══════════ BOTTOM NAV (MOBILE ONLY) ═══════════ -->
+    <nav class="bottom-nav">
+        <a href="#home" class="bottom-nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="#services" class="bottom-nav-item"><i class="fas fa-tools"></i><span>Services</span></a>
+        <a href="#builds" class="bottom-nav-item"><i class="fas fa-motorcycle"></i><span>Builds</span></a>
+        <a href="#sales" class="bottom-nav-item"><i class="fas fa-tags"></i><span>Sales</span></a>
+        <a href="#profile" class="bottom-nav-item"><i class="far fa-user"></i><span>Profile</span></a>
+    </nav>
 
     <script src="script.js"></script>
 </body>

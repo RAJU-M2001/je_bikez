@@ -2760,3 +2760,142 @@ input:-webkit-autofill:active {
     display: flex !important;
     z-index: 10000;
 }
+
+/* ═══════════════════════════════════════════
+   MOBILE RESPONSIVE (MAX-WIDTH: 768PX)
+   ═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+    /* Navbar adjustments */
+    #navLinks {
+        display: none !important;
+    }
+    .nav-login-btn {
+        display: none !important;
+    }
+    .navbar {
+        padding: 10px 20px;
+    }
+    .nav-right .nav-icon-btn i.fa-shopping-cart {
+        display: none;
+    }
+    .cart-wrapper {
+        display: none;
+    }
+    
+    /* Grid stacking */
+    .top-row-grid,
+    .middle-row-grid,
+    .bottom-row-grid,
+    .footer-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+    
+    /* Hero Section */
+    .hero-panel {
+        min-height: 500px;
+        padding: 30px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        text-align: center;
+        border-radius: 0;
+        margin: -20px -20px 0 -20px;
+    }
+    
+    .hero-bg-img {
+        border-radius: 0;
+    }
+    
+    .hero-content-inner {
+        padding: 20px;
+        background: linear-gradient(to top, #080808 60%, transparent);
+        width: 100%;
+    }
+    
+    .hero-content-inner h2 {
+        font-size: 32px;
+        line-height: 1.1;
+    }
+    
+    .hero-btns {
+        flex-direction: column !important;
+        gap: 15px !important;
+        width: 100%;
+    }
+    
+    .hero-btns button {
+        width: 100%;
+        padding: 15px !important;
+        font-size: 16px !important;
+    }
+    
+    .hero-stats {
+        display: none !important;
+    }
+    
+    /* Hide some desktop specific panels on mobile for cleaner view */
+    .categories-panel,
+    .why-choose-panel {
+        display: none !important;
+    }
+    
+    /* Builds & Sales Grid */
+    .builds-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .sales-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Section paddings */
+    .section {
+        padding-top: 30px !important;
+        padding-bottom: 30px !important;
+    }
+    
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #080808;
+        border-top: 1px solid #222;
+        justify-content: space-around;
+        padding: 10px 0;
+        z-index: 1000;
+    }
+    
+    .bottom-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #888;
+        text-decoration: none;
+        font-size: 10px;
+        gap: 5px;
+    }
+    
+    .bottom-nav-item.active {
+        color: var(--accent);
+    }
+    
+    .bottom-nav-item i {
+        font-size: 20px;
+    }
+    
+    /* Ensure body has padding for bottom nav */
+    body {
+        padding-bottom: 70px;
+    }
+}
+
+/* Hide bottom nav on desktop */
+.bottom-nav {
+    display: none;
+}

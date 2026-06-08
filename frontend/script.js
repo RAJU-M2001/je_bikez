@@ -11,6 +11,7 @@ window.addEventListener("load", function () {
     }
 });
 
+
 document.addEventListener("DOMContentLoaded", function () {
 
     // THEME SWITCH LOGIC
@@ -211,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
-            const response = await fetch("https://bike-modification-api.onrender.com/book-slot", {
+            const response = await fetch(`${API_BASE_URL}/api/book-slot`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -284,6 +285,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeStatusDialogBtn = document.getElementById("closeStatusDialogBtn");
     const closeLoginDialog = document.getElementById("closeLoginDialog");
     const closeSignupDialog = document.getElementById("closeSignupDialog");
+    const API_BASE_URL = "https://api.je-bikez.com";
+    // const API_BASE_URL = "http://127.0.0.1:10000";
 
     function hideAllModals() {
         if (loginDialog) loginDialog.classList.remove("show");
@@ -409,7 +412,7 @@ document.addEventListener("DOMContentLoaded", function () {
             loginBtnAction.innerText = "Logging in...";
 
             try {
-                const response = await fetch("/login", {
+                const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, password })
@@ -450,7 +453,7 @@ document.addEventListener("DOMContentLoaded", function () {
             signupBtnAction.innerText = "Signing up...";
 
             try {
-                const response = await fetch("/signup", {
+                const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ name, phone, email, password })

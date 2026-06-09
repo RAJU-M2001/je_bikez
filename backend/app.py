@@ -1,388 +1,158 @@
-# import os
-# from flask import Flask, request, jsonify, send_from_directory
-# from werkzeug.security import generate_password_hash, check_password_hash
-# from flask_cors import CORS
-# from pymongo import MongoClient
-# from dotenv import load_dotenv
-
-# # Load environment variables
-# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# env_path = os.path.join(BASE_DIR, ".env")
-# load_dotenv(env_path)
-
-# # Flask setup
-# FRONTEND_DIR = os.path.abspath(
-#     os.path.join(os.path.dirname(__file__), "..", "frontend")
-# )
-
-# app = Flask(__name__, static_folder=FRONTEND_DIR)
-# CORS(app)
-
-
-# # ✅ Serve index.html
-# @app.route("/")
-# def home():
-#     return send_from_directory(FRONTEND_DIR, "index.html")
-
-
-# # ✅ Serve all static files (CSS, JS, images)
-# @app.route("/<path:path>")
-# def serve_static(path):
-#     return send_from_directory(FRONTEND_DIR, path)
-
-
-# # 🔗 MongoDB Setup
-# mongo_uri = os.getenv("MONGO_URI")
-# db_name = os.getenv("DB_NAME")
-# collection_name = os.getenv("COLLECTION_NAME")
-# auth_user = os.getenv("AUTH_USER")
-
-# client = MongoClient(mongo_uri, tls=True)
-# db = client[db_name]
-# collection = db[collection_name]
-# user_collection = db[auth_user]
-
-
-# # 📦 BOOK SLOT API
-# @app.route("/book-slot", methods=["POST"])
-# def book_slot():
-#     try:
-#         data = request.get_json()
-
-#         if not data:
-#             return jsonify({"error": "No data received"}), 400
-
-#         name = data.get("name")
-#         phone = data.get("phone")
-#         bike = data.get("bike")
-#         date = data.get("date")
-
-#         if not name or not phone or not bike or not date:
-#             return jsonify({"error": "All fields are required"}), 400
-
-#         booking = {
-#             "name": name,
-#             "phone": phone,
-#             "bike": bike,
-#             "date": date
-#         }
-
-#         collection.insert_one(booking)
-
-#         return jsonify({"message": "Slot booked successfully"})
-
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
-
-
-# # 🔐 SIGNUP API
-# @app.route("/signup", methods=["POST"])
-# def signup():
-#     try:
-#         data = request.get_json()
-
-#         if not data:
-#             return jsonify({"error": "No data received"}), 400
-
-#         name = data.get("name")
-#         phone = data.get("phone")
-#         email = data.get("email")
-#         password = data.get("password")
-
-#         if not name or not phone or not email or not password:
-#             return jsonify({"error": "All fields are required"}), 400
-
-#         # Encrypt mobile and password
-#         encrypted_phone = generate_password_hash(phone)
-#         encrypted_password = generate_password_hash(password)
-
-#         new_user = {
-#             "name": name,
-#             "phone": encrypted_phone,
-#             "email": email,
-#             "password": encrypted_password
-#         }
-
-#         user_collection.insert_one(new_user)
-
-#         return jsonify({"message": "Signup successful!"})
-
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
-
-
-
-# # 🔐 LOGIN API
-# @app.route("/login", methods=["POST"])
-# def login():
-#     try:
-#         data = request.get_json()
-
-#         if not data:
-#             return jsonify({"error": "No data received"}), 400
-
-#         email = data.get("email")
-#         password = data.get("password")
-
-#         if not email or not password:
-#             return jsonify({"error": "Email and password are required"}), 400
-
-#         user = user_collection.find_one({"email": email})
-
-#         if not user:
-#             return jsonify({"error": "This user is not available"}), 404
-
-#         if not check_password_hash(user["password"], password):
-#             return jsonify({"error": "Invalid password"}), 401
-
-#         return jsonify({"message": "Login successful!"})
-
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
-
-
-
-
-# # 🚀 Run app
-# if __name__ == "__main__":
-#     port = int(os.environ.get("PORT", 10000))
-#     app.run(host="0.0.0.0", port=port)
-
-
 import os
 from flask import Flask, request, jsonify, send_from_directory
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 from pymongo import MongoClient
-from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 
-# -----------------------------
-# Load Environment Variables
-# -----------------------------
-load_dotenv()
-
-# -----------------------------
-# Flask App Setup
-# -----------------------------
+# Load environment variables
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+env_path = os.path.join(BASE_DIR, ".env")
+load_dotenv(env_path)
+
+# Flask setup
 FRONTEND_DIR = os.path.abspath(
-    os.path.join(BASE_DIR, "..", "frontend")
+    os.path.join(os.path.dirname(__file__), "..", "frontend")
 )
 
 app = Flask(__name__, static_folder=FRONTEND_DIR)
-CORS(
-    app,
-    resources={
-        r"/api/*": {
-            "origins": [
-                "https://je-bikez.com",
-                "https://www.je-bikez.com"
-            ]
-        }
-    }
-)
+CORS(app)
 
-# -----------------------------
-# MongoDB Connection
-# -----------------------------
-mongo_uri = os.getenv("MONGO_URI")
-db_name = os.getenv("DB_NAME")
-booking_collection_name = os.getenv("COLLECTION_NAME")
-user_collection_name = os.getenv("AUTH_USER")
 
-client = MongoClient(mongo_uri)
-db = client[db_name]
-
-booking_collection = db[booking_collection_name]
-user_collection = db[user_collection_name]
-
-# -----------------------------
-# Frontend Routes
-# -----------------------------
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-def serve_frontend(path):
-    file_path = os.path.join(FRONTEND_DIR, path)
-
-    if path and os.path.exists(file_path):
-        return send_from_directory(FRONTEND_DIR, path)
-
+# ✅ Serve index.html
+@app.route("/")
+def home():
     return send_from_directory(FRONTEND_DIR, "index.html")
 
 
-# -----------------------------
-# Book Slot API
-# -----------------------------
+# ✅ Serve all static files (CSS, JS, images)
+@app.route("/<path:path>")
+def serve_static(path):
+    return send_from_directory(FRONTEND_DIR, path)
+
+
+# 🔗 MongoDB Setup
+mongo_uri = os.getenv("MONGO_URI")
+db_name = os.getenv("DB_NAME")
+collection_name = os.getenv("COLLECTION_NAME")
+auth_user = os.getenv("AUTH_USER")
+
+client = MongoClient(mongo_uri, tls=True)
+db = client[db_name]
+collection = db[collection_name]
+user_collection = db[auth_user]
+
+
+# 📦 BOOK SLOT API
 @app.route("/api/book-slot", methods=["POST"])
 def book_slot():
     try:
         data = request.get_json()
 
         if not data:
-            return jsonify({
-                "success": False,
-                "message": "No data received"
-            }), 400
+            return jsonify({"error": "No data received"}), 400
 
-        name = data.get("name", "").strip()
-        phone = data.get("phone", "").strip()
-        bike = data.get("bike", "").strip()
-        date = data.get("date", "").strip()
+        name = data.get("name")
+        phone = data.get("phone")
+        bike = data.get("bike")
+        date = data.get("date")
 
-        if not all([name, phone, bike, date]):
-            return jsonify({
-                "success": False,
-                "message": "All fields are required"
-            }), 400
+        if not name or not phone or not bike or not date:
+            return jsonify({"error": "All fields are required"}), 400
 
-        booking_collection.insert_one({
+        booking = {
             "name": name,
             "phone": phone,
             "bike": bike,
             "date": date
-        })
+        }
 
-        return jsonify({
-            "success": True,
-            "message": "Slot booked successfully"
-        }), 201
+        collection.insert_one(booking)
+
+        return jsonify({"message": "Slot booked successfully"})
 
     except Exception as e:
-        return jsonify({
-            "success": False,
-            "message": str(e)
-        }), 500
+        return jsonify({"error": str(e)}), 500
 
 
-# -----------------------------
-# Signup API
-# -----------------------------
+# 🔐 SIGNUP API
 @app.route("/api/auth/signup", methods=["POST"])
 def signup():
     try:
         data = request.get_json()
 
         if not data:
-            return jsonify({
-                "success": False,
-                "message": "No data received"
-            }), 400
+            return jsonify({"error": "No data received"}), 400
 
-        name = data.get("name", "").strip()
-        phone = data.get("phone", "").strip()
-        email = data.get("email", "").strip().lower()
-        password = data.get("password", "").strip()
+        name = data.get("name")
+        phone = data.get("phone")
+        email = data.get("email")
+        password = data.get("password")
 
-        if not all([name, phone, email, password]):
-            return jsonify({
-                "success": False,
-                "message": "All fields are required"
-            }), 400
+        if not name or not phone or not email or not password:
+            return jsonify({"error": "All fields are required"}), 400
 
-        existing_user = user_collection.find_one({
-            "email": email
-        })
+        # Encrypt mobile and password
+        encrypted_phone = generate_password_hash(phone)
+        encrypted_password = generate_password_hash(password)
 
-        if existing_user:
-            return jsonify({
-                "success": False,
-                "message": "Email already registered"
-            }), 409
-
-        hashed_password = generate_password_hash(password)
-
-        user_collection.insert_one({
+        new_user = {
             "name": name,
-            "phone": phone,
+            "phone": encrypted_phone,
             "email": email,
-            "password": hashed_password
-        })
+            "password": encrypted_password
+        }
 
-        return jsonify({
-            "success": True,
-            "message": "Signup successful"
-        }), 201
+        user_collection.insert_one(new_user)
+
+        return jsonify({"message": "Signup successful!"})
 
     except Exception as e:
-        return jsonify({
-            "success": False,
-            "message": str(e)
-        }), 500
+        return jsonify({"error": str(e)}), 500
 
 
-# -----------------------------
-# Login API
-# -----------------------------
+
+# 🔐 LOGIN API
 @app.route("/api/auth/login", methods=["POST"])
 def login():
     try:
         data = request.get_json()
 
         if not data:
-            return jsonify({
-                "success": False,
-                "message": "No data received"
-            }), 400
+            return jsonify({"error": "No data received"}), 400
 
-        email = data.get("email", "").strip().lower()
-        password = data.get("password", "").strip()
+        email = data.get("email")
+        password = data.get("password")
 
         if not email or not password:
-            return jsonify({
-                "success": False,
-                "message": "Email and password are required"
-            }), 400
+            return jsonify({"error": "Email and password are required"}), 400
 
-        user = user_collection.find_one({
-            "email": email
-        })
+        user = user_collection.find_one({"email": email})
 
         if not user:
-            return jsonify({
-                "success": False,
-                "message": "User not found"
-            }), 404
+            return jsonify({"error": "This user is not available"}), 404
 
-        if not check_password_hash(
-            user["password"],
-            password
-        ):
-            return jsonify({
-                "success": False,
-                "message": "Invalid password"
-            }), 401
+        if not check_password_hash(user["password"], password):
+            return jsonify({"error": "Invalid password"}), 401
 
-        return jsonify({
-            "success": True,
-            "message": "Login successful",
-            "user": {
-                "name": user["name"],
-                "email": user["email"],
-                "phone": user["phone"]
-            }
-        }), 200
+        return jsonify({"message": "Login successful!"})
 
     except Exception as e:
-        return jsonify({
-            "success": False,
-            "message": str(e)
-        }), 500
+        return jsonify({"error": str(e)}), 500
 
-
-# -----------------------------
-# Health Check API
-# -----------------------------
+# HEALTH CHECK API
 @app.route("/api/health", methods=["GET"])
 def health():
     return jsonify({
         "success": True,
-        "message": "Server is running"
+        "status": "UP",
+        "message": "JE Bikez API is running"
     }), 200
 
 
-# -----------------------------
-# Run Server
-# -----------------------------
+# 🚀 Run app
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
+
+

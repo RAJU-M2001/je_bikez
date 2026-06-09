@@ -285,8 +285,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeStatusDialogBtn = document.getElementById("closeStatusDialogBtn");
     const closeLoginDialog = document.getElementById("closeLoginDialog");
     const closeSignupDialog = document.getElementById("closeSignupDialog");
-    const API_BASE_URL = "https://api.je-bikez.com";
+    // const API_BASE_URL = "https://api.je-bikez.com";
     // const API_BASE_URL = "http://127.0.0.1:10000";
+    const API_BASE_URL = "https://bike-modification-api.onrender.com";
 
     function hideAllModals() {
         if (loginDialog) loginDialog.classList.remove("show");

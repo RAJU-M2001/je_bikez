@@ -5,6 +5,13 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from bson import ObjectId
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+import time
+from threading import Thread
+from datetime import datetime, UTC
+
 
 # Load environment variables
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -17,9 +24,17 @@ FRONTEND_DIR = os.path.abspath(
 )
 
 app = Flask(__name__, static_folder=FRONTEND_DIR)
+app.config["MAX_CONTENT_LENGTH"] = int(os.getenv("MAX_UPLOAD_SIZE"))
 CORS(app)
 
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
 
+print(cloudinary.api.ping())
 # ✅ Serve index.html
 @app.route("/")
 def home():
@@ -36,12 +51,12 @@ def serve_static(path):
 mongo_uri = os.getenv("MONGO_URI")
 db_name = os.getenv("DB_NAME")
 collection_name = os.getenv("COLLECTION_NAME")
-auth_user = os.getenv("AUTH_USER")
+user = os.getenv("USER")
 
 client = MongoClient(mongo_uri, tls=True)
 db = client[db_name]
 collection = db[collection_name]
-user_collection = db[auth_user]
+user_collection = db[user]
 
 
 # Health Check API
@@ -136,13 +151,16 @@ def signup():
             "phone": phone,
             "email": email,
             "password": hashed_password,
-            "profile_picture": ""
+            "profile_picture": "",
+            "profile_picture_id": "",
+            "created_at": datetime.now(UTC),
+            "updated_at": datetime.now(UTC)
         }
 
-        user_collection.insert_one(new_user)
+        result = user_collection.insert_one(new_user)
 
         return jsonify({
-            "user_id": str(new_user["_id"]),
+            "user_id": str(result.inserted_id),
             "success": True,
             "message": "Signup successful"
         }), 201
@@ -169,6 +187,7 @@ def login():
 
         email = data.get("email")
         password = data.get("password")
+        
 
         if not email or not password:
             return jsonify({
@@ -192,6 +211,18 @@ def login():
                 "error": "Invalid password"
             }), 401
 
+        # Update updated_at after successful login
+        user_collection.update_one(
+            {
+                "_id": user["_id"]
+            },
+            {
+                "$set": {
+                    "updated_at": datetime.now(UTC)
+                }
+            }
+        )
+
         return jsonify({
             "success": True,
             "message": "Login successful",
@@ -214,7 +245,7 @@ def login():
 
 
 # Get User Profile API
-@app.route("/api/user/profile/<user_id>", methods=["GET"])
+@app.route("/api/user/<user_id>", methods=["GET"])
 def get_profile(user_id):
 
     try:
@@ -243,41 +274,80 @@ def get_profile(user_id):
         }), 500
 
 
-
-# Update User Profile API
-@app.route("/api/user/profile/<user_id>", methods=["PATCH"])
+@app.route("/api/user/<user_id>", methods=["PATCH"])
 def update_profile(user_id):
 
     try:
 
-        data = request.get_json()
+        user = user_collection.find_one({
+            "_id": ObjectId(user_id)
+        })
 
-        name = data.get("name")
-        profile_picture = data.get("profile_picture")
-
-        result = user_collection.update_one(
-            {
-                "_id": ObjectId(user_id)
-            },
-            {
-                "$set": {
-                    "name": name,
-                    "profile_picture": profile_picture
-                }
-            }
-        )
-
-        if result.matched_count == 0:
+        if not user:
             return jsonify({
                 "error": "User not found"
             }), 404
 
-        updated_user = user_collection.find_one(
-            {"_id": ObjectId(user_id)},
-            {"password": 0}
+        # Initialize update_data with updated_at
+        update_data = {
+            "updated_at": datetime.now(UTC)
+        }
+
+        # Name update
+        name = request.form.get("name")
+
+        if name:
+            update_data["name"] = name
+
+        # Profile image update
+        if "image" in request.files:
+
+            image = request.files["image"]
+
+            old_public_id = user.get(
+                "profile_picture_id"
+            )
+
+            if old_public_id:
+                cloudinary.uploader.destroy(
+                    old_public_id
+                )
+
+            result = cloudinary.uploader.upload(
+                image,
+                folder=os.getenv("CLOUDINARY_FOLDER")
+            )
+
+            update_data["profile_picture"] = (
+                result["secure_url"]
+            )
+
+            update_data["profile_picture_id"] = (
+                result["public_id"]
+            )
+
+        # Update MongoDB
+        user_collection.update_one(
+            {
+                "_id": ObjectId(user_id)
+            },
+            {
+                "$set": update_data
+            }
         )
 
-        updated_user["_id"] = str(updated_user["_id"])
+        updated_user = user_collection.find_one(
+            {
+                "_id": ObjectId(user_id)
+            },
+            {
+                "password": 0
+            }
+        )
+
+        updated_user["_id"] = str(
+            updated_user["_id"]
+        )
 
         return jsonify({
             "success": True,
@@ -288,6 +358,89 @@ def update_profile(user_id):
     except Exception as e:
 
         return jsonify({
+            "error": str(e)
+        }), 500
+
+
+def delete_user_after_delay(user_id):
+    try:
+        # Wait for 2 minutes
+        time.sleep(120)
+
+        # Find user whose account is marked for deletion
+        user = user_collection.find_one({
+            "_id": ObjectId(user_id),
+            "deleted_account": True
+        })
+
+        if not user:
+            print("User not found or deletion cancelled.")
+            return
+
+        # Delete profile image from Cloudinary
+        public_id = user.get("profile_picture_id")
+
+        if public_id:
+            result = cloudinary.uploader.destroy(public_id)
+
+            # Proceed only if image is deleted or doesn't exist
+            if result.get("result") not in ["ok", "not found"]:
+                print("Failed to delete Cloudinary image.")
+                return
+
+        # Delete user from MongoDB
+        user_collection.delete_one({
+            "_id": ObjectId(user_id)
+        })
+
+        print(f"User {user_id} deleted successfully.")
+
+    except Exception as e:
+        print(f"Delete Error: {e}")
+
+
+@app.route("/api/user/<user_id>", methods=["DELETE"])
+def delete_account(user_id):
+    try:
+        # Check if user exists
+        user = user_collection.find_one({
+            "_id": ObjectId(user_id)
+        })
+
+        if not user:
+            return jsonify({
+                "success": False,
+                "message": "User not found."
+            }), 404
+
+        # Mark account as deleted
+        user_collection.update_one(
+            {
+                "_id": ObjectId(user_id)
+            },
+            {
+                "$set": {
+                    "deleted_account": True,
+                    "deleted_at": datetime.utcnow()
+                }
+            }
+        )
+
+        # Start background deletion
+        Thread(
+            target=delete_user_after_delay,
+            args=(user_id,),
+            daemon=True
+        ).start()
+
+        return jsonify({
+            "success": True,
+            "message": "Your account has been scheduled for deletion. It will be permanently deleted in 2 minutes."
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
             "error": str(e)
         }), 500
 

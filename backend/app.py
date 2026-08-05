@@ -273,7 +273,7 @@ def get_profile(user_id):
             "error": str(e)
         }), 500
 
-
+#User path the user data from database to frontend
 @app.route("/api/user/<user_id>", methods=["PATCH"])
 def update_profile(user_id):
 

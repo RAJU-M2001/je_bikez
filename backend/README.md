@@ -119,4 +119,3 @@ We welcome contributions. Before submitting major changes, please open an issue 
 ## 📄 License
 
 &copy; 2026 JE BikeZ Studio. All rights reserved.
--------------------------------------------------

@@ -1,0 +1,113 @@
+#addBikeDialog .dialog-box::-webkit-scrollbar {
+    display: none;
+}
+
+.bike-field {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.bike-field select,
+#additionalNotes {
+    width: 100%;
+    box-sizing: border-box;
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 8px;
+    color: #888;
+    font-size: 13px;
+}
+
+.bike-field select {
+    appearance: none;
+    padding: 12px 15px;
+    cursor: pointer;
+}
+
+.bike-field::after {
+    content: "\f078";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 15px;
+    top: 13px;
+    color: #666;
+    font-size: 11px;
+    pointer-events: none;
+}
+
+.bike-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 5px;
+}
+
+.bike-row .bike-field {
+    flex: 1;
+}
+
+#additionalNotes {
+    resize: vertical;
+    min-height: 90px;
+    padding: 12px 15px;
+    color: white;
+    font-family: inherit;
+}
+
+#additionalNotes::placeholder {
+    color: #666;
+}
+
+#addBikeDialog small {
+    display: block;
+    color: #666;
+    font-size: 11px;
+    margin-top: 6px;
+}
+
+.bike-upload {
+    border: 1px dashed #333;
+    padding: 25px;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    cursor: pointer;
+}
+
+.bike-upload p {
+    color: #ccc;
+    font-size: 14px;
+    margin: 0 0 5px;
+}
+
+.bike-submit {
+    width: 100%;
+    background: var(--accent);
+    color: black;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.bike-cancel {
+    display: block;
+    text-align: center;
+    color: var(--accent);
+    font-size: 12px;
+    text-decoration: none;
+}
+
+@media (max-width: 480px) {
+    #addBikeDialog .dialog-box {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .bike-row {
+        gap: 10px;
+    }
+}

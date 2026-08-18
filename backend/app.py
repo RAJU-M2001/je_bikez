@@ -13,6 +13,7 @@ from threading import Thread
 from datetime import datetime, UTC
 
 
+
 # Load environment variables
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 env_path = os.path.join(BASE_DIR, ".env")
@@ -67,6 +68,24 @@ def health():
         "status": "UP",
         "message": "JE Bikez API is running"
     }), 200
+
+# CONFIG API
+@app.route("/api/config", methods=["GET"])
+def get_config():
+    try:
+        theme = os.getenv("THEME", "light").strip().lower()
+
+        return jsonify({
+            "success": True,
+            "theme": theme
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "message": "Failed to load configuration",
+            "error": str(e)
+        }), 500
 
 
 # 📦 BOOK SLOT API

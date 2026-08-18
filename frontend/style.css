@@ -49,6 +49,29 @@
     --transition: 0.3s ease;
 }
 
+/* Light Mode Overrides */
+:root.light-mode {
+    --bg-primary: #f0f0f4;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #e9e9ed;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f5f5f5;
+    --bg-navbar: rgba(255, 255, 255, 0.95);
+    --bg-input: rgba(0, 0, 0, 0.05);
+
+    --text-primary: #111111;
+    --text-secondary: #555555;
+    --text-muted: #777777;
+    --text-dim: #999999;
+
+    --border: rgba(0, 0, 0, 0.1);
+    --border-light: rgba(0, 0, 0, 0.15);
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.15);
+}
+
 /* ═══════════════════════════════════════════
    RESET & BASE
    ═══════════════════════════════════════════ */
@@ -805,6 +828,11 @@ img {
     font-size: 16px;
 }
 
+
+.dialog-box::-webkit-scrollbar {
+    display: none;
+}
+
 .why-choose-text h4 {
     font-size: 14px;
     font-weight: 700;
@@ -820,6 +848,9 @@ img {
 /* ═══════════════════════════════════════════
    TESTIMONIALS
    ═══════════════════════════════════════════ */
+.dialog-box::-webkit-scrollbar {
+    display: none;
+}
 
 .testimonials-section {
     background: var(--bg-secondary);
@@ -2765,23 +2796,28 @@ input:-webkit-autofill:active {
    MOBILE RESPONSIVE (MAX-WIDTH: 768PX)
    ═══════════════════════════════════════════ */
 @media (max-width: 768px) {
+
     /* Navbar adjustments */
     #navLinks {
         display: none !important;
     }
+
     .nav-login-btn {
         display: none !important;
     }
+
     .navbar {
         padding: 10px 20px;
     }
+
     .nav-right .nav-icon-btn i.fa-shopping-cart {
         display: none;
     }
+
     .cart-wrapper {
         display: none;
     }
-    
+
     /* Grid stacking */
     .top-row-grid,
     .middle-row-grid,
@@ -2791,7 +2827,7 @@ input:-webkit-autofill:active {
         flex-direction: column !important;
         gap: 20px !important;
     }
-    
+
     /* Hero Section */
     .hero-panel {
         min-height: 500px;
@@ -2804,59 +2840,59 @@ input:-webkit-autofill:active {
         border-radius: 0;
         margin: -20px -20px 0 -20px;
     }
-    
+
     .hero-bg-img {
         border-radius: 0;
     }
-    
+
     .hero-content-inner {
         padding: 20px;
         background: linear-gradient(to top, #080808 60%, transparent);
         width: 100%;
     }
-    
+
     .hero-content-inner h2 {
         font-size: 32px;
         line-height: 1.1;
     }
-    
+
     .hero-btns {
         flex-direction: column !important;
         gap: 15px !important;
         width: 100%;
     }
-    
+
     .hero-btns button {
         width: 100%;
         padding: 15px !important;
         font-size: 16px !important;
     }
-    
+
     .hero-stats {
         display: none !important;
     }
-    
+
     /* Hide some desktop specific panels on mobile for cleaner view */
     .categories-panel,
     .why-choose-panel {
         display: none !important;
     }
-    
+
     /* Builds & Sales Grid */
     .builds-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .sales-grid {
         grid-template-columns: 1fr !important;
     }
-    
+
     /* Section paddings */
     .section {
         padding-top: 30px !important;
         padding-bottom: 30px !important;
     }
-    
+
     /* Bottom Navigation Bar */
     .bottom-nav {
         display: flex !important;
@@ -2870,7 +2906,7 @@ input:-webkit-autofill:active {
         padding: 10px 0;
         z-index: 1000;
     }
-    
+
     .bottom-nav-item {
         display: flex;
         flex-direction: column;
@@ -2880,15 +2916,15 @@ input:-webkit-autofill:active {
         font-size: 10px;
         gap: 5px;
     }
-    
+
     .bottom-nav-item.active {
         color: var(--accent);
     }
-    
+
     .bottom-nav-item i {
         font-size: 20px;
     }
-    
+
     /* Ensure body has padding for bottom nav */
     body {
         padding-bottom: 70px;
@@ -2898,4 +2934,1742 @@ input:-webkit-autofill:active {
 /* Hide bottom nav on desktop */
 .bottom-nav {
     display: none;
+}
+
+/* ═══════════════════════════════════════════
+   LIGHT MODE — DIALOG OVERRIDES
+   ═══════════════════════════════════════════ */
+
+/* Dialog backdrop */
+.light-mode .dialog {
+    background: rgba(0, 0, 0, 0.35) !important;
+    backdrop-filter: blur(4px);
+}
+
+/* Dialog box container */
+.light-mode .dialog .dialog-box {
+    background: #ffffff !important;
+    border-color: var(--border) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Headings & text inside dialogs */
+.light-mode .dialog .dialog-box h4 {
+    color: var(--accent) !important;
+}
+
+.light-mode .dialog .dialog-box h5 {
+    color: var(--text-primary) !important;
+}
+
+.light-mode .dialog .dialog-box p {
+    color: var(--text-primary) !important;
+}
+
+.light-mode .dialog .dialog-box small {
+    color: var(--text-muted) !important;
+}
+
+/* Labels */
+.light-mode .dialog .dialog-box label {
+    color: var(--text-secondary) !important;
+}
+
+/* Input fields */
+.light-mode .dialog .dialog-box input[type="text"],
+.light-mode .dialog .dialog-box input[type="email"],
+.light-mode .dialog .dialog-box input[type="password"],
+.light-mode .dialog .dialog-box input[type="tel"],
+.light-mode .dialog .dialog-box input[type="number"],
+.light-mode .dialog .dialog-box input[type="date"],
+.light-mode .dialog .dialog-box input[type="time"],
+.light-mode .dialog .dialog-box textarea {
+    background: var(--bg-input) !important;
+    border-color: var(--border) !important;
+    color: var(--text-primary) !important;
+}
+
+.light-mode .dialog .dialog-box input::placeholder,
+.light-mode .dialog .dialog-box textarea::placeholder {
+    color: var(--text-dim) !important;
+}
+
+/* Read-only input (profile email) */
+.light-mode .dialog .dialog-box input[readonly] {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-muted) !important;
+}
+
+/* Select dropdowns */
+.light-mode .dialog .dialog-box select {
+    background: var(--bg-input) !important;
+    border-color: var(--border) !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Close button */
+.light-mode .dialog .dialog-box button[id^="close"] {
+    color: var(--text-muted) !important;
+}
+
+.light-mode .dialog .dialog-box button[id^="close"]:hover {
+    color: var(--text-primary) !important;
+}
+
+/* Eye icon (password toggle) */
+.light-mode .dialog .dialog-box .fa-eye,
+.light-mode .dialog .dialog-box .fa-eye-slash {
+    color: var(--text-muted) !important;
+}
+
+/* Divider line & text ("or continue with") */
+.light-mode .dialog .dialog-box .divider span {
+    background: #ffffff !important;
+    color: var(--text-muted) !important;
+}
+
+.light-mode .dialog .dialog-box .divider div {
+    background: var(--border) !important;
+}
+
+/* Google / social button */
+.light-mode .dialog .dialog-box button[style*="border: 1px solid #333"] {
+    border-color: var(--border) !important;
+    color: var(--text-primary) !important;
+    background: var(--bg-tertiary) !important;
+}
+
+/* Muted paragraph text (e.g. "Don't have an account?", "Already have...") */
+.light-mode .dialog .dialog-box p[style*="color: #888"] {
+    color: var(--text-secondary) !important;
+}
+
+/* Status/detail spans */
+.light-mode .dialog .dialog-box span[style*="color: #888"] {
+    color: var(--text-secondary) !important;
+}
+
+.light-mode .dialog .dialog-box span[style*="color: white"] {
+    color: var(--text-primary) !important;
+}
+
+/* Delete confirm dialog — cancel button */
+.light-mode #deleteConfirmDialog #cancelDeleteBtn {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Tracking dialog vertical line */
+.light-mode #trackingDialog .dialog-box div[style*="background: #222"] {
+    background: var(--border) !important;
+}
+
+/* Tracking step borders */
+.light-mode .dialog .dialog-box div[style*="border-bottom: 1px solid #222"] {
+    border-bottom-color: var(--border) !important;
+}
+
+/* Dashed upload area (add bike dialog) */
+.light-mode .dialog .dialog-box div[style*="border: 1px dashed #333"] {
+    border-color: var(--border-light) !important;
+}
+
+.light-mode .dialog .dialog-box div[style*="border: 1px dashed #333"] p {
+    color: var(--text-secondary) !important;
+}
+
+/* Chevron icons in selects */
+.light-mode .dialog .dialog-box .fa-chevron-down {
+    color: var(--text-muted) !important;
+}
+
+/* Alert boxes inside dialogs */
+.light-mode .dialog .dialog-box div[id$="Alert"] {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Link colors (forgot password, skip, go to home, etc.) */
+.light-mode .dialog .dialog-box a[style*="color: #888"] {
+    color: var(--text-secondary) !important;
+}
+
+
+/* ============================================================
+   LOGOUT CONFIRMATION DIALOG
+   Modern / Professional UI
+============================================================ */
+
+.logout-dialog {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.68);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    z-index: 9999;
+}
+
+
+/* ============================================================
+   DIALOG BOX
+============================================================ */
+
+.logout-confirm-box {
+    position: relative;
+
+    width: min(440px, calc(100vw - 40px));
+
+    padding: 42px 34px 28px;
+
+    overflow: hidden;
+
+    text-align: center;
+
+    background:
+        linear-gradient(145deg,
+            #ffffff 0%,
+            #fafafa 100%);
+
+    border: 1px solid rgba(0, 0, 0, 0.08);
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.30),
+        0 8px 30px rgba(0, 0, 0, 0.12);
+
+    animation: logoutDialogIn 0.25s ease-out;
+}
+
+
+/* ============================================================
+   TOP ACCENT LINE
+============================================================ */
+
+.logout-confirm-box::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 4px;
+
+    background: linear-gradient(90deg,
+            #ff7043,
+            #ff4444,
+            #ff6b6b);
+}
+
+
+/* ============================================================
+   DECORATIVE GLOW
+============================================================ */
+
+.logout-glow {
+    position: absolute;
+
+    top: -90px;
+    left: 50%;
+
+    width: 190px;
+    height: 190px;
+
+    transform: translateX(-50%);
+
+    background: rgba(255, 68, 68, 0.08);
+
+    border-radius: 50%;
+
+    filter: blur(35px);
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   CLOSE BUTTON
+============================================================ */
+
+.logout-close-btn {
+    position: absolute;
+
+    top: 16px;
+    right: 16px;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid #e5e5e5;
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    color: #333333;
+
+    font-size: 14px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    z-index: 5;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.logout-close-btn i {
+    color: inherit;
+    font-size: 13px;
+}
+
+.logout-close-btn:hover {
+    background: #fff1f1;
+
+    color: #ff4444;
+
+    border-color: #ffcccc;
+
+    transform: rotate(90deg);
+
+    box-shadow: 0 4px 12px rgba(255, 68, 68, 0.12);
+}
+
+.logout-close-btn:focus-visible {
+    outline: 3px solid rgba(255, 68, 68, 0.20);
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   LOGOUT ICON
+============================================================ */
+
+.logout-icon {
+    position: relative;
+
+    width: 76px;
+    height: 76px;
+
+    margin: 8px auto 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(145deg,
+            #fff4f4,
+            #ffe9e9);
+
+    color: #ff4444;
+
+    border: 1px solid rgba(255, 68, 68, 0.22);
+
+    border-radius: 50%;
+
+    font-size: 28px;
+
+    box-shadow:
+        0 8px 25px rgba(255, 68, 68, 0.12);
+
+    z-index: 2;
+}
+
+.logout-icon::after {
+    content: "";
+
+    position: absolute;
+
+    inset: -7px;
+
+    border: 1px solid rgba(255, 68, 68, 0.10);
+
+    border-radius: 50%;
+}
+
+.logout-icon i {
+    color: #ff4444;
+}
+
+
+/* ============================================================
+   CONTENT
+============================================================ */
+
+.logout-content {
+    position: relative;
+    z-index: 2;
+}
+
+.logout-label {
+    display: inline-block;
+
+    margin-bottom: 7px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.8px;
+
+    color: #ff5a45;
+}
+
+.logout-confirm-box h2 {
+    margin: 0 0 12px;
+
+    color: #181818;
+
+    font-size: 28px;
+
+    font-weight: 750;
+
+    letter-spacing: -0.5px;
+}
+
+.logout-confirm-box p {
+    max-width: 340px;
+
+    margin: 0 auto 30px;
+
+    color: #666666;
+
+    font-size: 14px;
+
+    line-height: 1.65;
+}
+
+
+/* ============================================================
+   ACTION BUTTONS
+============================================================ */
+
+.logout-actions {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+
+    gap: 12px;
+
+    width: 100%;
+
+    margin-top: 4px;
+}
+
+.logout-actions button {
+    position: relative;
+
+    flex: 1;
+
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 12px 16px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    outline: none;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.logout-actions button i {
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   STAY LOGGED IN BUTTON
+============================================================ */
+
+.logout-actions .cancel-btn {
+    background: #ffffff;
+
+    color: #292929;
+
+    border: 1px solid #d8d8d8;
+
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+.logout-actions .cancel-btn span {
+    color: #292929;
+}
+
+.logout-actions .cancel-btn i {
+    color: #555555;
+}
+
+.logout-actions .cancel-btn:hover {
+    background: #f7f7f7;
+
+    color: #111111;
+
+    border-color: #bdbdbd;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.logout-actions .cancel-btn:hover i {
+    color: #222222;
+}
+
+
+/* ============================================================
+   YES LOGOUT BUTTON
+============================================================ */
+
+.logout-actions .logout-confirm-btn {
+    background:
+        linear-gradient(135deg,
+            #ff4b4b,
+            #f23838);
+
+    color: #ffffff;
+
+    border: 1px solid #ff4b4b;
+
+    box-shadow:
+        0 6px 16px rgba(255, 68, 68, 0.22);
+}
+
+.logout-actions .logout-confirm-btn span,
+.logout-actions .logout-confirm-btn i {
+    color: #ffffff;
+}
+
+.logout-actions .logout-confirm-btn:hover {
+    background:
+        linear-gradient(135deg,
+            #f23838,
+            #df2929);
+
+    border-color: #f23838;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 9px 22px rgba(255, 68, 68, 0.30);
+}
+
+.logout-actions .logout-confirm-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ============================================================
+   SECURITY NOTE
+============================================================ */
+
+.logout-note {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    margin-top: 20px;
+
+    color: #999999;
+
+    font-size: 11px;
+}
+
+.logout-note i {
+    color: #999999;
+
+    font-size: 11px;
+}
+
+
+/* ============================================================
+   DISABLED STATE
+============================================================ */
+
+.logout-actions button:disabled {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none !important;
+
+    box-shadow: none !important;
+}
+
+
+/* ============================================================
+   KEYBOARD ACCESSIBILITY
+============================================================ */
+
+.logout-actions button:focus-visible {
+    outline: 3px solid rgba(255, 68, 68, 0.20);
+
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   ANIMATION
+============================================================ */
+
+@keyframes logoutDialogIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 480px) {
+
+    .logout-dialog {
+        padding: 15px;
+    }
+
+    .logout-confirm-box {
+        width: 100%;
+
+        padding: 38px 20px 24px;
+
+        border-radius: 18px;
+    }
+
+    .logout-close-btn {
+        top: 13px;
+        right: 13px;
+
+        width: 34px;
+        height: 34px;
+    }
+
+    .logout-icon {
+        width: 68px;
+        height: 68px;
+
+        margin-bottom: 18px;
+
+        font-size: 25px;
+    }
+
+    .logout-confirm-box h2 {
+        font-size: 25px;
+    }
+
+    .logout-confirm-box p {
+        font-size: 13px;
+
+        margin-bottom: 24px;
+    }
+
+    .logout-actions {
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+    .logout-actions button {
+        width: 100%;
+
+        min-height: 48px;
+    }
+
+    .logout-note {
+        margin-top: 16px;
+    }
+}
+
+/* ============================================================
+   NAVBAR PROFILE SYSTEM
+============================================================ */
+
+
+/* ============================================================
+   PROFILE CONTAINER
+============================================================ */
+
+.profile-menu-container {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ============================================================
+   LOGIN / SIGNUP BUTTON
+============================================================ */
+
+.navbar-auth-btn {
+    height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 0 17px;
+
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.04);
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.navbar-auth-btn i {
+    font-size: 13px;
+}
+
+
+.navbar-auth-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+
+    border-color: rgba(255, 255, 255, 0.24);
+
+    transform: translateY(-1px);
+}
+
+
+.navbar-auth-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.35);
+
+    outline-offset: 3px;
+}
+
+
+/* ============================================================
+   PROFILE CONTAINER
+============================================================ */
+
+.profile-container {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ============================================================
+   PROFILE AVATAR BUTTON
+============================================================ */
+
+.profile-avatar-btn {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+    padding: 0;
+
+    background: transparent;
+
+    border: none;
+    border-radius: 50%;
+
+    outline: none;
+
+    cursor: pointer;
+
+    box-shadow: none;
+
+    transition: transform 0.2s ease;
+}
+
+
+/*
+   IMPORTANT:
+   No rectangular hover background.
+*/
+
+.profile-avatar-btn:hover,
+.profile-avatar-btn:focus,
+.profile-avatar-btn:active {
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+
+/* ============================================================
+   AVATAR
+============================================================ */
+
+.nav-profile-avatar {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 50%;
+
+    background: #151515;
+
+    border: 1px solid rgba(255, 255, 255, 0.14);
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.profile-avatar-btn:hover .nav-profile-avatar {
+    transform: scale(1.04);
+
+    border-color: rgba(255, 255, 255, 0.30);
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.20);
+}
+
+
+.profile-avatar-btn:focus-visible .nav-profile-avatar {
+    outline: 2px solid rgba(255, 255, 255, 0.35);
+
+    outline-offset: 3px;
+}
+
+
+/* ============================================================
+   AVATAR IMAGE
+============================================================ */
+
+.nav-profile-avatar img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+}
+
+
+/* ============================================================
+   PROFILE DROPDOWN
+============================================================ */
+
+.profile-dropdown {
+    position: absolute;
+
+    top: calc(100% + 12px);
+    right: 0;
+
+    width: 260px;
+
+    display: none;
+
+    padding: 8px;
+
+    background:
+        linear-gradient(145deg,
+            #171717,
+            #101010);
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 18px 50px rgba(0, 0, 0, 0.45),
+        0 5px 18px rgba(0, 0, 0, 0.25);
+
+    z-index: 9998;
+
+    animation: profileDropdownIn 0.18s ease-out;
+}
+
+
+/*
+   Small visual connector.
+*/
+
+.profile-dropdown::before {
+    content: "";
+
+    position: absolute;
+
+    top: -5px;
+    right: 14px;
+
+    width: 10px;
+    height: 10px;
+
+    background: #171717;
+
+    border-left: 1px solid rgba(255, 255, 255, 0.10);
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+
+    transform: rotate(45deg);
+}
+
+
+/* ============================================================
+   DROPDOWN HEADER
+============================================================ */
+
+.profile-dropdown-header {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px 10px;
+}
+
+
+/* ============================================================
+   DROPDOWN AVATAR
+============================================================ */
+
+.dropdown-profile-avatar {
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 50%;
+
+    background: #202020;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    color: #ffffff;
+
+    font-size: 14px;
+}
+
+
+.dropdown-profile-avatar img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+}
+
+
+/* ============================================================
+   USER INFORMATION
+============================================================ */
+
+.profile-dropdown-user {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.profile-dropdown-user strong {
+    overflow: hidden;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.profile-dropdown-user span {
+    overflow: hidden;
+
+    color: #888888;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+/* ============================================================
+   DIVIDER
+============================================================ */
+
+.profile-dropdown-divider {
+    height: 1px;
+
+    margin: 4px 4px 7px;
+
+    background: rgba(255, 255, 255, 0.08);
+}
+
+
+/* ============================================================
+   DROPDOWN BUTTON
+============================================================ */
+
+.profile-dropdown-btn {
+    width: 100%;
+    min-height: 44px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    margin: 2px 0;
+    padding: 9px 10px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: transparent;
+
+    color: #eeeeee;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        color 0.18s ease;
+}
+
+
+.profile-dropdown-btn:hover {
+    background: rgba(255, 255, 255, 0.07);
+
+    color: #ffffff;
+}
+
+
+.profile-dropdown-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.25);
+
+    outline-offset: -2px;
+}
+
+
+/* ============================================================
+   MENU ICON
+============================================================ */
+
+.profile-menu-icon {
+    width: 32px;
+    height: 32px;
+
+    flex: 0 0 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    color: #cccccc;
+
+    font-size: 13px;
+
+    transition:
+        background 0.18s ease,
+        color 0.18s ease;
+}
+
+
+.profile-dropdown-btn:hover .profile-menu-icon {
+    background: rgba(255, 255, 255, 0.10);
+
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   MENU TEXT
+============================================================ */
+
+.profile-menu-text {
+    flex: 1;
+
+    color: inherit;
+}
+
+
+/* ============================================================
+   LOGOUT
+============================================================ */
+
+.logout-dropdown-btn {
+    color: #ff6b6b;
+}
+
+
+.logout-dropdown-btn .profile-menu-icon {
+    color: #ff6b6b;
+
+    background: rgba(255, 70, 70, 0.08);
+}
+
+
+.logout-dropdown-btn:hover {
+    background: rgba(255, 70, 70, 0.08);
+
+    color: #ff7777;
+}
+
+
+.logout-dropdown-btn:hover .profile-menu-icon {
+    background: rgba(255, 70, 70, 0.13);
+
+    color: #ff7777;
+}
+
+
+/* ============================================================
+   NO ARROWS
+============================================================ */
+
+.profile-chevron,
+.profile-menu-arrow {
+    display: none !important;
+}
+
+
+/* ============================================================
+   DROPDOWN ANIMATION
+============================================================ */
+
+@keyframes profileDropdownIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(-5px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* ============================================================
+   LOGOUT DIALOG
+============================================================ */
+
+.logout-dialog {
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.68);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    z-index: 9999;
+}
+
+
+/* ============================================================
+   LOGOUT BOX
+============================================================ */
+
+.logout-confirm-box {
+    position: relative;
+
+    width: min(440px, calc(100vw - 40px));
+
+    padding: 42px 34px 28px;
+
+    overflow: hidden;
+
+    text-align: center;
+
+    background:
+        linear-gradient(145deg,
+            #ffffff,
+            #fafafa);
+
+    border: 1px solid rgba(0, 0, 0, 0.08);
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.30),
+        0 8px 30px rgba(0, 0, 0, 0.12);
+
+    animation: logoutDialogIn 0.25s ease-out;
+}
+
+
+.logout-confirm-box::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 4px;
+
+    background:
+        linear-gradient(90deg,
+            #ff7043,
+            #ff4444,
+            #ff6b6b);
+}
+
+
+/* ============================================================
+   LOGOUT CLOSE
+============================================================ */
+
+.logout-close-btn {
+    position: absolute;
+
+    top: 16px;
+    right: 16px;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid #e5e5e5;
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    color: #333333;
+
+    cursor: pointer;
+
+    z-index: 5;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.logout-close-btn:hover {
+    background: #fff1f1;
+
+    color: #ff4444;
+
+    border-color: #ffcccc;
+
+    transform: rotate(90deg);
+}
+
+
+/* ============================================================
+   LOGOUT GLOW
+============================================================ */
+
+.logout-glow {
+    position: absolute;
+
+    top: -90px;
+    left: 50%;
+
+    width: 190px;
+    height: 190px;
+
+    transform: translateX(-50%);
+
+    background: rgba(255, 68, 68, 0.08);
+
+    border-radius: 50%;
+
+    filter: blur(35px);
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   LOGOUT ICON
+============================================================ */
+
+.logout-icon {
+    position: relative;
+
+    width: 76px;
+    height: 76px;
+
+    margin: 8px auto 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(145deg,
+            #fff4f4,
+            #ffe9e9);
+
+    color: #ff4444;
+
+    border: 1px solid rgba(255, 68, 68, 0.22);
+
+    border-radius: 50%;
+
+    font-size: 28px;
+
+    box-shadow:
+        0 8px 25px rgba(255, 68, 68, 0.12);
+}
+
+
+.logout-icon::after {
+    content: "";
+
+    position: absolute;
+
+    inset: -7px;
+
+    border: 1px solid rgba(255, 68, 68, 0.10);
+
+    border-radius: 50%;
+}
+
+
+/* ============================================================
+   LOGOUT CONTENT
+============================================================ */
+
+.logout-content {
+    position: relative;
+    z-index: 2;
+}
+
+
+.logout-label {
+    display: inline-block;
+
+    margin-bottom: 7px;
+
+    color: #ff5a45;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1.8px;
+}
+
+
+.logout-confirm-box h2 {
+    margin: 0 0 12px;
+
+    color: #181818;
+
+    font-size: 28px;
+    font-weight: 750;
+}
+
+
+.logout-confirm-box p {
+    max-width: 340px;
+
+    margin: 0 auto 30px;
+
+    color: #666666;
+
+    font-size: 14px;
+
+    line-height: 1.65;
+}
+
+
+/* ============================================================
+   LOGOUT ACTIONS
+============================================================ */
+
+.logout-actions {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+
+    gap: 12px;
+
+    width: 100%;
+}
+
+
+.logout-actions button {
+    flex: 1;
+
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 12px 16px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* ============================================================
+   STAY LOGGED IN
+============================================================ */
+
+.logout-actions .cancel-btn {
+    background: #ffffff;
+
+    color: #292929;
+
+    border: 1px solid #d8d8d8;
+
+    box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+
+.logout-actions .cancel-btn:hover {
+    background: #f7f7f7;
+
+    border-color: #bdbdbd;
+
+    transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   CONFIRM LOGOUT
+============================================================ */
+
+.logout-actions .logout-confirm-btn {
+    background:
+        linear-gradient(135deg,
+            #ff4b4b,
+            #f23838);
+
+    color: #ffffff;
+
+    border: 1px solid #ff4b4b;
+
+    box-shadow:
+        0 6px 16px rgba(255, 68, 68, 0.22);
+}
+
+
+.logout-actions .logout-confirm-btn span,
+.logout-actions .logout-confirm-btn i {
+    color: #ffffff;
+}
+
+
+.logout-actions .logout-confirm-btn:hover {
+    background:
+        linear-gradient(135deg,
+            #f23838,
+            #df2929);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 9px 22px rgba(255, 68, 68, 0.30);
+}
+
+
+/* ============================================================
+   SECURITY NOTE
+============================================================ */
+
+.logout-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    margin-top: 20px;
+
+    color: #999999;
+
+    font-size: 11px;
+}
+
+
+.logout-note i {
+    color: #999999;
+
+    font-size: 11px;
+}
+
+
+/* ============================================================
+   DISABLED
+============================================================ */
+
+.logout-actions button:disabled {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none !important;
+
+    box-shadow: none !important;
+}
+
+
+/* ============================================================
+   LOGOUT ANIMATION
+============================================================ */
+
+@keyframes logoutDialogIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 480px) {
+
+    .navbar-auth-btn {
+        height: 40px;
+
+        padding: 0 13px;
+
+        font-size: 12px;
+    }
+
+
+    .profile-avatar-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+
+    .nav-profile-avatar {
+        width: 38px;
+        height: 38px;
+    }
+
+
+    .profile-dropdown {
+        right: -4px;
+
+        width: 245px;
+    }
+
+
+    .logout-dialog {
+        padding: 15px;
+    }
+
+
+    .logout-confirm-box {
+        width: 100%;
+
+        padding: 38px 20px 24px;
+
+        border-radius: 18px;
+    }
+
+
+    .logout-close-btn {
+        top: 13px;
+        right: 13px;
+
+        width: 34px;
+        height: 34px;
+    }
+
+
+    .logout-icon {
+        width: 68px;
+        height: 68px;
+
+        margin-bottom: 18px;
+
+        font-size: 25px;
+    }
+
+
+    .logout-confirm-box h2 {
+        font-size: 25px;
+    }
+
+
+    .logout-confirm-box p {
+        font-size: 13px;
+
+        margin-bottom: 24px;
+    }
+
+
+    .logout-actions {
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+
+    .logout-actions button {
+        width: 100%;
+
+        min-height: 48px;
+    }
+
+
+    .logout-note {
+        margin-top: 16px;
+    }
+
 }

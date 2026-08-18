@@ -20,42 +20,296 @@
 </head>
 
 <body>
-
-    <!-- ═══════════ NAVBAR ═══════════ -->
+    <!-- ═══════════════════════════════════════════════════════════
+     NAVBAR
+    ═══════════════════════════════════════════════════════════ -->
     <header>
         <nav class="navbar" id="mainNav">
+
+            <!-- =====================================================
+             LEFT SIDE
+            ====================================================== -->
             <div class="nav-left">
+
+                <!-- LOGO -->
                 <div class="logo">
-                    <a href="index.html">
-                        <span class="logo-text"><img
-                                src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
-                                alt="Bike" style="width: 50px; height: 50px;"></span>
+                    <a href="index.html" aria-label="JE BikeZ Home">
+                        <span class="logo-text">
+                            <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                                alt="JE BikeZ" width="50" height="50">
+                        </span>
                     </a>
                 </div>
+
+                <!-- NAVIGATION LINKS -->
                 <div class="nav-links" id="navLinks">
+
                     <a href="#home" class="active">Home</a>
                     <a href="#services">Services</a>
                     <a href="#builds">Builds</a>
                     <a href="#sales">Sales</a>
                     <a href="#about">About Us</a>
                     <a href="#contact">Contact</a>
+
                 </div>
+
             </div>
+
+
+            <!-- =====================================================
+             RIGHT SIDE
+            ====================================================== -->
             <div class="nav-right">
-                <button class="nav-icon-btn" id="searchBtn" aria-label="Search">
-                    <i class="fas fa-search"></i>
+
+                <!-- =================================================
+                 FEATURE ENHANCEMENT
+                 SEARCH
+                 ==================================================
+
+            <button
+                id="searchBtn"
+                type="button"
+                class="nav-icon-btn"
+                aria-label="Search"
+                title="Search"
+            >
+                <i class="fas fa-search"></i>
+            </button>
+
+            -->
+
+
+                <!-- =================================================
+                 FEATURE ENHANCEMENT
+                 SHOP / CART
+            ==================================================
+
+            <div class="cart-wrapper">
+
+                <button
+                    id="shopBtn"
+                    type="button"
+                    class="nav-icon-btn"
+                    aria-label="Shop"
+                    title="Shop"
+                >
+                    <i class="fas fa-shopping-bag"></i>
                 </button>
-                <div class="cart-wrapper" style="position: relative;">
-                    <button class="nav-icon-btn" aria-label="Cart">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                    <span class="cart-badge"
-                        style="position: absolute; top: -5px; right: -5px; background: var(--accent); color: black; font-size: 10px; font-weight: bold; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">2</span>
-                </div>
-                <button class="nav-login-btn" id="loginSignupBtn" type="button">Login / Sign Up</button>
+
+                <span class="cart-badge" aria-label="2 items">
+                    2
+                </span>
+
             </div>
+
+            -->
+
+
+                <!-- =================================================
+                 AUTH / PROFILE CONTAINER
+            ================================================== -->
+                <div id="profileMenuContainer" class="profile-menu-container">
+
+                    <!-- =================================================
+                     LOGGED OUT
+                     LOGIN / SIGNUP
+                ================================================== -->
+                    <button id="loginSignupBtn" type="button" class="nav-login-btn navbar-auth-btn"
+                        aria-label="Login or Signup">
+
+                        <i class="fas fa-user" aria-hidden="true"></i>
+
+                        <span>Login / Signup</span>
+
+                    </button>
+
+
+                    <!-- =================================================
+                     LOGGED IN
+                     PROFILE CONTAINER
+                ================================================== -->
+                    <div id="profileContainer" class="profile-container" style="display: none;">
+
+                        <!-- PROFILE TRIGGER -->
+                        <button id="profileAvatarBtn" type="button" class="profile-avatar-btn"
+                            aria-label="Open profile menu" aria-expanded="false" aria-haspopup="true">
+
+                            <!-- PROFILE AVATAR -->
+                            <div id="navProfileAvatar" class="nav-profile-avatar">
+                                <i class="fas fa-user" aria-hidden="true"></i>
+                            </div>
+
+                            <!-- CHEVRON -->
+                            <i class="fas fa-chevron-down profile-chevron" aria-hidden="true"></i>
+
+                        </button>
+
+
+                        <!-- =================================================
+                         PROFILE DROPDOWN
+                    ================================================== -->
+                        <div id="profileDropdown" class="profile-dropdown" role="menu" aria-hidden="true">
+
+                            <!-- PROFILE HEADER -->
+                            <div class="profile-dropdown-header">
+
+                                <!-- DROPDOWN AVATAR -->
+                                <div id="dropdownProfileAvatar" class="dropdown-profile-avatar">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                </div>
+
+
+                                <!-- USER INFORMATION -->
+                                <div class="profile-dropdown-user">
+
+                                    <strong id="dropdownProfileName">
+                                        Account
+                                    </strong>
+
+                                    <span id="dropdownProfileEmail">
+                                        Manage your profile
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- DIVIDER -->
+                            <div class="profile-dropdown-divider"></div>
+
+
+                            <!-- EDIT PROFILE -->
+                            <button id="editProfileBtn" type="button" class="profile-dropdown-btn" role="menuitem">
+
+                                <span class="profile-menu-icon">
+                                    <i class="fas fa-user-edit" aria-hidden="true"></i>
+                                </span>
+
+                                <span class="profile-menu-text">
+                                    Edit Profile
+                                </span>
+
+                                <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
+
+                            </button>
+
+
+                            <!-- LOGOUT -->
+                            <button id="logoutBtn" type="button" class="profile-dropdown-btn logout-dropdown-btn"
+                                role="menuitem">
+
+                                <span class="profile-menu-icon">
+                                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                </span>
+
+                                <span class="profile-menu-text">
+                                    Logout
+                                </span>
+
+                                <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </nav>
     </header>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+     LOGOUT CONFIRMATION DIALOG
+═══════════════════════════════════════════════════════════ -->
+    <div id="logoutConfirmDialog" class="dialog logout-dialog" aria-hidden="true" style="display: none;">
+
+        <div class="dialog-box logout-confirm-box" role="dialog" aria-modal="true" aria-labelledby="logoutDialogTitle"
+            aria-describedby="logoutDialogDescription">
+
+            <!-- CLOSE -->
+            <button id="cancelLogoutTop" type="button" class="logout-close-btn" aria-label="Close logout dialog"
+                title="Close">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+
+
+            <!-- DECORATIVE GLOW -->
+            <div class="logout-glow" aria-hidden="true"></div>
+
+
+            <!-- LOGOUT ICON -->
+            <div class="logout-icon" aria-hidden="true">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+
+
+            <!-- CONTENT -->
+            <div class="logout-content">
+
+                <span class="logout-label">
+                    ACCOUNT ACTION
+                </span>
+
+                <h2 id="logoutDialogTitle">
+                    Logout?
+                </h2>
+
+                <p id="logoutDialogDescription">
+                    Are you sure you want to logout from your account?
+                    Your current session will be ended.
+                </p>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+            <div class="logout-actions">
+
+                <!-- STAY LOGGED IN -->
+                <button id="cancelLogoutBtn" type="button" class="cancel-btn">
+
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
+
+                    <span>
+                        Stay Logged In
+                    </span>
+
+                </button>
+
+
+                <!-- CONFIRM LOGOUT -->
+                <button id="confirmLogoutBtn" type="button" class="logout-confirm-btn">
+
+                    <span>
+                        Yes, Logout
+                    </span>
+
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+
+                </button>
+
+            </div>
+
+
+            <!-- SECURITY NOTE -->
+            <div class="logout-note">
+
+                <i class="fas fa-shield-alt" aria-hidden="true"></i>
+
+                <span>
+                    You can sign in again anytime.
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
 
     <main class="main-content">
 
@@ -84,19 +338,22 @@
                     <div class="panel-box hero-panel">
                         <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5389_gcrjn8.jpg"
                             alt="Premium Bike" class="hero-bg-img">
-                        <div class="hero-content-inner">
-                            <h2>BUILT WITH PASSION.<br><span class="highlight">PERFECTED BY EXPERTS.</span></h2>
-                            <p class="hero-subtitle">Service | Modification | Sales</p>
-                            <p class="hero-desc">Everything your bike needs, under one roof.</p>
-                            <div class="hero-btns" style="display: flex; gap: 10px; margin-bottom: 20px;">
-                                <button class="btn-primary" id="bookServiceBtnHero"
-                                    style="padding: 10px 20px; background: var(--accent); color: black; font-weight: bold; border-radius: 5px;">Book
-                                    Service</button>
-                                <button class="btn-outline"
-                                    style="padding: 10px 20px; background: transparent; border: 1px solid var(--text-primary); color: var(--text-primary); border-radius: 5px;">Explore
-                                    Builds</button>
+                        <div class="hero-content-inner"
+                            style="color: white; display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                            <div class="hero-top-content">
+                                <h2>BUILT WITH PASSION.<br><span class="highlight">PERFECTED BY EXPERTS.</span></h2>
+                                <p class="hero-subtitle">Service | Modification | Sales</p>
+                                <p class="hero-desc">Everything your bike needs, under one roof.</p>
+                                <div class="hero-btns" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                                    <button class="btn-primary" id="bookServiceBtnHero"
+                                        style="padding: 10px 20px; background: var(--accent); color: black; font-weight: bold; border-radius: 5px;">Book
+                                        Service</button>
+                                    <button class="btn-outline"
+                                        style="padding: 10px 20px; background: transparent; border: 1px solid white; color: white; border-radius: 5px;">Explore
+                                        Builds</button>
+                                </div>
                             </div>
-                            <div class="hero-stats">
+                            <div class="hero-stats" style="margin-top: auto;">
                                 <div class="hero-stat"><i class="fas fa-user-gear"></i><br>Expert<br>Mechanics</div>
                                 <div class="hero-stat"><i class="fas fa-cogs"></i><br>Genuine<br>Parts</div>
                                 <div class="hero-stat"><i class="fas fa-award"></i><br>Quality<br>Service</div>
@@ -660,69 +917,216 @@
             </div>
         </div>
 
-        <div id="addBikeDialog" class="dialog">
+        <div id="profileDialog" class="dialog">
             <div class="dialog-box"
-                style="margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
-                <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">ADD
-                    YOUR BIKE</h4>
-                <p style="font-size: 16px; color: white; margin-bottom: 25px;">Tell us about your bike</p>
+                style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+                <button id="closeProfileDialog" type="button"
+                    style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                    onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+                <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">
+                    PROFILE SETTINGS</h4>
 
-                <div style="margin-bottom: 15px; position: relative;">
-                    <select
-                        style="appearance: none; width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: #888; font-size: 13px;">
-                        <option>Select Manufacturer</option>
-                    </select>
-                    <i class="fas fa-chevron-down"
-                        style="position: absolute; right: 15px; top: 15px; color: #666; font-size: 12px; pointer-events: none;"></i>
+                <div id="profileAlert"
+                    style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+                </div>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="position: relative; display: inline-block;">
+                        <div id="profileImagePreview"
+                            style="width: 80px; height: 80px; border-radius: 50%; background: var(--avatar-bg); color: var(--avatar-color); display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent); font-size: 32px;">
+                            <i class="fas fa-user"></i>
+                        </div>
+
+                        <label for="profileImageInput"
+                            style="position: absolute; bottom: 0; right: 0; background: var(--accent); color: black; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px;">
+                            <i class="fas fa-camera"></i>
+                        </label>
+
+                        <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                    </div>
                 </div>
 
-                <div style="margin-bottom: 15px; position: relative;">
-                    <select
-                        style="appearance: none; width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: #888; font-size: 13px;">
-                        <option>Select Model</option>
-                    </select>
-                    <i class="fas fa-chevron-down"
-                        style="position: absolute; right: 15px; top: 15px; color: #666; font-size: 12px; pointer-events: none;"></i>
-                </div>
+                <!-- <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="position: relative; display: inline-block;">
+                        <img id="profileImagePreview"
+                            src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                            alt="Profile"
+                            style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);">
+                        <label for="profileImageInput"
+                            style="position: absolute; bottom: 0; right: 0; background: var(--accent); color: black; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px;">
+                            <i class="fas fa-camera"></i>
+                        </label>
+                        <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                    </div>
+                </div> -->
 
                 <div style="margin-bottom: 15px;">
-                    <input type="text" placeholder="Year"
-                        style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 13px;">
+                    <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Full Name</label>
+                    <input type="text" id="profileName" placeholder="Enter your name"
+                        style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
                 </div>
 
-                <div style="margin-bottom: 20px; position: relative; display: flex; gap: 15px;">
-                    <div style="flex: 1; position: relative;">
-                        <select
-                            style="appearance: none; width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: #888; font-size: 13px;">
-                            <option>Select Year</option>
-                        </select>
-                        <i class="fas fa-chevron-down"
-                            style="position: absolute; right: 15px; top: 15px; color: #666; font-size: 12px; pointer-events: none;"></i>
-                    </div>
-                    <div style="flex: 1; position: relative;">
-                        <select
-                            style="appearance: none; width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: #888; font-size: 13px;">
-                            <option>Select CC</option>
-                        </select>
-                        <i class="fas fa-chevron-down"
-                            style="position: absolute; right: 15px; top: 15px; color: #666; font-size: 12px; pointer-events: none;"></i>
-                    </div>
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email
+                        Address</label>
+                    <input type="email" id="profileEmail" readonly
+                        style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: #666; font-size: 14px; cursor: not-allowed;">
                 </div>
 
-                <div
-                    style="border: 1px dashed #333; padding: 25px; text-align: center; border-radius: 8px; margin-bottom: 25px; cursor: pointer;">
-                    <p style="color: #ccc; font-size: 14px; margin: 0 0 5px 0;">Upload Bike Photo</p>
-                    <small style="color: #666; font-size: 11px;">JPG, PNG, up to 5MB</small>
-                </div>
-
-                <button id="confirmBookingBtn"
+                <button id="saveProfileBtn"
                     style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 15px;">Save
-                    & Continue</button>
-                <a href="#" class="skip-link" id="cancelAddBike"
-                    style="display: block; text-align: center; color: var(--accent); font-size: 12px; text-decoration: none;">Skip
-                    for now</a>
+                    Changes</button>
+
+                <button id="deleteAccountBtn"
+                    style="width: 100%; background: transparent; color: #ff4444; border: 1px solid #ff4444; border-radius: 8px; padding: 12px; font-weight: bold; cursor: pointer; font-size: 14px;">Delete
+                    Account</button>
             </div>
         </div>
+
+        <div id="deleteConfirmDialog" class="dialog">
+            <div class="dialog-box"
+                style="position: relative; margin: auto; width: 350px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; text-align: center; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+                <i class="fas fa-exclamation-triangle"
+                    style="font-size: 40px; color: #ff4444; margin-bottom: 15px;"></i>
+                <h4 style="color: white; font-size: 18px; margin-bottom: 10px;">Delete Account?</h4>
+                <p style="font-size: 13px; color: #888; margin-bottom: 25px;">Are you sure you want to delete your
+                    account? This action cannot be undone.</p>
+                <div style="display: flex; gap: 10px;">
+                    <button id="cancelDeleteBtn"
+                        style="flex: 1; background: #222; color: white; border-radius: 8px; padding: 10px; font-weight: bold; border: none; cursor: pointer; font-size: 13px;">Cancel</button>
+                    <button id="confirmDeleteBtn"
+                        style="flex: 1; background: #ff4444; color: white; border-radius: 8px; padding: 10px; font-weight: bold; border: none; cursor: pointer; font-size: 13px;">Yes,
+                        Delete</button>
+                </div>
+            </div>
+        </div>
+        <div id="addBikeDialog" class="dialog" aria-hidden="true">
+            <div class="dialog-box"
+                style="position:relative;margin:auto;width:400px;max-width:90%;max-height:85vh;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none;background:#080808;border:1px solid #222;border-radius:12px;padding:30px;">
+
+                <button id="closeAddBikeDialog" type="button"
+                    style="position:absolute;top:15px;right:15px;background:none;border:none;color:#666;font-size:20px;cursor:pointer;">
+                    &times;
+                </button>
+
+                <h4 style="color:var(--accent);font-size:14px;margin-bottom:5px;text-transform:uppercase;">
+                    BOOK SERVICE
+                </h4>
+
+                <p style="font-size:13px;color:#777;margin:0 0 25px;">
+                    Add your bike details
+                </p>
+
+                <!-- Manufacturer -->
+                <div class="bike-field">
+                    <select id="manufacturer">
+                        <option value="">Select Manufacturer</option>
+                        <option>BMW</option>
+                        <option>Yamaha</option>
+                        <option>Kawasaki</option>
+                        <option>KTM</option>
+                        <option>Honda</option>
+                        <option>Royal Enfield</option>
+                        <option>TVS</option>
+                        <option>Bajaj</option>
+                        <option>Suzuki</option>
+                    </select>
+                </div>
+
+                <!-- Model -->
+                <div class="bike-field">
+                    <select id="model">
+                        <option value="">Select Model</option>
+                    </select>
+                </div>
+
+                <!-- Variant -->
+                <div class="bike-field">
+                    <select id="variant">
+                        <option value="">Select Variant</option>
+                    </select>
+                </div>
+
+                <!-- Year + CC -->
+                <div class="bike-row">
+
+                    <div class="bike-field">
+                        <select id="year">
+                            <option value="">Select Year</option>
+                            <option>2026</option>
+                            <option>2025</option>
+                            <option>2024</option>
+                            <option>2023</option>
+                            <option>2022</option>
+                            <option>2021</option>
+                            <option>2020</option>
+                            <option>2019</option>
+                        </select>
+                    </div>
+
+                    <div class="bike-field">
+                        <select id="cc">
+                            <option value="">Select CC</option>
+                            <option>125 CC</option>
+                            <option>150 CC</option>
+                            <option>160 CC</option>
+                            <option>200 CC</option>
+                            <option>250 CC</option>
+                            <option>300 CC</option>
+                            <option>400 CC</option>
+                            <option>500 CC</option>
+                            <option>650 CC</option>
+                            <option>1000 CC</option>
+                            <option>1200 CC</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <!-- Service Type -->
+                <div class="bike-field">
+                    <select id="serviceType">
+                        <option value="">Select Service Type</option>
+                        <option>General Service</option>
+                        <option>Oil Change</option>
+                        <option>Engine Service</option>
+                        <option>Brake Service</option>
+                        <option>Chain & Sprocket</option>
+                        <option>Tyre Service</option>
+                        <option>Electrical Service</option>
+                        <option>Custom Modification</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <!-- Additional Notes -->
+                <div style="margin-bottom:20px;">
+                    <textarea id="additionalNotes" placeholder="Additional Notes" rows="4" maxlength="500"></textarea>
+
+                    <small>
+                        Describe the issue or custom requests (e.g., squeaky front brakes, chain noise above 60 km/h,
+                        oil change)...
+                    </small>
+                </div>
+
+                <!-- Bike Photo -->
+                <div class="bike-upload">
+                    <p>Upload Bike Photo</p>
+                    <small>JPG, PNG, up to 5MB</small>
+                </div>
+
+                <button id="confirmBookingBtn" type="button" class="bike-submit">
+                    Save & Continue
+                </button>
+
+                <a href="#" id="cancelAddBike" class="bike-cancel">
+                    Skip for now
+                </a>
+
+            </div>
+        </div>
+
+        <link rel="stylesheet" href="bike-service.css">
+        <script src="bike-service.js"></script>
 
         <div id="statusDialog" class="dialog">
             <div class="dialog-box"
@@ -769,7 +1173,10 @@
 
         <div id="trackingDialog" class="dialog">
             <div class="dialog-box"
-                style="margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+                style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+                <button id="closeTrackingDialog" type="button"
+                    style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                    onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
                 <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">
                     BOOKING TRACKING</h4>
                 <p style="font-size: 16px; color: white; margin-bottom: 30px;">Track Your Service</p>
@@ -843,16 +1250,18 @@
     </main>
 
     <!-- ═══════════ FOOTER ═══════════ -->
-    <footer style="background: #080808; border-top: 1px solid #222; padding: 50px 20px 20px; margin-top: 40px;">
+    <footer
+        style="background: var(--bg-tertiary); border-top: 1px solid var(--border); padding: 50px 20px 20px; margin-top: 40px;">
         <div class="container-fluid"
             style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 40px;">
             <div>
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
                     <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
                         alt="JE BikeZ" style="width: 30px;">
-                    <h4 style="color: white; margin: 0; font-size: 16px;">JE BikeZ</h4>
+                    <h4 style="color: var(--text-primary); margin: 0; font-size: 16px;">JE BIKEZ GARAGE</h4>
                 </div>
-                <p style="color: #888; font-size: 12px; line-height: 1.6; margin: 0;">Premium bike modification studio.
+                <p style="color: var(--text-secondary); font-size: 12px; line-height: 1.6; margin: 0;">Premium bike
+                    modification studio.
                     Everything your bike needs, under one roof.</p>
             </div>
             <div>
@@ -860,20 +1269,24 @@
                     Links</h4>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <a href="#services"
-                        style="color: #888; text-decoration: none; font-size: 12px; transition: color 0.2s;"
-                        onmouseover="this.style.color='white'" onmouseout="this.style.color='#888'">Services</a>
+                        style="color: var(--text-secondary); text-decoration: none; font-size: 12px; transition: color 0.2s;"
+                        onmouseover="this.style.color='var(--text-primary)'"
+                        onmouseout="this.style.color='var(--text-secondary)'">Services</a>
                     <a href="#builds"
-                        style="color: #888; text-decoration: none; font-size: 12px; transition: color 0.2s;"
-                        onmouseover="this.style.color='white'" onmouseout="this.style.color='#888'">Builds</a>
+                        style="color: var(--text-secondary); text-decoration: none; font-size: 12px; transition: color 0.2s;"
+                        onmouseover="this.style.color='var(--text-primary)'"
+                        onmouseout="this.style.color='var(--text-secondary)'">Builds</a>
                     <a href="#sales"
-                        style="color: #888; text-decoration: none; font-size: 12px; transition: color 0.2s;"
-                        onmouseover="this.style.color='white'" onmouseout="this.style.color='#888'">Sales</a>
+                        style="color: var(--text-secondary); text-decoration: none; font-size: 12px; transition: color 0.2s;"
+                        onmouseover="this.style.color='var(--text-primary)'"
+                        onmouseout="this.style.color='var(--text-secondary)'">Sales</a>
                 </div>
             </div>
             <div>
                 <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 15px; text-transform: uppercase;">
                     Contact</h4>
-                <div style="display: flex; flex-direction: column; gap: 10px; color: #888; font-size: 12px;">
+                <div
+                    style="display: flex; flex-direction: column; gap: 10px; color: var(--text-secondary); font-size: 12px;">
                     <span><i class="fas fa-map-marker-alt" style="width: 20px; color: var(--accent);"></i>
                         Mayiladuthurai, TN, India</span>
                     <span><i class="fas fa-phone-alt" style="width: 20px; color: var(--accent);"></i> +91 98765
@@ -887,24 +1300,25 @@
                     Follow Us</h4>
                 <div style="display: flex; gap: 15px;">
                     <a href="#"
-                        style="width: 35px; height: 35px; border-radius: 50%; background: #111; border: 1px solid #222; display: flex; align-items: center; justify-content: center; color: white; transition: all 0.3s;"
+                        style="width: 35px; height: 35px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-primary); transition: all 0.3s;"
                         onmouseover="this.style.background='var(--accent)'; this.style.color='black';"
-                        onmouseout="this.style.background='#111'; this.style.color='white';"><i
+                        onmouseout="this.style.background='var(--bg-card)'; this.style.color='var(--text-primary)';"><i
                             class="fab fa-instagram"></i></a>
                     <a href="#"
-                        style="width: 35px; height: 35px; border-radius: 50%; background: #111; border: 1px solid #222; display: flex; align-items: center; justify-content: center; color: white; transition: all 0.3s;"
+                        style="width: 35px; height: 35px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-primary); transition: all 0.3s;"
                         onmouseover="this.style.background='var(--accent)'; this.style.color='black';"
-                        onmouseout="this.style.background='#111'; this.style.color='white';"><i
+                        onmouseout="this.style.background='var(--bg-card)'; this.style.color='var(--text-primary)';"><i
                             class="fab fa-facebook-f"></i></a>
                     <a href="#"
-                        style="width: 35px; height: 35px; border-radius: 50%; background: #111; border: 1px solid #222; display: flex; align-items: center; justify-content: center; color: white; transition: all 0.3s;"
+                        style="width: 35px; height: 35px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-primary); transition: all 0.3s;"
                         onmouseover="this.style.background='var(--accent)'; this.style.color='black';"
-                        onmouseout="this.style.background='#111'; this.style.color='white';"><i
+                        onmouseout="this.style.background='var(--bg-card)'; this.style.color='var(--text-primary)';"><i
                             class="fab fa-youtube"></i></a>
                 </div>
             </div>
         </div>
-        <div style="border-top: 1px solid #222; padding-top: 20px; text-align: center; color: #666; font-size: 11px;">
+        <div
+            style="border-top: 1px solid var(--border); padding-top: 20px; text-align: center; color: var(--text-muted); font-size: 11px;">
             &copy; 2024 JE BikeZ. Built With Passion. Perfected By Experts.
         </div>
     </footer>

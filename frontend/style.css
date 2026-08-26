@@ -2104,7 +2104,7 @@ input:-webkit-autofill:active {
         gap: 12px;
     }
 
-    .nav-right .nav-login-btn,
+    .nav-right .nav-login-btn:not(.navbar-auth-btn),
     .nav-right .nav-icon-btn {
         display: none;
     }
@@ -2802,7 +2802,7 @@ input:-webkit-autofill:active {
         display: none !important;
     }
 
-    .nav-login-btn {
+    .nav-login-btn:not(.navbar-auth-btn) {
         display: none !important;
     }
 
@@ -3676,12 +3676,12 @@ input:-webkit-autofill:active {
 
     padding: 0 17px;
 
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid var(--border-light);
     border-radius: 10px;
 
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--bg-input);
 
-    color: #ffffff;
+    color: var(--text-primary);
 
     font-family: inherit;
     font-size: 13px;
@@ -3702,16 +3702,16 @@ input:-webkit-autofill:active {
 
 
 .navbar-auth-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--accent-subtle);
 
-    border-color: rgba(255, 255, 255, 0.24);
+    border-color: var(--border-accent);
 
     transform: translateY(-1px);
 }
 
 
 .navbar-auth-btn:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.35);
+    outline: 2px solid var(--border-accent);
 
     outline-offset: 3px;
 }

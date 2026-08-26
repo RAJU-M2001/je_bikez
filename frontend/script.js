@@ -36,15 +36,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // ========================================================
 
     // LOCAL
-    // const API_BASE_URL =
-    //     "http://127.0.0.1:10000";
+    const API_BASE_URL =
+        "http://127.0.0.1:10000";
 
     // PRODUCTION
     // const API_BASE_URL = "https://api.je-bikez.com";
 
     // RENDER
-    const API_BASE_URL =
-        "https://bike-modification-api.onrender.com";
+    // const API_BASE_URL =
+    //     "https://bike-modification-api.onrender.com";
 
 
     // ========================================================

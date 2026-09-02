@@ -36,15 +36,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // ========================================================
 
     // LOCAL
-    // const API_BASE_URL =
-    //     "http://127.0.0.1:10000";
+    const API_BASE_URL =
+        "http://127.0.0.1:10000";
 
     // PRODUCTION
     // const API_BASE_URL = "https://api.je-bikez.com";
 
     // RENDER
-    const API_BASE_URL =
-        "https://bike-modification-api.onrender.com";
+    // const API_BASE_URL =
+    //     "https://bike-modification-api.onrender.com";
 
 
     // ========================================================
@@ -52,6 +52,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // ========================================================
 
     async function fetchThemeConfig() {
+
+        // 1. Check local storage first to prevent flickering
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "light") {
+            document.documentElement.classList.add("light-mode");
+            document.body.classList.add("light-mode");
+        } else {
+            document.documentElement.classList.remove("light-mode");
+            document.body.classList.remove("light-mode");
+        }
 
         try {
 
@@ -66,6 +76,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const data =
                 await response.json();
+
+            // 2. Update local storage with the API result
+            localStorage.setItem("theme", data.theme);
 
             if (data.theme === "light") {
 
@@ -791,6 +804,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ========================================================
+    // FETCH & STORE USER PROFILE HELPER
+    // ========================================================
+
+    function fetchAndStoreUserProfile(userId) {
+        if (!userId) return;
+        fetch(`${API_BASE_URL}/api/user/${userId}`)
+            .then(r => r.json())
+            .then(profileData => {
+                const user = profileData.user;
+                if (!user) return;
+                localStorage.setItem("user_object", JSON.stringify(user));
+                localStorage.setItem("currentUserPhone", user.phone || "");
+                if (user.profile_picture) {
+                    currentUserProfilePic = user.profile_picture;
+                    localStorage.setItem("currentUserProfilePic", currentUserProfilePic);
+                    updateNavbarAuthUI();
+                }
+            })
+            .catch(() => { });
+    }
     // NAVBAR ELEMENTS
     // ========================================================
 
@@ -1714,6 +1747,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     "currentUserProfilePic"
                 );
 
+                localStorage.removeItem(
+                    "currentUserPhone"
+                );
+
+                localStorage.removeItem(
+                    "user_object"
+                );
+
 
                 // --------------------------------------------
                 // IMPORTANT
@@ -2208,6 +2249,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         );
 
 
+                        // Fetch full profile to store user_object + phone
+                        fetchAndStoreUserProfile(currentUserId);
+
+
                         // ------------------------------------
                         // UPDATE COMPLETE NAVBAR
                         // ------------------------------------
@@ -2438,9 +2483,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         );
 
 
-                        // ------------------------------------
-                        // UPDATE COMPLETE NAVBAR
-                        // ------------------------------------
+                        // Fetch full profile to store user_object + phone
+                        fetchAndStoreUserProfile(currentUserId);
 
                         updateNavbarAuthUI();
 
@@ -2521,11 +2565,6 @@ document.addEventListener("DOMContentLoaded", function () {
             function () {
 
                 if (!isLoggedIn) {
-
-                    alert(
-                        "Please login first to book a service!"
-                    );
-
 
                     showModal(
                         loginDialog
@@ -3096,5 +3135,100 @@ document.addEventListener("DOMContentLoaded", function () {
     // ========================================================
 
     updateNavbarAuthUI();
+
+    // On page load/refresh, re-fetch full profile if already logged in
+    if (isLoggedIn && currentUserId) {
+        fetchAndStoreUserProfile(currentUserId);
+    }
+
+    // ========================================================
+    // BOOK A SLOT LOGIC
+
+    // ========================================================
+    const bookSlotDialog = document.getElementById("bookSlotDialog");
+    const closeBookSlotDialog = document.getElementById("closeBookSlotDialog");
+    const bookSlotForm = document.getElementById("bookSlotForm");
+    const slotContactError = document.getElementById("slotContactError");
+
+    window.openBookSlotDialog = function () {
+        const slotName = document.getElementById("slotName");
+        const slotEmail = document.getElementById("slotEmail");
+        const slotPhone = document.getElementById("slotPhone");
+
+        if (isLoggedIn) {
+            if (currentUserName && slotName) slotName.value = currentUserName;
+            if (currentUserEmail && slotEmail) slotEmail.value = currentUserEmail;
+
+            // Auto-fill phone if it exists in local storage
+            const savedPhone = localStorage.getItem("currentUserPhone");
+            if (savedPhone && slotPhone) slotPhone.value = savedPhone;
+        }
+
+        showModal(bookSlotDialog);
+    };
+
+    if (closeBookSlotDialog) {
+        closeBookSlotDialog.addEventListener("click", () => {
+            hideAllModals();
+            if (bookSlotForm) bookSlotForm.reset();
+            if (slotContactError) slotContactError.style.display = "none";
+        });
+    }
+
+    if (bookSlotForm) {
+        bookSlotForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById("slotName").value.trim();
+            const phone = document.getElementById("slotPhone").value.trim();
+            const email = document.getElementById("slotEmail").value.trim();
+            const bike = document.getElementById("slotBike").value.trim();
+
+            if (!phone && !email) {
+                slotContactError.style.display = "block";
+                return;
+            }
+            slotContactError.style.display = "none";
+
+            const submitBtn = document.getElementById("slotSubmitBtn");
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = 'Booking... <span class="spinner"></span>';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/modification-slot`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, phone, email, bike })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    hideAllModals();
+                    bookSlotForm.reset();
+
+                    const successModal = document.getElementById("modificationSuccessDialog");
+                    if (successModal) {
+                        showModal(successModal);
+                        setTimeout(() => {
+                            hideAllModals();
+                        }, 5000);
+                    }
+                } else {
+                    const errorMsg = data.error || "Failed to book slot";
+                    slotContactError.innerText = "Error: " + errorMsg;
+                    slotContactError.style.display = "block";
+                }
+            } catch (err) {
+                console.error(err);
+                slotContactError.innerText = "Server error. Please try again.";
+                slotContactError.style.display = "block";
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    }
 
 });

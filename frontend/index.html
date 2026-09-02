@@ -438,9 +438,9 @@
                     <div class="panel-box ideas-panel">
                         <h3 class="panel-title">NEED MODIFICATION<br>IDEAS?</h3>
                         <p>Share your bike and get custom suggestions from our experts.</p>
-                        <button class="btn-primary mb-3"
-                            style="padding: 10px 20px; background: var(--accent); color: black; font-weight: bold; border-radius: 5px; width: fit-content;">Ask
-                            Mechanic</button>
+                        <button class="btn-primary mb-3" onclick="openBookSlotDialog()"
+                            style="padding: 10px 20px; background: var(--accent); color: black; font-weight: bold; border-radius: 5px; width: fit-content;">
+                            Book a Slot</button>
                         <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5388_i4fqri.jpg"
                             alt="Bike Idea">
                     </div>
@@ -1127,6 +1127,77 @@
 
         <link rel="stylesheet" href="bike-service.css">
         <script src="bike-service.js"></script>
+
+        <!-- BOOK SLOT DIALOG -->
+        <div id="bookSlotDialog" class="dialog">
+            <div class="dialog-box"
+                style="position: relative; margin: auto; width: 450px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+                <button id="closeBookSlotDialog" type="button"
+                    style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                    onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+                <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">BOOK A
+                    SLOT</h4>
+                <p style="font-size: 14px; color: #aaa; margin-bottom: 25px;">Fill in the details below to book a
+                    modification slot.</p>
+                <form id="bookSlotForm">
+                    <div style="margin-bottom: 15px;">
+                        <label for="slotName"
+                            style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Full Name
+                            *</label>
+                        <input type="text" id="slotName" name="slotName" placeholder="e.g., Alex Morgan"
+                            style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px; font-family: inherit; box-sizing: border-box;"
+                            required>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="slotPhone"
+                            style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Phone Number /
+                            WhatsApp</label>
+                        <input type="tel" id="slotPhone" name="slotPhone" placeholder="e.g., +91 98765 43210"
+                            style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px; font-family: inherit; box-sizing: border-box;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="slotEmail"
+                            style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email
+                            Address</label>
+                        <input type="email" id="slotEmail" name="slotEmail" placeholder="e.g., alex.morgan@gmail.com"
+                            style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px; font-family: inherit; box-sizing: border-box;">
+                    </div>
+                    <p id="slotContactError"
+                        style="color: #f44336; font-size: 12px; display: none; margin-top: -10px; margin-bottom: 10px;">
+                        Please provide either a Phone Number or an Email Address.</p>
+                    <div style="margin-bottom: 15px;">
+                        <label for="slotBike"
+                            style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Bike Details &
+                            Modification Description *</label>
+                        <textarea id="slotBike" name="slotBike"
+                            placeholder="e.g., Royal Enfield Classic 350 - Looking for a custom exhaust upgrade, alloy wheels, and matte black handlebar installation."
+                            rows="4"
+                            style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px; font-family: inherit; box-sizing: border-box; resize: none; word-wrap: break-word;"
+                            required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" id="slotSubmitBtn"
+                        style="width: 100%; justify-content: center; margin-top: 15px; padding: 12px; font-weight: bold; border-radius: 8px; font-family: inherit;">
+                        Submit Request
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MODIFICATION SUCCESS DIALOG -->
+        <div id="modificationSuccessDialog" class="dialog">
+            <div class="dialog-box"
+                style="margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+                <h4
+                    style="text-align: center; color: white; font-size: 15px; margin-bottom: 25px; font-weight: normal;">
+                    BOOKING CONFIRMED</h4>
+                <div
+                    style="width: 64px; height: 64px; background: #4caf50; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; color: white; margin: 0 auto 20px auto; box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);">
+                    <i class="fas fa-check"></i>
+                </div>
+                <p style="text-align: center; color: #aaa; font-size: 14px; line-height: 1.5;">Your modification request
+                    has been received.<br>Our consultant will contact you shortly.</p>
+            </div>
+        </div>
 
         <div id="statusDialog" class="dialog">
             <div class="dialog-box"

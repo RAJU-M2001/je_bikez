@@ -53,11 +53,13 @@ mongo_uri = os.getenv("MONGO_URI")
 db_name = os.getenv("DB_NAME")
 collection_name = os.getenv("COLLECTION_NAME")
 user = os.getenv("USER")
+modification=os.getenv("MODIFICATION")
 
 client = MongoClient(mongo_uri, tls=True)
 db = client[db_name]
 collection = db[collection_name]
 user_collection = db[user]
+modification_collection = db[modification]
 
 
 # Health Check API
@@ -128,6 +130,38 @@ def book_slot():
         return jsonify({
             "error": str(e)
         }), 500
+
+# 📦 MODIFICATION SLOT API
+@app.route("/api/modification-slot", methods=["POST"])
+def modification_slot():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No data received"}), 400
+            
+        name = data.get("name")
+        phone = data.get("phone")
+        email = data.get("email")
+        bike = data.get("bike")
+        
+        if not name or not bike:
+            return jsonify({"error": "Name and Bike details are required"}), 400
+            
+        if not phone and not email:
+            return jsonify({"error": "Either Phone or Email is required"}), 400
+            
+        modification_collection.insert_one({
+            "name": name,
+            "phone": phone,
+            "email": email,
+            "bike": bike,
+            "type": "modification_slot",
+            "date": datetime.now(UTC)
+        })
+        
+        return jsonify({"success": True, "message": "Slot booked successfully"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # 🔐 SIGNUP API
 @app.route("/api/auth/signup", methods=["POST"])
@@ -467,5 +501,6 @@ def delete_account(user_id):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
+
 
 

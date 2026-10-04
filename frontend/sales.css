@@ -1,0 +1,977 @@
+/* ═══════════════════════════════════════════════════════════════
+   JE BIKEZ — SALES PAGE STYLES (sales.css)
+   Consistent with Service Page Aesthetic (Light Mode Redesign)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Light Mode Base ── */
+.svc-body {
+    background: #f4f5f9;
+    color: #1a1a2e;
+    font-family: 'Inter', 'Outfit', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+}
+
+.svc-body .navbar {
+    background: rgba(255, 255, 255, 0.94) !important;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.svc-body .navbar a,
+.svc-body .navbar .nav-icon-btn {
+    color: #1a1a2e !important;
+}
+
+.svc-body .navbar a.active {
+    color: var(--accent, #ff6600) !important;
+}
+
+.svc-body .navbar .navbar-auth-btn {
+    background: var(--accent, #ff6600) !important;
+    color: #000000 !important;
+    border: none !important;
+    font-weight: 700 !important;
+}
+
+.svc-body .navbar .navbar-auth-btn i,
+.svc-body .navbar .navbar-auth-btn span {
+    color: #000000 !important;
+}
+
+/* Profile Dropdown fix */
+.svc-body .profile-dropdown button,
+.svc-body .profile-dropdown .profile-dropdown-btn {
+    color: #eeeeee !important;
+}
+.svc-body .profile-dropdown .logout-dropdown-btn {
+    color: #ff6b6b !important;
+}
+
+/* ── Hero Section ── */
+.sales-hero {
+    background: linear-gradient(135deg, #fff5ed 0%, #ffe0c2 40%, #ffc89a 100%);
+    padding: 90px 24px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.sales-hero::after {
+    content: '';
+    position: absolute;
+    width: 480px;
+    height: 480px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 102, 0, 0.15) 0%, transparent 70%);
+    top: -120px;
+    right: -100px;
+    pointer-events: none;
+}
+
+.sales-hero-content {
+    max-width: 820px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.sales-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 102, 0, 0.12);
+    color: var(--accent, #ff6600);
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(255, 102, 0, 0.25);
+}
+
+.sales-hero h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 14px;
+    line-height: 1.15;
+}
+
+.sales-hero h1 .accent {
+    color: var(--accent, #ff6600);
+}
+
+.sales-hero p {
+    font-size: 1.05rem;
+    color: #4b5563;
+    max-width: 650px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+}
+
+/* Stats Ribbon */
+.sales-stats-ribbon {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+
+.sales-stat-pill {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 102, 0, 0.2);
+    border-radius: 12px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
+.sales-stat-pill i {
+    font-size: 1.25rem;
+    color: var(--accent, #ff6600);
+}
+
+.sales-stat-pill strong {
+    display: block;
+    font-size: 1.1rem;
+    color: #111827;
+    font-weight: 800;
+}
+
+.sales-stat-pill span {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* ── Filter Bar ── */
+.sales-filter-bar {
+    max-width: 1200px;
+    margin: -25px auto 40px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.sales-filter-inner {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 14px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    border: 1px solid #eaebee;
+}
+
+.sales-filter-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.sales-filter-btn:hover {
+    color: var(--accent, #ff6600);
+    background: #fff7ed;
+}
+
+.sales-filter-btn.active {
+    background: var(--accent, #ff6600);
+    color: #000000;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+}
+
+/* ── Main Container & Grid ── */
+.sales-main {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+}
+
+.sales-section-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.sales-section-header .sales-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--accent, #ff6600);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.sales-section-header h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #111827;
+}
+
+.sales-section-header h2 .accent {
+    color: var(--accent, #ff6600);
+}
+
+.sales-bikes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+/* ── Individual Sale Bike Card ── */
+.sales-bike-card {
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.sales-bike-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 36px rgba(255, 102, 0, 0.15);
+    border-color: rgba(255, 102, 0, 0.4);
+}
+
+.sales-card-media {
+    position: relative;
+    height: 220px;
+    background: #111;
+    overflow: hidden;
+}
+
+.sales-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.sales-bike-card:hover .sales-card-media img {
+    transform: scale(1.06);
+}
+
+.sales-tag-pill {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    z-index: 2;
+}
+
+.sales-tag-pill.verified {
+    background: #10b981;
+    color: #ffffff;
+}
+
+.sales-heart-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.sales-heart-btn:hover,
+.sales-heart-btn.liked {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.sales-card-hover-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    z-index: 3;
+}
+
+.sales-card-hover-overlay span {
+    background: rgba(255, 255, 255, 0.95);
+    color: #111827;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sales-bike-card:hover .sales-card-hover-overlay {
+    opacity: 1;
+}
+
+/* Card Body */
+.sales-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.sales-card-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.sales-category-badge {
+    background: rgba(255, 102, 0, 0.1);
+    color: var(--accent, #ff6600);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.sales-condition-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    color: #10b981;
+    font-weight: 700;
+}
+
+.sales-bike-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #111827;
+    margin: 4px 0 6px;
+}
+
+.sales-bike-subtitle {
+    font-size: 0.88rem;
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+/* Card Specs Row */
+.sales-card-specs-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    background: #f9fafb;
+    border: 1px solid #f3f4f6;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 16px;
+}
+
+.sales-spec-item {
+    text-align: center;
+}
+
+.sales-spec-item small {
+    display: block;
+    font-size: 0.68rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.sales-spec-item strong {
+    font-size: 0.88rem;
+    color: #1f2937;
+    font-weight: 700;
+}
+
+/* Card Footer */
+.sales-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.sales-card-price-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.sales-card-price-group .price-val {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--accent, #ff6600);
+}
+
+.sales-card-price-group .emi-note {
+    font-size: 0.72rem;
+    color: #6b7280;
+}
+
+.sales-explore-btn {
+    background: #111827;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.sales-explore-btn:hover {
+    background: var(--accent, #ff6600);
+    color: #000000;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SALES DETAILS MODAL & SLIDER
+   ═══════════════════════════════════════════════════════════════ */
+.sales-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.sales-modal-backdrop.open {
+    display: flex;
+    animation: modalFadeIn 0.3s ease forwards;
+}
+
+.sales-modal-dialog {
+    background: #ffffff;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 1000px;
+    max-height: 92vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+    animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.sales-modal-close-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.08);
+    color: #111;
+    border: none;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.sales-modal-close-btn:hover {
+    background: #111;
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.sales-modal-content {
+    padding: 30px;
+}
+
+.sales-modal-header {
+    margin-bottom: 20px;
+    padding-right: 40px;
+}
+
+.sales-modal-header .modal-badge {
+    background: rgba(255, 102, 0, 0.12);
+    color: var(--accent, #ff6600);
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.sales-modal-header h2 {
+    font-size: 2rem;
+    color: #111827;
+    margin: 0 0 6px;
+    font-weight: 800;
+}
+
+.sales-modal-header p {
+    color: #6b7280;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* ── Image Slider in Slide Format ── */
+.sales-slider-wrapper {
+    position: relative;
+    background: #0d0f14;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.sales-slider-stage {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    display: flex;
+    overflow: hidden;
+}
+
+.sales-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: scale(0.98);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sales-slide.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+.sales-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.sales-slide-caption {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+}
+
+.sales-slider-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
+    color: #ffffff;
+    border: none;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 5;
+}
+
+.sales-slider-nav-btn:hover {
+    background: var(--accent, #ff6600);
+    color: #000000;
+}
+
+.sales-slider-nav-btn.prev {
+    left: 15px;
+}
+
+.sales-slider-nav-btn.next {
+    right: 15px;
+}
+
+/* Dots Indicator */
+.sales-slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    background: #141720;
+}
+
+.sales-slider-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.25s ease;
+}
+
+.sales-slider-dot.active {
+    background: var(--accent, #ff6600);
+    transform: scale(1.25);
+    width: 24px;
+    border-radius: 12px;
+}
+
+/* ── Modal Grid: Details Left, Booking Form Right ── */
+.sales-modal-body-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 30px;
+}
+
+.sales-details-column h4 {
+    font-size: 1.05rem;
+    color: #111827;
+    margin: 0 0 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sales-details-column h4 i {
+    color: var(--accent, #ff6600);
+}
+
+.sales-specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+}
+
+.sales-specs-table td {
+    padding: 8px 12px;
+    font-size: 0.88rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.sales-specs-table td:first-child {
+    color: #6b7280;
+    font-weight: 600;
+    width: 42%;
+}
+
+.sales-specs-table td:last-child {
+    color: #111827;
+    font-weight: 700;
+}
+
+.sales-checkpoints-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+}
+
+.sales-checkpoints-list li {
+    padding: 6px 0;
+    font-size: 0.86rem;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sales-checkpoints-list li i {
+    color: #10b981;
+}
+
+/* ── Booking Form Column ── */
+.sales-booking-card {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 24px;
+    position: sticky;
+    top: 20px;
+}
+
+.sales-price-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.sales-price-banner small {
+    display: block;
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.sales-price-banner .price {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--accent, #ff6600);
+}
+
+.sales-booking-header {
+    margin-bottom: 16px;
+}
+
+.sales-booking-header h5 {
+    font-size: 1.1rem;
+    color: #111827;
+    margin: 0 0 4px;
+    font-weight: 700;
+}
+
+.sales-booking-header p {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+/* Logged-out state inside form */
+.sales-auth-gate {
+    background: #fff;
+    border: 1px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.sales-auth-gate i {
+    font-size: 2rem;
+    color: var(--accent, #ff6600);
+    margin-bottom: 10px;
+}
+
+.sales-auth-gate h6 {
+    font-size: 1rem;
+    margin: 0 0 6px;
+    color: #111827;
+}
+
+.sales-auth-gate p {
+    font-size: 0.82rem;
+    color: #6b7280;
+    margin: 0 0 16px;
+}
+
+.sales-auth-login-trigger {
+    background: var(--accent, #ff6600);
+    color: #000000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sales-auth-login-trigger:hover {
+    background: #e65c00;
+}
+
+/* Booking Form Elements */
+.sales-form-field {
+    margin-bottom: 14px;
+}
+
+.sales-form-field label {
+    display: block;
+    font-size: 0.82rem;
+    color: #4b5563;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.sales-form-field label i {
+    color: var(--accent, #ff6600);
+    margin-right: 4px;
+}
+
+.sales-form-field input,
+.sales-form-field select,
+.sales-form-field textarea {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    color: #111827;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.sales-form-field input:focus,
+.sales-form-field select:focus,
+.sales-form-field textarea:focus {
+    outline: none;
+    border-color: var(--accent, #ff6600);
+    box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.15);
+}
+
+.sales-submit-btn {
+    width: 100%;
+    background: var(--accent, #ff6600);
+    color: #000000;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+}
+
+.sales-submit-btn:hover {
+    background: #e65c00;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 102, 0, 0.3);
+}
+
+.sales-submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.sales-booking-msg {
+    margin-top: 14px;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    text-align: center;
+    display: none;
+}
+
+.sales-booking-msg.success {
+    display: block;
+    background: #e6fffa;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+
+.sales-booking-msg.error {
+    display: block;
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+/* ── Footer ── */
+.svc-footer {
+    background: #ffffff;
+    border-top: 1px solid #eaeaea;
+    padding: 30px 20px;
+    text-align: center;
+    color: #888888;
+    font-size: 0.88rem;
+}
+
+/* ── Responsive Queries ── */
+@media (max-width: 900px) {
+    .sales-hero h1 {
+        font-size: 2.2rem;
+    }
+    .sales-modal-body-grid {
+        grid-template-columns: 1fr;
+    }
+    .sales-slider-stage {
+        height: 280px;
+    }
+}
+
+@media (max-width: 600px) {
+    .sales-hero {
+        padding: 70px 16px 40px;
+    }
+    .sales-hero h1 {
+        font-size: 1.8rem;
+    }
+    .sales-bikes-grid {
+        grid-template-columns: 1fr;
+    }
+    .sales-card-media {
+        height: 180px;
+    }
+    .sales-slider-stage {
+        height: 220px;
+    }
+    .sales-modal-content {
+        padding: 18px;
+    }
+}

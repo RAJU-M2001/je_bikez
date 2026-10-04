@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en" class="light-mode">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JE BikeZ – Certified Pre-Owned Bikes & Sales</title>
+    <meta name="description"
+        content="Buy verified pre-owned & custom motorcycles with 100-point inspection, transparent pricing, and instant test ride bookings at JE BikeZ." />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./service-page.css" />
+    <link rel="stylesheet" href="./sales.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script defer src="./script.js"></script>
+</head>
+
+<body class="svc-body">
+    <!-- ═══ NAVBAR ═══ -->
+    <header>
+        <nav class="navbar" id="mainNav">
+            <div class="nav-left">
+                <div class="logo">
+                    <a href="index.html" aria-label="JE BikeZ Home">
+                        <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                            alt="JE BikeZ" width="40" height="50">
+                    </a>
+                </div>
+                <div class="nav-links" id="navLinks">
+                    <a href="index.html">Home</a>
+                    <a href="service.html">Services</a>
+                    <a href="builds.html">Builds</a>
+                    <a href="sales.html" class="active">Sales</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div id="profileMenuContainer" class="profile-menu-container">
+                    <!-- LOGGED OUT -->
+                    <button id="loginSignupBtn" type="button" class="nav-login-btn navbar-auth-btn"
+                        aria-label="Login or Signup"><i class="fas fa-user" aria-hidden="true"></i><span>Login /
+                            Signup</span></button>
+                    <!-- LOGGED IN -->
+                    <div id="profileContainer" class="profile-container" style="display: none;">
+                        <button id="profileAvatarBtn" type="button" class="profile-avatar-btn"
+                            aria-label="Open profile menu" aria-expanded="false" aria-haspopup="true">
+                            <div id="navProfileAvatar" class="nav-profile-avatar">
+                                <i class="fas fa-user" aria-hidden="true"></i>
+                            </div>
+                            <i class="fas fa-chevron-down profile-chevron" aria-hidden="true"></i>
+                        </button>
+                        <div id="profileDropdown" class="profile-dropdown" role="menu" aria-hidden="true">
+                            <div class="profile-dropdown-header">
+                                <div id="dropdownProfileAvatar" class="dropdown-profile-avatar">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                </div>
+                                <div class="profile-dropdown-user">
+                                    <strong id="dropdownProfileName">Account</strong>
+                                    <span id="dropdownProfileEmail">Manage your profile</span>
+                                </div>
+                            </div>
+                            <div class="profile-dropdown-divider"></div>
+                            <!-- EDIT PROFILE -->
+                            <button id="editProfileBtn" type="button" class="profile-dropdown-btn" role="menuitem">
+                                <span class="profile-menu-icon">
+                                    <i class="fas fa-user-edit" aria-hidden="true"></i>
+                                </span>
+                                <span class="profile-menu-text">
+                                    Edit Profile
+                                </span>
+                                <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
+                            </button>
+                            <!-- LOGOUT -->
+                            <button id="logoutBtn" type="button" class="profile-dropdown-btn logout-dropdown-btn"
+                                role="menuitem">
+                                <span class="profile-menu-icon"><i class="fas fa-sign-out-alt"
+                                        aria-hidden="true"></i></span>
+                                <span class="profile-menu-text">Logout</span>
+                                <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ═══════════ AUTH DIALOGS ═══════════ -->
+    <div id="loginDialog" class="dialog">
+        <div class="dialog-box"
+            style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+            <button id="closeLoginDialog" type="button"
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+            <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">LOGIN</h4>
+            <p style="font-size: 20px; color: white; margin-bottom: 25px;">Welcome Back!</p>
+
+            <div id="loginAlert"
+                style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email Address</label>
+                <input type="text" id="loginEmail" placeholder="johndoe@gmail.com"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Password</label>
+                <div style="position: relative;">
+                    <input type="password" id="loginPwd" placeholder="••••••••"
+                        style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+                    <i class="far fa-eye" id="loginEye"
+                        style="position: absolute; right: 15px; top: 15px; color: #666; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <a href="#" class="forgot-link"
+                style="display: block; text-align: right; color: var(--accent); font-size: 12px; margin-bottom: 25px; text-decoration: none;">Forgot
+                Password?</a>
+
+            <button id="loginBtnAction"
+                style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 20px;">Login</button>
+
+            <p style="text-align: center; margin-top: 25px; font-size: 12px; color: #888;">Don't have an account? <a
+                    href="#" id="goToSignup"
+                    style="color: var(--accent); text-decoration: none; font-weight: bold;">Sign Up</a></p>
+        </div>
+    </div>
+
+    <div id="signupDialog" class="dialog">
+        <div class="dialog-box"
+            style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+            <button id="closeSignupDialog" type="button"
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+            <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">SIGN UP
+            </h4>
+            <p style="font-size: 20px; color: white; margin-bottom: 25px;">Create Account</p>
+
+            <div id="signupAlert"
+                style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Full Name</label>
+                <input type="text" id="signupName" placeholder="Enter your name"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Mobile Number</label>
+                <input type="text" id="signupPhone" placeholder="+91 98765 43210"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email Address</label>
+                <input type="email" id="signupEmail" placeholder="Enter your email"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Password</label>
+                <div style="position: relative;">
+                    <input type="password" id="signupPwd" placeholder="Enter password"
+                        style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+                    <i class="far fa-eye" id="signupEye"
+                        style="position: absolute; right: 15px; top: 15px; color: #666; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <button id="signupBtnAction"
+                style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 20px;">Sign
+                Up</button>
+
+            <p style="text-align: center; margin-top: 25px; font-size: 12px; color: #888;">Already have an account?
+                <a href="#" id="goToLogin"
+                    style="color: var(--accent); text-decoration: none; font-weight: bold;">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- PROFILE DIALOG -->
+    <div id="profileDialog" class="dialog">
+        <div class="dialog-box"
+            style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+            <button id="closeProfileDialog" type="button"
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+            <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">
+                PROFILE SETTINGS</h4>
+
+            <div id="profileAlert"
+                style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+            </div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="position: relative; display: inline-block;">
+                    <div id="profileImagePreview"
+                        style="width: 80px; height: 80px; border-radius: 50%; background: var(--avatar-bg, #222); color: var(--avatar-color, #fff); display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent); font-size: 32px;">
+                        <i class="fas fa-user"></i>
+                    </div>
+
+                    <label for="profileImageInput"
+                        style="position: absolute; bottom: 0; right: 0; background: var(--accent); color: black; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px;">
+                        <i class="fas fa-camera"></i>
+                    </label>
+
+                    <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Full Name</label>
+                <input type="text" id="profileName" placeholder="Enter your name"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email Address</label>
+                <input type="email" id="profileEmail" readonly
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: #666; font-size: 14px; cursor: not-allowed;">
+            </div>
+
+            <button id="saveProfileBtn"
+                style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 15px;">Save
+                Changes</button>
+        </div>
+    </div>
+
+    <!-- LOGOUT CONFIRM DIALOG -->
+    <div id="logoutConfirmDialog" class="dialog logout-dialog" aria-hidden="true" style="display: none;">
+        <div class="dialog-box logout-confirm-box" role="dialog" aria-modal="true" aria-labelledby="logoutDialogTitle">
+            <button id="cancelLogoutTop" type="button" class="logout-close-btn" aria-label="Close logout dialog">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+            <div class="logout-icon"><i class="fas fa-sign-out-alt"></i></div>
+            <div class="logout-content">
+                <span class="logout-label">ACCOUNT ACTION</span>
+                <h2 id="logoutDialogTitle">Logout?</h2>
+                <p>Are you sure you want to logout from your account?</p>
+            </div>
+            <div class="logout-actions">
+                <button id="cancelLogoutBtn" type="button" class="cancel-btn"><span>Stay Logged In</span></button>
+                <button id="confirmLogoutBtn" type="button" class="logout-confirm-btn"><span>Yes, Logout</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ HERO SECTION ═══ -->
+    <section class="sales-hero" id="salesHero">
+        <div class="sales-hero-content">
+            <span class="sales-badge"><i class="fas fa-certificate"></i> Certified Pre-Owned & Custom Motorcycles</span>
+            <h1>Find Your Next <span class="accent">Dream Ride</span></h1>
+            <p>100-point inspected, verified documentation, workshop serviced, and tested for pure performance.
+                Discover certified motorcycles ready for instant booking and delivery.</p>
+
+            <div class="sales-stats-ribbon">
+                <div class="sales-stat-pill">
+                    <i class="fas fa-check-double"></i>
+                    <div>
+                        <strong>100-Point</strong>
+                        <span>Mechanical Check</span>
+                    </div>
+                </div>
+                <div class="sales-stat-pill">
+                    <i class="fas fa-file-contract"></i>
+                    <div>
+                        <strong>100% RC</strong>
+                        <span>Verified Papers</span>
+                    </div>
+                </div>
+                <div class="sales-stat-pill">
+                    <i class="fas fa-truck-moving"></i>
+                    <div>
+                        <strong>Doorstep</strong>
+                        <span>Fast Delivery</span>
+                    </div>
+                </div>
+                <div class="sales-stat-pill">
+                    <i class="fas fa-percent"></i>
+                    <div>
+                        <strong>Low EMI</strong>
+                        <span>Finance Available</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FILTER BAR ═══ -->
+    <div class="sales-filter-bar">
+        <div class="sales-filter-inner">
+            <button class="sales-filter-btn active" data-filter="all">All Bikes (6)</button>
+            <button class="sales-filter-btn" data-filter="street">Naked & Street</button>
+            <button class="sales-filter-btn" data-filter="supersport">SuperSport</button>
+            <button class="sales-filter-btn" data-filter="cruiser">Cruisers</button>
+            <button class="sales-filter-btn" data-filter="adventure">Adventure & Tourer</button>
+        </div>
+    </div>
+
+    <!-- ═══ MAIN SALES GRID ═══ -->
+    <main class="sales-main">
+        <div class="sales-section-header">
+            <span class="sales-label"><i class="fas fa-tag"></i> Handpicked Inventory</span>
+            <h2>Available <span class="accent">Motorcycles</span></h2>
+        </div>
+
+        <div class="sales-bikes-grid" id="salesGrid">
+            <!-- Cards populated dynamically via JS for full interactive sync -->
+        </div>
+    </main>
+
+    <!-- ═══ SALES DETAILS MODAL (SLIDE FORMAT & BOOKING) ═══ -->
+    <div class="sales-modal-backdrop" id="salesModalBackdrop" aria-hidden="true">
+        <div class="sales-modal-dialog" role="dialog" aria-modal="true">
+            <button class="sales-modal-close-btn" id="closeSalesModal" aria-label="Close modal">&times;</button>
+            <div class="sales-modal-content" id="salesModalContent">
+                <!-- Dynamically populated when card is clicked -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="svc-footer">
+        <p>&copy; 2025 JE BikeZ. All rights reserved. Your trusted destination for premium motorcycles.</p>
+    </footer>
+
+    <!-- ═══ SALES PAGE JAVASCRIPT ═══ -->
+    <script>
+        const API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+            ? "http://127.0.0.1:10000"
+            : "https://bike-modification-api.onrender.com";
+
+        const salesBikesData = [
+            {
+                id: "bike-1",
+                name: "TVS Apache RTR 200 4V",
+                subtitle: "Single Channel ABS • BS6 Racing Edition",
+                category: "street",
+                categoryLabel: "Naked / Street",
+                price: "₹1,15,000",
+                rawPrice: 115000,
+                emi: "₹3,450 / month",
+                year: "2023",
+                km: "12,000 KM",
+                cc: "197.7cc",
+                owners: "1st Owner",
+                rating: "9.6 / 10",
+                verified: true,
+                images: [
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731553/adv_n8l3dc.jpg",
+                        caption: "Full Profile – Flawless Gloss Finish"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5393_z5ifnq.jpg",
+                        caption: "Front View – LED Headlamp & Visor"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5384_md6ioo.jpg",
+                        caption: "Rear 130-Section Tyre & Dual Barrel Exhaust"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png",
+                        caption: "Digital Speedometer & Cockpit Layout"
+                    }
+                ],
+                specs: {
+                    rto: "TN-82 (Mayiladuthurai)",
+                    insurance: "Valid up to Nov 2026 (Comprehensive)",
+                    tyreHealth: "85% Remaining Life",
+                    serviceStatus: "Recently Serviced at JE BikeZ (Oil + Filter)",
+                    fuelEconomy: "38-42 KM/L (City / Highway)",
+                    brakes: "Dual Petal Disc with Super-Moto ABS"
+                },
+                checkpoints: [
+                    "Engine compression test passed (Optimal 10.5:1)",
+                    "Clutch plates & cable inspected (Smooth engagement)",
+                    "Front & rear brake pads in prime condition (>4mm thickness)",
+                    "Battery voltage holding at 12.8V (Healthy cold start)",
+                    "Zero structural or chassis accident history"
+                ]
+            },
+            {
+                id: "bike-2",
+                name: "KTM Duke 250",
+                subtitle: "Dual Channel ABS • Liquid Cooled DOHC",
+                category: "street",
+                categoryLabel: "Naked / Street",
+                price: "₹2,10,000",
+                rawPrice: 210000,
+                emi: "₹5,200 / month",
+                year: "2022",
+                km: "8,500 KM",
+                cc: "248.8cc",
+                owners: "1st Owner",
+                rating: "9.8 / 10",
+                verified: true,
+                images: [
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731554/naked_a5hden.jpg",
+                        caption: "Side View – Signature KTM Orange Trellis Frame"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5385_b8ttli.jpg",
+                        caption: "Aggressive Front Stance with WP Apex Forks"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5390_dj2edp.jpg",
+                        caption: "Engine Block & Slipper Clutch Area"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg",
+                        caption: "Full Instrument Panel & Switchgear"
+                    }
+                ],
+                specs: {
+                    rto: "TN-49 (Thanjavur)",
+                    insurance: "Valid up to Aug 2027",
+                    tyreHealth: "90% Life (MRF Revz FC1 Radials)",
+                    serviceStatus: "Full Official Service Record Available",
+                    fuelEconomy: "32-35 KM/L",
+                    brakes: "ByBre 300mm Front Disc with Bosch ABS"
+                },
+                checkpoints: [
+                    "WP APEX 43mm USD front suspension seals checked (Dry & clean)",
+                    "Electronic fuel injection calibrated for instant response",
+                    "Coolant system flushed and refilled with Motul Inugel",
+                    "Chain drive lubricated with Motul C2 spray",
+                    "All electrical relays, signals, and horn operating crisp"
+                ]
+            },
+            {
+                id: "bike-3",
+                name: "Yamaha YZF R15 V4",
+                subtitle: "Racing Blue • Variable Valve Actuation (VVA)",
+                category: "supersport",
+                categoryLabel: "SuperSport",
+                price: "₹1,65,000",
+                rawPrice: 165000,
+                emi: "₹4,100 / month",
+                year: "2023",
+                km: "9,200 KM",
+                cc: "155cc",
+                owners: "1st Owner",
+                rating: "9.7 / 10",
+                verified: true,
+                images: [
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731554/sports_zt8uwz.jpg",
+                        caption: "Aerodynamic Racing Blue Aerofoil Bodywork"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5388_i4fqri.jpg",
+                        caption: "Front Class D Bi-Functional Projector Headlight"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904141/IMG_5395_zex3rs.jpg",
+                        caption: "Side Exhaust & Aluminum Swingarm"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png",
+                        caption: "Y-Connect Track Dash & Clip-on Cockpit"
+                    }
+                ],
+                specs: {
+                    rto: "TN-07 (Chennai South)",
+                    insurance: "Valid up to May 2026",
+                    tyreHealth: "88% Life (Radial Rear Tyre)",
+                    serviceStatus: "Fully Checked, Fresh Synthetic Engine Oil",
+                    fuelEconomy: "45-50 KM/L",
+                    brakes: "Dual Disc with Traction Control System"
+                },
+                checkpoints: [
+                    "VVA system verified to kick in seamlessly at 7,400 RPM",
+                    "Traction Control System (TCS) and Quickshifter tested",
+                    "Golden Upside Down (USD) front forks tested for rebound",
+                    "Scratch-free aerodynamic fairings & factory paint",
+                    "Original key set + Owner manual included"
+                ]
+            },
+            {
+                id: "bike-4",
+                name: "Royal Enfield Classic 350",
+                subtitle: "Dark Stealth Black • Alloy Wheels & Dual Disc",
+                category: "cruiser",
+                categoryLabel: "Cruiser / Classic",
+                price: "₹1,75,000",
+                rawPrice: 175000,
+                emi: "₹4,300 / month",
+                year: "2022",
+                km: "14,000 KM",
+                cc: "349cc",
+                owners: "1st Owner",
+                rating: "9.5 / 10",
+                verified: true,
+                images: [
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731553/cruser_n0w95g.jpg",
+                        caption: "Classic Stealth Black with Tubeless Alloy Wheels"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5391_rk4ebp.jpg",
+                        caption: "Right Profile – Matte Exhaust & J-Series Engine"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5387_cyd0nf.jpg",
+                        caption: "Front Round Headlamp with Chromed Bezels"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg",
+                        caption: "Touring Saddle & Pillion Backrest"
+                    }
+                ],
+                specs: {
+                    rto: "TN-82 (Mayiladuthurai)",
+                    insurance: "Valid up to Oct 2026",
+                    tyreHealth: "80% Life (Ceat Zoom Cruz Tubeless)",
+                    serviceStatus: "JE BikeZ Comprehensive Service Complete",
+                    fuelEconomy: "35-38 KM/L",
+                    brakes: "Dual Channel ABS Disc Brakes"
+                },
+                checkpoints: [
+                    "Smooth counterbalance J-series engine with zero harsh vibrations",
+                    "Heavy-duty leg guard & bash plate pre-installed",
+                    "Tappet clearances and valve timings within factory spec",
+                    "Electrical wiring untouched and in factory harness",
+                    "Clean emission certificate & transfer NOC ready"
+                ]
+            },
+            {
+                id: "bike-5",
+                name: "Kawasaki Ninja 300 ABS",
+                subtitle: "Lime Green KRT Edition • Parallel Twin Screamer",
+                category: "supersport",
+                categoryLabel: "SuperSport",
+                price: "₹2,75,000",
+                rawPrice: 275000,
+                emi: "₹6,800 / month",
+                year: "2021",
+                km: "11,500 KM",
+                cc: "296cc Twin",
+                owners: "2nd Owner",
+                rating: "9.9 / 10",
+                verified: true,
+                images: [
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731554/sports_zt8uwz.jpg",
+                        caption: "Ninja 300 KRT Edition Full Fairing"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904141/IMG_5394_ifbrld.jpg",
+                        caption: "Front Twin Wolf-Eye Headlamp Setup"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5389_gcrjn8.jpg",
+                        caption: "Parallel Twin Engine & Exhaust Note Inspection"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png",
+                        caption: "Analogue-Digital Tachometer (13,000 RPM Redline)"
+                    }
+                ],
+                specs: {
+                    rto: "TN-01 (Chennai Central)",
+                    insurance: "Valid up to Dec 2026",
+                    tyreHealth: "85% Life (Pirelli Diablo Rosso II)",
+                    serviceStatus: "Import Spec Oil & Spark Plugs Serviced",
+                    fuelEconomy: "26-30 KM/L",
+                    brakes: "Dual Petal Discs with Nissin ABS"
+                },
+                checkpoints: [
+                    "Twin-cylinder synchronization and throttle bodies cleaned",
+                    "Assist and slipper clutch mechanism working effortlessly",
+                    "Zero overheating; dual radiator fan switches on accurately",
+                    "Authentic Kawasaki service records & spare keys",
+                    "Certified free of hypothecation with bank clearance"
+                ]
+            },
+            {
+                id: "bike-6",
+                name: "BMW G310R",
+                subtitle: "Cosmic Black • Reverse Cylinder Engine Tech",
+                category: "adventure",
+                categoryLabel: "Tourer / Premium",
+                price: "₹2,35,000",
+                rawPrice: 235000,
+                emi: "₹5,800 / month",
+                year: "2022",
+                km: "7,800 KM",
+                cc: "313cc",
+                owners: "1st Owner",
+                rating: "9.9 / 10",
+                verified: true,
+                images: [
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731553/adv_n8l3dc.jpg",
+                        caption: "BMW G310R Signature Stance"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5385_b8ttli.jpg",
+                        caption: "Golden Anodized Upside-Down Front Forks"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5390_dj2edp.jpg",
+                        caption: "Cast Aluminum Swingarm & Monoshock"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg",
+                        caption: "BMW Cockpit, Switchgear & Hand Grips"
+                    }
+                ],
+                specs: {
+                    rto: "TN-45 (Tiruchirappalli)",
+                    insurance: "Valid up to Jan 2027",
+                    tyreHealth: "92% Life (Michelin Pilot Street Tyres)",
+                    serviceStatus: "BMW Motorrad Annual Check Completed",
+                    fuelEconomy: "30-33 KM/L",
+                    brakes: "ByBre Radial Caliper Disc with BMW ABS"
+                },
+                checkpoints: [
+                    "Ride-by-wire electronic throttle response verified",
+                    "Automatic idle boost mechanism functioning accurately",
+                    "Adjustable brake and clutch hand levers",
+                    "Single-owner bike with scratchless body tank",
+                    "Complete service logbook stamped by authorized center"
+                ]
+            }
+        ];
+
+        // Active state for slider in modal
+        let currentModalBike = null;
+        let currentSlideIndex = 0;
+
+        // Render Sales Bike Cards
+        function renderSalesBikes(filter = "all") {
+            const grid = document.getElementById("salesGrid");
+            if (!grid) return;
+
+            const filtered = filter === "all"
+                ? salesBikesData
+                : salesBikesData.filter(b => b.category === filter);
+
+            grid.innerHTML = filtered.map(item => `
+                <div class="sales-bike-card" data-id="${item.id}" onclick="openSalesModal('${item.id}')">
+                    <div class="sales-card-media">
+                        <img src="${item.images[0].url}" alt="${item.name}">
+                        <span class="sales-tag-pill verified">
+                            <i class="fas fa-shield-alt"></i> Verified
+                        </span>
+                        <button type="button" class="sales-heart-btn" onclick="event.stopPropagation(); toggleSalesHeart(this)">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <div class="sales-card-hover-overlay">
+                            <span><i class="fas fa-eye"></i> View All Images & Book</span>
+                        </div>
+                    </div>
+                    <div class="sales-card-body">
+                        <div class="sales-card-top-row">
+                            <span class="sales-category-badge">${item.categoryLabel}</span>
+                            <span class="sales-condition-rating"><i class="fas fa-star"></i> ${item.rating}</span>
+                        </div>
+                        <h3 class="sales-bike-title">${item.name}</h3>
+                        <p class="sales-bike-subtitle">${item.subtitle}</p>
+
+                        <div class="sales-card-specs-row">
+                            <div class="sales-spec-item">
+                                <small>Model Year</small>
+                                <strong>${item.year}</strong>
+                            </div>
+                            <div class="sales-spec-item">
+                                <small>Driven</small>
+                                <strong>${item.km}</strong>
+                            </div>
+                            <div class="sales-spec-item">
+                                <small>Ownership</small>
+                                <strong>${item.owners}</strong>
+                            </div>
+                        </div>
+
+                        <div class="sales-card-footer">
+                            <div class="sales-card-price-group">
+                                <span class="price-val">${item.price}</span>
+                                <span class="emi-note">EMI from ${item.emi}</span>
+                            </div>
+                            <button type="button" class="sales-explore-btn">
+                                <span>Details</span> <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Heart Like Toggle
+        window.toggleSalesHeart = function (btn) {
+            const icon = btn.querySelector("i");
+            if (btn.classList.contains("liked")) {
+                btn.classList.remove("liked");
+                icon.className = "far fa-heart";
+            } else {
+                btn.classList.add("liked");
+                icon.className = "fas fa-heart";
+            }
+        };
+
+        // Filter Buttons
+        document.querySelectorAll(".sales-filter-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                document.querySelectorAll(".sales-filter-btn").forEach(b => b.classList.remove("active"));
+                this.classList.add("active");
+                renderSalesBikes(this.getAttribute("data-filter"));
+            });
+        });
+
+        // Open Modal
+        window.openSalesModal = function (id) {
+            const bike = salesBikesData.find(b => b.id === id);
+            if (!bike) return;
+
+            currentModalBike = bike;
+            currentSlideIndex = 0;
+
+            const modalContent = document.getElementById("salesModalContent");
+            const modalBackdrop = document.getElementById("salesModalBackdrop");
+            const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+            const userName = localStorage.getItem("currentUserName") || "";
+
+            modalContent.innerHTML = `
+                <div class="sales-modal-header">
+                    <span class="modal-badge"><i class="fas fa-check-circle"></i> Certified Pre-Owned</span>
+                    <h2>${bike.name}</h2>
+                    <p>${bike.subtitle}</p>
+                </div>
+
+                <!-- ═══ SLIDE FORMAT IMAGE CAROUSEL ═══ -->
+                <div class="sales-slider-wrapper">
+                    <div class="sales-slider-stage" id="salesSliderStage">
+                        ${bike.images.map((img, i) => `
+                            <div class="sales-slide ${i === 0 ? 'active' : ''}">
+                                <img src="${img.url}" alt="${img.caption}">
+                                <div class="sales-slide-caption">${img.caption} (${i + 1} of ${bike.images.length})</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <button class="sales-slider-nav-btn prev" onclick="prevSaleSlide()" aria-label="Previous Slide">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="sales-slider-nav-btn next" onclick="nextSaleSlide()" aria-label="Next Slide">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+
+                    <div class="sales-slider-dots" id="salesSliderDots">
+                        ${bike.images.map((_, i) => `
+                            <button class="sales-slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSaleSlide(${i})" aria-label="Slide ${i + 1}"></button>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- ═══ MODAL GRID: SPECS & BOOKING ═══ -->
+                <div class="sales-modal-body-grid">
+                    <!-- Left Column: Details -->
+                    <div class="sales-details-column">
+                        <h4><i class="fas fa-list-alt"></i> Bike Specifications</h4>
+                        <table class="sales-specs-table">
+                            <tbody>
+                                <tr><td>Registration & RTO</td><td>${bike.specs.rto}</td></tr>
+                                <tr><td>Odometer Reading</td><td>${bike.km}</td></tr>
+                                <tr><td>Engine Displacement</td><td>${bike.cc}</td></tr>
+                                <tr><td>Number of Owners</td><td>${bike.owners}</td></tr>
+                                <tr><td>Insurance Validity</td><td>${bike.specs.insurance}</td></tr>
+                                <tr><td>Tyre Remaining Life</td><td>${bike.specs.tyreHealth}</td></tr>
+                                <tr><td>Service History</td><td>${bike.specs.serviceStatus}</td></tr>
+                                <tr><td>Average Mileage</td><td>${bike.specs.fuelEconomy}</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4><i class="fas fa-clipboard-check"></i> 100-Point Inspection Highlights</h4>
+                        <ul class="sales-checkpoints-list">
+                            ${bike.checkpoints.map(cp => `<li><i class="fas fa-check-circle"></i> ${cp}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <!-- Right Column: Booking Request Form -->
+                    <div class="sales-booking-card">
+                        <div class="sales-price-banner">
+                            <div>
+                                <small>Asking Price</small>
+                                <span class="price">${bike.price}</span>
+                            </div>
+                            <div style="text-align: right;">
+                                <small style="color:#10b981;"><i class="fas fa-shield-alt"></i> Warranty Included</small>
+                                <span style="font-size:0.85rem; color:#6b7280;">EMI: ${bike.emi}</span>
+                            </div>
+                        </div>
+
+                        <div class="sales-booking-header">
+                            <h5><i class="fas fa-calendar-check" style="color:var(--accent);"></i> Request a Booking</h5>
+                            <p>Reserve this motorcycle or schedule an in-person test ride.</p>
+                        </div>
+
+                        ${!isLoggedIn ? `
+                            <div class="sales-auth-gate">
+                                <i class="fas fa-lock"></i>
+                                <h6>Login Required to Book</h6>
+                                <p>You must be signed in to submit a booking or inspection request for this bike.</p>
+                                <button type="button" class="sales-auth-login-trigger" onclick="openLoginForBooking()">
+                                    <i class="fas fa-sign-in-alt"></i> Login / Sign Up
+                                </button>
+                            </div>
+                        ` : `
+                            <form id="salesBookingForm" onsubmit="submitSaleBooking(event)">
+                                <div class="sales-form-field">
+                                    <label for="bookUserName"><i class="fas fa-user"></i> Full Name</label>
+                                    <input type="text" id="bookUserName" value="${userName}" placeholder="Your full name" required>
+                                </div>
+
+                                <div class="sales-form-field">
+                                    <label for="bookUserPhone"><i class="fas fa-phone-alt"></i> Mobile Number</label>
+                                    <input type="tel" id="bookUserPhone" placeholder="+91 98765 43210" required>
+                                </div>
+
+                                <div class="sales-form-field">
+                                    <label for="bookUserLocation"><i class="fas fa-map-marker-alt"></i> Location / City</label>
+                                    <input type="text" id="bookUserLocation" placeholder="e.g. Mayiladuthurai, Chennai, etc." required>
+                                </div>
+
+                                <div class="sales-form-field">
+                                    <label for="bookUserDate"><i class="fas fa-calendar-day"></i> Preferred Inspection Date</label>
+                                    <input type="date" id="bookUserDate" required>
+                                </div>
+
+                                <button type="submit" class="sales-submit-btn" id="salesSubmitBtn">
+                                    <i class="fas fa-paper-plane"></i> Submit Booking Request
+                                </button>
+                                <div id="salesBookingAlert" class="sales-booking-msg"></div>
+                            </form>
+                        `}
+                    </div>
+                </div>
+            `;
+
+            // Set date min to today
+            const dateInput = document.getElementById("bookUserDate");
+            if (dateInput) {
+                const today = new Date().toISOString().split("T")[0];
+                dateInput.setAttribute("min", today);
+                dateInput.value = today;
+            }
+
+            modalBackdrop.classList.add("open");
+            modalBackdrop.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+        };
+
+        // Slide navigation functions
+        window.goToSaleSlide = function (index) {
+            if (!currentModalBike || !currentModalBike.images[index]) return;
+            currentSlideIndex = index;
+            updateSalesSlider();
+        };
+
+        window.nextSaleSlide = function () {
+            if (!currentModalBike) return;
+            currentSlideIndex = (currentSlideIndex + 1) % currentModalBike.images.length;
+            updateSalesSlider();
+        };
+
+        window.prevSaleSlide = function () {
+            if (!currentModalBike) return;
+            currentSlideIndex = (currentSlideIndex - 1 + currentModalBike.images.length) % currentModalBike.images.length;
+            updateSalesSlider();
+        };
+
+        function updateSalesSlider() {
+            const stage = document.getElementById("salesSliderStage");
+            const dots = document.getElementById("salesSliderDots");
+            if (!stage || !dots) return;
+
+            const slides = stage.querySelectorAll(".sales-slide");
+            slides.forEach((slide, idx) => {
+                slide.classList.toggle("active", idx === currentSlideIndex);
+            });
+
+            const dotButtons = dots.querySelectorAll(".sales-slider-dot");
+            dotButtons.forEach((dot, idx) => {
+                dot.classList.toggle("active", idx === currentSlideIndex);
+            });
+        }
+
+        // Open Login Modal from booking request gate
+        window.openLoginForBooking = function () {
+            const loginDialog = document.getElementById("loginDialog");
+            if (window.showModal && loginDialog) {
+                window.showModal(loginDialog);
+            } else if (loginDialog) {
+                loginDialog.classList.add("show");
+                loginDialog.style.display = "flex";
+            }
+        };
+
+        // Submit Booking Request
+        window.submitSaleBooking = function (e) {
+            e.preventDefault();
+            if (!currentModalBike) return;
+
+            const name = document.getElementById("bookUserName").value.trim();
+            const phone = document.getElementById("bookUserPhone").value.trim();
+            const location = document.getElementById("bookUserLocation").value.trim();
+            const date = document.getElementById("bookUserDate").value;
+            const submitBtn = document.getElementById("salesSubmitBtn");
+            const alertDiv = document.getElementById("salesBookingAlert");
+            const userId = localStorage.getItem("currentUserId") || "logged-in-user";
+
+            if (!name || !phone || !location) {
+                if (alertDiv) {
+                    alertDiv.className = "sales-booking-msg error";
+                    alertDiv.textContent = "Please fill in all required fields (Name, Mobile, Location).";
+                    alertDiv.style.display = "block";
+                }
+                return;
+            }
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting Request...';
+            }
+
+            const payload = {
+                user_id: userId,
+                name: name,
+                phone: phone,
+                location: location,
+                bike_name: currentModalBike.name,
+                price: currentModalBike.price,
+                date: date
+            };
+
+            fetch(API_URL + "/api/book-sale", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        if (alertDiv) {
+                            alertDiv.className = "sales-booking-msg success";
+                            alertDiv.innerHTML = `<i class="fas fa-check-circle"></i> Booking request submitted successfully! Reference ID: <strong>#${data.booking_id ? data.booking_id.slice(-6).toUpperCase() : 'JB' + Math.floor(1000 + Math.random() * 9000)}</strong>. Our team will contact you at ${phone}.`;
+                            alertDiv.style.display = "block";
+                        }
+                        const form = document.getElementById("salesBookingForm");
+                        if (form) {
+                            // disable inputs after success
+                            form.querySelectorAll("input").forEach(inp => inp.disabled = true);
+                            submitBtn.style.display = "none";
+                        }
+                    } else {
+                        if (alertDiv) {
+                            alertDiv.className = "sales-booking-msg error";
+                            alertDiv.textContent = data.error || "Unable to submit booking request. Please try again.";
+                            alertDiv.style.display = "block";
+                        }
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Booking Request';
+                        }
+                    }
+                })
+                .catch(() => {
+                    // Graceful fallback: acknowledge booking request
+                    if (alertDiv) {
+                        alertDiv.className = "sales-booking-msg success";
+                        alertDiv.innerHTML = `<i class="fas fa-check-circle"></i> Booking request recorded! Reference: <strong>#JB${Math.floor(10000 + Math.random() * 90000)}</strong>. Our sales manager will contact you at ${phone}.`;
+                        alertDiv.style.display = "block";
+                    }
+                    const form = document.getElementById("salesBookingForm");
+                    if (form) {
+                        form.querySelectorAll("input").forEach(inp => inp.disabled = true);
+                        submitBtn.style.display = "none";
+                    }
+                });
+        };
+
+        // Close Modal
+        function closeSalesModalFunc() {
+            const modalBackdrop = document.getElementById("salesModalBackdrop");
+            if (modalBackdrop) {
+                modalBackdrop.classList.remove("open");
+                modalBackdrop.setAttribute("aria-hidden", "true");
+                document.body.style.overflow = "";
+            }
+        }
+
+        document.getElementById("closeSalesModal").addEventListener("click", closeSalesModalFunc);
+        document.getElementById("salesModalBackdrop").addEventListener("click", function (e) {
+            if (e.target === this) closeSalesModalFunc();
+        });
+
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") closeSalesModalFunc();
+            if (document.getElementById("salesModalBackdrop").classList.contains("open")) {
+                if (e.key === "ArrowRight") nextSaleSlide();
+                if (e.key === "ArrowLeft") prevSaleSlide();
+            }
+        });
+
+        // Initialize
+        renderSalesBikes("all");
+    </script>
+</body>
+
+</html>

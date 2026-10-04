@@ -42,9 +42,12 @@ def home():
     return send_from_directory(FRONTEND_DIR, "index.html")
 
 
-# ✅ Serve all static files (CSS, JS, images)
-@app.route("/<path:path>")
+# ✅ Serve all static files (CSS, JS, images) — never intercept /api/* routes
+@app.route("/<path:path>", methods=["GET"])
 def serve_static(path):
+    if path.startswith("api/"):
+        from flask import abort
+        abort(404)
     return send_from_directory(FRONTEND_DIR, path)
 
 
@@ -54,12 +57,15 @@ db_name = os.getenv("DB_NAME")
 collection_name = os.getenv("COLLECTION_NAME")
 user = os.getenv("USER")
 modification=os.getenv("MODIFICATION")
+book_sales = os.getenv("BOOK_SALES") or os.getenv("BOOK_SALE") or "book-sales"
+
 
 client = MongoClient(mongo_uri, tls=True)
 db = client[db_name]
 collection = db[collection_name]
 user_collection = db[user]
 modification_collection = db[modification]
+book_sales_collection = db[book_sales]
 
 
 # Health Check API
@@ -497,10 +503,308 @@ def delete_account(user_id):
             "error": str(e)
         }), 500
 
+# 📦 SERVICE HISTORY API
+@app.route("/api/service-history/<user_id>", methods=["GET"])
+def get_service_history(user_id):
+    try:
+        history_coll = db["service_history"]
+        records = list(history_coll.find({"user_id": user_id}, {"_id": 0}))
+        for r in records:
+            if isinstance(r.get("date"), datetime):
+                r["date"] = r["date"].isoformat()
+        return jsonify({"success": True, "history": records}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+# 📦 BOOK SERVICE API
+# @app.route("/api/book-service", methods=["POST"])
+# def book_service():
+#     try:
+#         data = request.get_json() or {}
+#         data["created_at"] = datetime.now(UTC)
+#         data.setdefault("user_id", "demo-user")
+#         data.setdefault("status", "Pending")
+#         db["service_history"].insert_one(data)
+#         return jsonify({"success": True, "message": "Service booked successfully"}), 201
+#     except Exception as e:
+#         return jsonify({"success": False, "error": str(e)}), 500
+
+# ============================================================
+# 📦 SERVICE BOOKING API
+# ============================================================
+
+@app.route("/api/book-service", methods=["POST"])
+def book_service():
+
+    try:
+
+        # --------------------------------------------------------
+        # READ JSON BODY
+        # --------------------------------------------------------
+
+        data = request.get_json(silent=True)
+
+        if not data:
+
+            return jsonify({
+                "success": False,
+                "error": "Request body must contain JSON data."
+            }), 400
+
+
+        # --------------------------------------------------------
+        # REQUIRED FIELDS
+        # --------------------------------------------------------
+
+        required_fields = [
+            "user_id",
+            "manufacturer",
+            "model",
+            "variant",
+            "year",
+            "cc",
+            "serviceType",
+            "date"
+        ]
+
+
+        # --------------------------------------------------------
+        # CHECK REQUIRED FIELDS
+        # --------------------------------------------------------
+
+        missing_fields = [
+            field
+            for field in required_fields
+            if data.get(field) is None
+            or str(data.get(field)).strip() == ""
+        ]
+
+
+        if missing_fields:
+
+            return jsonify({
+                "success": False,
+                "error": "Required booking information is missing.",
+                "fields": missing_fields
+            }), 400
+
+
+        # --------------------------------------------------------
+        # CLEAN VALUES
+        # --------------------------------------------------------
+
+        user_id = str(
+            data["user_id"]
+        ).strip()
+
+        manufacturer = str(
+            data["manufacturer"]
+        ).strip()
+
+        model = str(
+            data["model"]
+        ).strip()
+
+        variant = str(
+            data["variant"]
+        ).strip()
+
+        year = str(
+            data["year"]
+        ).strip()
+
+        cc = str(
+            data["cc"]
+        ).strip()
+
+        service_type = str(
+            data["serviceType"]
+        ).strip()
+
+        booking_date = str(
+            data["date"]
+        ).strip()
+
+
+        # --------------------------------------------------------
+        # CREATE BOOKING DOCUMENT
+        # --------------------------------------------------------
+
+        booking_data = {
+
+            "user_id": user_id,
+
+            "bike": {
+
+                "manufacturer": manufacturer,
+
+                "model": model,
+
+                "variant": variant,
+
+                "year": year,
+
+                "cc": cc
+            },
+
+            "serviceType": service_type,
+
+            "date": booking_date,
+
+            "status": "Pending",
+
+            "created_at": datetime.now(UTC),
+
+            "updated_at": datetime.now(UTC)
+        }
+
+
+        # --------------------------------------------------------
+        # INSERT INTO MONGODB
+        # --------------------------------------------------------
+
+        collection = db["service-booking"]
+
+        result = collection.insert_one(
+            booking_data
+        )
+
+
+        # --------------------------------------------------------
+        # SUCCESS RESPONSE
+        # --------------------------------------------------------
+
+        return jsonify({
+
+            "success": True,
+
+            "message": "Service booked successfully.",
+
+            "booking": {
+
+                "booking_id":
+                    str(result.inserted_id),
+
+                "user_id":
+                    user_id,
+
+                "manufacturer":
+                    manufacturer,
+
+                "model":
+                    model,
+
+                "variant":
+                    variant,
+
+                "year":
+                    year,
+
+                "cc":
+                    cc,
+
+                "serviceType":
+                    service_type,
+
+                "date":
+                    booking_date,
+
+                "status":
+                    "Pending"
+            }
+
+        }), 201
+
+
+    # ------------------------------------------------------------
+    # GENERAL ERROR
+    # ------------------------------------------------------------
+
+    except Exception as e:
+
+        print(
+            "❌ BOOK SERVICE ERROR:",
+            str(e)
+        )
+
+
+        return jsonify({
+
+            "success": False,
+
+            "error":
+                "Unable to book service.",
+
+            "details":
+                str(e)
+
+        }), 500
+
+
+
+
+
+
+# ============================================================
+# 📦 SALES BIKE BOOKING REQUEST API
+# ============================================================
+
+@app.route("/api/book-sale", methods=["POST"])
+def book_sale():
+    try:
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({
+                "success": False,
+                "error": "Request body must contain JSON data."
+            }), 400
+
+        name = data.get("name")
+        phone = data.get("phone")
+        location = data.get("location")
+        bike_name = data.get("bike_name")
+
+        if not name or not phone or not location:
+            return jsonify({
+                "success": False,
+                "error": "Name, mobile number, and location are required."
+            }), 400
+
+        sale_booking_data = {
+            "user_id": str(data.get("user_id", "guest")),
+            "name": str(name).strip(),
+            "phone": str(phone).strip(),
+            "location": str(location).strip(),
+            "bike_name": str(bike_name or "Custom Sale Bike").strip(),
+            "price": str(data.get("price", "N/A")).strip(),
+            "date": str(data.get("date", datetime.now(UTC).strftime("%Y-%m-%d"))).strip(),
+            "status": "Pending",
+            "created_at": datetime.now(UTC),
+            "updated_at": datetime.now(UTC)
+        }
+
+        result = book_sales_collection.insert_one(sale_booking_data)
+
+        return jsonify({
+            "success": True,
+            "message": "Booking request submitted successfully! Our sales team will contact you shortly.",
+            "booking_id": str(result.inserted_id)
+        }), 201
+
+    except Exception as e:
+        print("❌ BOOK SALE ERROR:", str(e))
+        return jsonify({
+            "success": False,
+            "error": "Unable to submit booking request.",
+            "details": str(e)
+        }), 500
+
+
 # 🚀 Run app
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 

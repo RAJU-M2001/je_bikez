@@ -54,6 +54,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const year = document.getElementById("year");
     const cc = document.getElementById("cc");
     const serviceType = document.getElementById("serviceType");
+    const dateInput = document.getElementById("dateInput");
+
+    if (dateInput) {
+        const today = new Date().toISOString().split("T")[0];
+        dateInput.setAttribute("min", today);
+        if (!dateInput.value) {
+            dateInput.value = today;
+        }
+        dateInput.addEventListener("click", function () {
+            if (typeof this.showPicker === "function") {
+                try { this.showPicker(); } catch (e) { }
+            }
+        });
+    }
 
     manufacturer.addEventListener("change", function () {
 

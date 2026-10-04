@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" class="light-mode">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JE BikeZ – Premium Bike Services</title>
+    <meta name="description"
+        content="Book professional bike services, explore maintenance packages, and track your service history with JE BikeZ." />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./service-page.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script defer src="./bike-service.js"></script>
+    <script defer src="./script.js"></script>
+</head>
+
+<body class="svc-body">
+    <!-- ═══ NAVBAR ═══ -->
+    <header>
+        <nav class="navbar" id="mainNav">
+            <div class="nav-left">
+                <div class="logo">
+                    <a href="index.html" aria-label="JE BikeZ Home">
+                        <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                            alt="JE BikeZ" width="40" height="50">
+                    </a>
+                </div>
+                <div class="nav-links" id="navLinks">
+                    <a href="index.html">Home</a>
+                    <a href="service.html" class="active">Services</a>
+                    <a href="builds.html">Builds</a>
+                    <a href="sales.html">Sales</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div id="profileMenuContainer" class="profile-menu-container">
+                    <!-- LOGGED OUT -->
+                    <button id="loginSignupBtn" type="button" class="nav-login-btn navbar-auth-btn"
+                        aria-label="Login or Signup"><i class="fas fa-user" aria-hidden="true"></i><span>Login /
+                            Signup</span></button>
+                    <!-- LOGGED IN -->
+                    <div id="profileContainer" class="profile-container" style="display: none;">
+                        <button id="profileAvatarBtn" type="button" class="profile-avatar-btn"
+                            aria-label="Open profile menu" aria-expanded="false" aria-haspopup="true">
+                            <div id="navProfileAvatar" class="nav-profile-avatar">
+                                <i class="fas fa-user" aria-hidden="true"></i>
+                            </div>
+                            <i class="fas fa-chevron-down profile-chevron" aria-hidden="true"></i>
+                        </button>
+                        <div id="profileDropdown" class="profile-dropdown" role="menu" aria-hidden="true">
+                            <div class="profile-dropdown-header">
+                                <div id="dropdownProfileAvatar" class="dropdown-profile-avatar">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                </div>
+                                <div class="profile-dropdown-user">
+                                    <strong id="dropdownProfileName">Account</strong>
+                                    <span id="dropdownProfileEmail">Manage your profile</span>
+                                </div>
+                            </div>
+                            <div class="profile-dropdown-divider"></div>
+                            <!-- EDIT PROFILE -->
+                            <button id="editProfileBtn" type="button" class="profile-dropdown-btn" role="menuitem">
+                                <span class="profile-menu-icon">
+                                    <i class="fas fa-user-edit" aria-hidden="true"></i>
+                                </span>
+                                <span class="profile-menu-text">
+                                    Edit Profile
+                                </span>
+                                <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
+                            </button>
+                            <!-- LOGOUT -->
+                            <button id="logoutBtn" type="button" class="profile-dropdown-btn logout-dropdown-btn"
+                                role="menuitem">
+                                <span class="profile-menu-icon"><i class="fas fa-sign-out-alt"
+                                        aria-hidden="true"></i></span>
+                                <span class="profile-menu-text">Logout</span>
+                                <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ═══════════ MODALS ═══════════ -->
+    <div id="loginDialog" class="dialog">
+        <div class="dialog-box"
+            style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+            <button id="closeLoginDialog" type="button"
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+            <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">LOGIN
+            </h4>
+            <p style="font-size: 20px; color: white; margin-bottom: 25px;">Welcome Back!</p>
+
+            <div id="loginAlert"
+                style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email
+                    Address</label>
+                <input type="text" id="loginEmail" placeholder="johndoe@gmail.com"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Password</label>
+                <div style="position: relative;">
+                    <input type="password" id="loginPwd" placeholder="••••••••"
+                        style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+                    <i class="far fa-eye" id="loginEye"
+                        style="position: absolute; right: 15px; top: 15px; color: #666; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <a href="#" class="forgot-link"
+                style="display: block; text-align: right; color: var(--accent); font-size: 12px; margin-bottom: 25px; text-decoration: none;">Forgot
+                Password?</a>
+
+            <button id="loginBtnAction"
+                style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 20px;">Login</button>
+
+            <p style="text-align: center; margin-top: 25px; font-size: 12px; color: #888;">Don't have an account? <a
+                    href="#" id="goToSignup"
+                    style="color: var(--accent); text-decoration: none; font-weight: bold;">Sign Up</a></p>
+        </div>
+    </div>
+
+    <div id="signupDialog" class="dialog">
+        <div class="dialog-box"
+            style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+            <button id="closeSignupDialog" type="button"
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+            <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">SIGN
+                UP</h4>
+            <p style="font-size: 20px; color: white; margin-bottom: 25px;">Create Account</p>
+
+            <div id="signupAlert"
+                style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Full Name</label>
+                <input type="text" id="signupName" placeholder="Enter your name"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Mobile
+                    Number</label>
+                <input type="text" id="signupPhone" placeholder="+91 98765 43210"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email
+                    Address</label>
+                <input type="email" id="signupEmail" placeholder="Enter your email"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Password</label>
+                <div style="position: relative;">
+                    <input type="password" id="signupPwd" placeholder="Enter password"
+                        style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+                    <i class="far fa-eye" id="signupEye"
+                        style="position: absolute; right: 15px; top: 15px; color: #666; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <button id="signupBtnAction"
+                style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 20px;">Sign
+                Up</button>
+
+            <p style="text-align: center; margin-top: 25px; font-size: 12px; color: #888;">Already have an account?
+                <a href="#" id="goToLogin"
+                    style="color: var(--accent); text-decoration: none; font-weight: bold;">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ═══ PROFILE SETTINGS DIALOG ═══ -->
+    <div id="profileDialog" class="dialog">
+        <div class="dialog-box"
+            style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+            <button id="closeProfileDialog" type="button"
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+            <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">
+                PROFILE SETTINGS</h4>
+
+            <div id="profileAlert"
+                style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+            </div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="position: relative; display: inline-block;">
+                    <div id="profileImagePreview"
+                        style="width: 80px; height: 80px; border-radius: 50%; background: var(--avatar-bg, #222); color: var(--avatar-color, #fff); display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent); font-size: 32px;">
+                        <i class="fas fa-user"></i>
+                    </div>
+
+                    <label for="profileImageInput"
+                        style="position: absolute; bottom: 0; right: 0; background: var(--accent); color: black; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px;">
+                        <i class="fas fa-camera"></i>
+                    </label>
+
+                    <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Full Name</label>
+                <input type="text" id="profileName" placeholder="Enter your name"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email Address</label>
+                <input type="email" id="profileEmail" readonly
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: #666; font-size: 14px; cursor: not-allowed;">
+            </div>
+
+            <button id="saveProfileBtn"
+                style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 15px;">Save
+                Changes</button>
+        </div>
+    </div>
+
+    <!-- ═══ LOGOUT CONFIRM DIALOG ═══ -->
+    <div id="logoutConfirmDialog" class="dialog logout-dialog" aria-hidden="true" style="display: none;">
+        <div class="dialog-box logout-confirm-box" role="dialog" aria-modal="true" aria-labelledby="logoutDialogTitle"
+            aria-describedby="logoutDialogDescription">
+            <button id="cancelLogoutTop" type="button" class="logout-close-btn" aria-label="Close logout dialog"
+                title="Close">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+            <div class="logout-glow" aria-hidden="true"></div>
+            <div class="logout-icon" aria-hidden="true">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <div class="logout-content">
+                <span class="logout-label">ACCOUNT ACTION</span>
+                <h2 id="logoutDialogTitle">Logout?</h2>
+                <p id="logoutDialogDescription">
+                    Are you sure you want to logout from your account?
+                    Your current session will be ended.
+                </p>
+            </div>
+            <div class="logout-actions">
+                <button id="cancelLogoutBtn" type="button" class="cancel-btn">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                    <span>
+                        Stay Logged In
+                    </span>
+                </button>
+                <button id="confirmLogoutBtn" type="button" class="logout-confirm-btn">
+                    <span>
+                        Yes, Logout
+                    </span>
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="logout-note">
+                <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                <span>
+                    You can sign in again anytime.
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <main class="svc-main">
+        <!-- ═══ HERO ═══ -->
+        <section class="svc-hero" id="serviceHero">
+            <div class="svc-hero-content">
+                <span class="svc-badge"><i class="fas fa-wrench"></i> Premium Bike Care</span>
+                <h1>Expert <span class="accent">Service</span> for Your Ride</h1>
+                <p>From routine maintenance to performance upgrades — skilled mechanics, genuine parts, and transparent
+                    pricing.</p>
+                <a href="#bookSection" class="svc-hero-btn" id="svcHeroBookBtn"><i class="fas fa-calendar-check"></i>
+                    Book Now</a>
+            </div>
+        </section>
+
+        <!-- ═══ SERVICES GRID ═══ -->
+        <section class="svc-section" id="servicesGrid">
+            <div class="svc-container">
+                <div class="svc-section-header">
+                    <span class="svc-label"><i class="fas fa-cogs"></i> What We Offer</span>
+                    <h2>Our <span class="accent">Services</span></h2>
+                </div>
+                <div class="svc-grid">
+                    <div class="svc-card">
+                        <div class="svc-card-icon"><i class="fas fa-oil-can"></i></div>
+                        <h3>General Service</h3>
+                        <p>Complete checkup with oil, filter & brake inspection.</p>
+                    </div>
+                    <div class="svc-card">
+                        <div class="svc-card-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <h3>Performance Upgrade</h3>
+                        <p>Boost power, control & throttle response.</p>
+                    </div>
+                    <div class="svc-card">
+                        <div class="svc-card-icon"><i class="fas fa-paint-roller"></i></div>
+                        <h3>Custom Paint</h3>
+                        <p>Make your bike uniquely yours with custom finishes.</p>
+                    </div>
+                    <div class="svc-card">
+                        <div class="svc-card-icon"><i class="fas fa-lightbulb"></i></div>
+                        <h3>LED Setup</h3>
+                        <p>Better visibility and style with premium LEDs.</p>
+                    </div>
+                    <div class="svc-card">
+                        <div class="svc-card-icon"><i class="fas fa-circle-notch"></i></div>
+                        <h3>Tyre Replacement</h3>
+                        <p>Grip, safety and better control on every terrain.</p>
+                    </div>
+                    <div class="svc-card">
+                        <div class="svc-card-icon"><i class="fas fa-cog"></i></div>
+                        <h3>Engine Work</h3>
+                        <p>Precision tuning and overhaul for peak performance.</p>
+                    </div>
+                    <div class="svc-card">
+                        <div class="svc-card-icon"><i class="fas fa-bolt"></i></div>
+                        <h3>Electrical Work</h3>
+                        <p>Reliable wiring, diagnostics and advanced setups.</p>
+                    </div>
+                    <div class="svc-card">
+                        <div class="svc-card-icon"><i class="fas fa-car-crash"></i></div>
+                        <h3>Body Work</h3>
+                        <p>Restore, repair and ride with pride.</p>
+                    </div>
+                    <div class="svc-card">
+                        <div class="svc-card-icon"><i class="fas fa-spray-can"></i></div>
+                        <h3>Detailing</h3>
+                        <p>Showroom finish with long-lasting shine.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ BOOKING FORM ═══ -->
+        <section class="svc-section svc-book-section" id="bookSection">
+            <div class="svc-container">
+                <div class="svc-section-header">
+                    <span class="svc-label"><i class="fas fa-calendar-alt"></i> Book Your Service</span>
+                    <h2>Schedule Your <span class="accent">Service</span></h2>
+                    <p class="svc-subtitle">Select your bike details and preferred service. We'll handle the rest.</p>
+                </div>
+                <div class="svc-book-layout">
+                    <form id="bookServiceForm" class="svc-form" autocomplete="off">
+                        <div class="svc-form-grid">
+                            <div class="svc-field">
+                                <label for="manufacturer"><i class="fas fa-industry"></i> Manufacturer</label>
+                                <select id="manufacturer" name="manufacturer" required>
+                                    <option value="">Select Brand</option>
+                                    <option value="BMW">BMW</option>
+                                    <option value="Yamaha">Yamaha</option>
+                                    <option value="Kawasaki">Kawasaki</option>
+                                    <option value="KTM">KTM</option>
+                                    <option value="Honda">Honda</option>
+                                    <option value="Royal Enfield">Royal Enfield</option>
+                                    <option value="TVS">TVS</option>
+                                    <option value="Bajaj">Bajaj</option>
+                                    <option value="Suzuki">Suzuki</option>
+                                </select>
+                            </div>
+                            <div class="svc-field">
+                                <label for="model"><i class="fas fa-motorcycle"></i> Model</label>
+                                <select id="model" name="model" disabled required>
+                                    <option value="">Select Model</option>
+                                </select>
+                            </div>
+                            <div class="svc-field">
+                                <label for="variant"><i class="fas fa-layer-group"></i> Variant</label>
+                                <select id="variant" name="variant" disabled required>
+                                    <option value="">Select Variant</option>
+                                </select>
+                            </div>
+                            <div class="svc-field">
+                                <label for="year"><i class="fas fa-calendar"></i> Year</label>
+                                <select id="year" name="year" disabled required>
+                                    <option value="">Select Year</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2020">2020</option>
+                                </select>
+                            </div>
+                            <div class="svc-field">
+                                <label for="cc"><i class="fas fa-tachometer-alt"></i> Engine CC</label>
+                                <select id="cc" name="cc" disabled required>
+                                    <option value="">Select CC</option>
+                                    <option value="150">150cc</option>
+                                    <option value="200">200cc</option>
+                                    <option value="250">250cc</option>
+                                    <option value="300">300cc</option>
+                                    <option value="350">350cc</option>
+                                    <option value="400">400cc</option>
+                                    <option value="650">650cc</option>
+                                    <option value="1000">1000cc+</option>
+                                </select>
+                            </div>
+                            <div class="svc-field">
+                                <label for="serviceType"><i class="fas fa-tools"></i> Service Type</label>
+                                <select id="serviceType" name="serviceType" disabled required>
+                                    <option value="">Select Service</option>
+                                    <option value="General Service">General Service</option>
+                                    <option value="Oil Change">Oil Change</option>
+                                    <option value="Performance Upgrade">Performance Upgrade</option>
+                                    <option value="Custom Paint">Custom Paint</option>
+                                    <option value="Tyre Replacement">Tyre Replacement</option>
+                                    <option value="Engine Work">Engine Work</option>
+                                    <option value="Electrical Work">Electrical Work</option>
+                                    <option value="Body Work">Body Work</option>
+                                    <option value="Detailing">Detailing</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="svc-field" style="margin-top:16px;">
+                            <label for="dateInput"><i class="fas fa-clock"></i> Preferred Date</label>
+                            <input type="date" id="dateInput" name="date" required />
+                        </div>
+                        <button type="submit" class="svc-submit-btn" id="bookServiceBtn">
+                            <i class="fas fa-paper-plane"></i> Book Service
+                        </button>
+                        <div id="bookingResult"></div>
+                    </form>
+                    <div class="svc-features">
+                        <div class="svc-feature">
+                            <div class="svc-feature-icon"><i class="fas fa-user-tie"></i></div>
+                            <div><strong>Expert Technicians</strong><span>Skilled & certified mechanics</span></div>
+                        </div>
+                        <div class="svc-feature">
+                            <div class="svc-feature-icon"><i class="fas fa-clock"></i></div>
+                            <div><strong>Quick Turnaround</strong><span>Get back on the road faster</span></div>
+                        </div>
+                        <div class="svc-feature">
+                            <div class="svc-feature-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div><strong>Genuine Parts</strong><span>Quality you can trust</span></div>
+                        </div>
+                        <div class="svc-feature">
+                            <div class="svc-feature-icon"><i class="fas fa-star"></i></div>
+                            <div><strong>100% Satisfaction</strong><span>Your ride, our priority</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="bookingResult"></div>
+            </div>
+        </section>
+
+        <!-- ═══ SERVICE HISTORY ═══ -->
+        <section class="svc-section" id="historySection">
+            <div class="svc-container">
+                <div class="svc-section-header">
+                    <span class="svc-label"><i class="fas fa-history"></i> Service History</span>
+                    <h2>Past <span class="accent">Services</span></h2>
+                </div>
+                <table id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Bike</th>
+                            <th>Service(s)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>12 Aug 2025</td>
+                            <td>Yamaha R15 V4</td>
+                            <td>General Service + Chain Clean</td>
+                            <td><span class="svc-status completed">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>28 May 2025</td>
+                            <td>KTM Duke 390</td>
+                            <td>Oil Change + Filter Change</td>
+                            <td><span class="svc-status completed">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>15 Feb 2025</td>
+                            <td>Royal Enfield Classic 350</td>
+                            <td>General Service + Brake Check</td>
+                            <td><span class="svc-status completed">Completed</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="historyMsg"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="svc-footer">
+        <p>&copy; 2025 JE BikeZ. All rights reserved.</p>
+    </footer>
+
+    <!-- ═══ SERVICE PAGE BOOKING & HISTORY SCRIPT ═══ -->
+    <script>
+        (function () {
+            const API = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+                ? "http://127.0.0.1:10000"
+                : "https://bike-modification-api.onrender.com";
+
+            // Service Booking Handler
+            const bookForm = document.getElementById("bookServiceForm");
+            if (bookForm) {
+                bookForm.addEventListener("submit", function (e) {
+                    e.preventDefault();
+
+                    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+                    const loginDialog = document.getElementById("loginDialog");
+
+                    if (!isLoggedIn) {
+                        if (window.showModal && loginDialog) {
+                            window.showModal(loginDialog);
+                        } else if (loginDialog) {
+                            loginDialog.classList.add("show");
+                            loginDialog.style.display = "flex";
+                        }
+                        return;
+                    }
+
+                    const userId = localStorage.getItem("currentUserId");
+                    const submitBtn = document.getElementById("bookServiceBtn");
+                    const resDiv = document.getElementById("bookingResult");
+                    const payload = {
+                        user_id: userId || "demo-user",
+                        manufacturer: document.getElementById("manufacturer").value,
+                        model: document.getElementById("model").value,
+                        variant: document.getElementById("variant").value,
+                        year: document.getElementById("year").value,
+                        cc: document.getElementById("cc").value,
+                        serviceType: document.getElementById("serviceType").value,
+                        date: document.getElementById("dateInput").value,
+                        status: "Pending"
+                    };
+
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Booking...';
+                    }
+
+                    fetch(API + "/api/book-service", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                if (resDiv) {
+                                    resDiv.innerHTML = '<div class="svc-alert success" style="margin-top:15px;padding:12px;border-radius:8px;background:#e6fffa;color:#047857;border:1px solid #a7f3d0;text-align:center;">' + (data.message || 'Service booked successfully!') + '</div>';
+                                }
+                                bookForm.reset();
+                                loadHistory();
+                            } else {
+                                if (resDiv) {
+                                    resDiv.innerHTML = '<div class="svc-alert error" style="margin-top:15px;padding:12px;border-radius:8px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;text-align:center;">' + (data.error || 'Failed to book service.') + '</div>';
+                                }
+                            }
+                        })
+                        .catch(() => {
+                            if (resDiv) {
+                                resDiv.innerHTML = '<div class="svc-alert error" style="margin-top:15px;padding:12px;border-radius:8px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;text-align:center;">Network error. Please try again.</div>';
+                            }
+                        })
+                        .finally(() => {
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Book Service';
+                            }
+                        });
+                });
+            }
+
+            // Load Service History
+            function loadHistory() {
+                const userId = localStorage.getItem("currentUserId");
+                if (!userId) return;
+                fetch(API + "/api/service-history/" + userId)
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.success && res.history && res.history.length > 0) {
+                            const tbody = document.querySelector("#historyTable tbody");
+                            if (tbody) {
+                                tbody.innerHTML = res.history.map(item => `
+                                    <tr>
+                                        <td>${item.date ? new Date(item.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}</td>
+                                        <td>${item.manufacturer || ''} ${item.model || ''} (${item.variant || ''})</td>
+                                        <td>${item.serviceType || 'General Service'}</td>
+                                        <td><span class="svc-status ${(item.status || '').toLowerCase() === 'completed' ? 'completed' : 'pending'}">${item.status || 'Pending'}</span></td>
+                                    </tr>
+                                `).join('');
+                            }
+                        }
+                    }).catch(() => { });
+            }
+
+            if (localStorage.getItem("isLoggedIn") === "true") {
+                loadHistory();
+            }
+        })();
+    </script>
+</body>
+
+</html>

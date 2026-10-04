@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en" class="light-mode">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JE BikeZ – Completed Builds & Custom Projects</title>
+    <meta name="description"
+        content="Explore our premier custom motorcycle builds. From cafe racers and streetfighters to full-blown touring machines, witness JE BikeZ craftsmanship." />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./service-page.css" />
+    <link rel="stylesheet" href="./builds.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script defer src="./script.js"></script>
+</head>
+
+<body class="svc-body">
+    <!-- ═══ NAVBAR ═══ -->
+    <header>
+        <nav class="navbar" id="mainNav">
+            <div class="nav-left">
+                <div class="logo">
+                    <a href="index.html" aria-label="JE BikeZ Home">
+                        <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                            alt="JE BikeZ" width="40" height="50">
+                    </a>
+                </div>
+                <div class="nav-links" id="navLinks">
+                    <a href="index.html">Home</a>
+                    <a href="service.html">Services</a>
+                    <a href="builds.html" class="active">Builds</a>
+                    <a href="sales.html">Sales</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div id="profileMenuContainer" class="profile-menu-container">
+                    <!-- LOGGED OUT -->
+                    <button id="loginSignupBtn" type="button" class="nav-login-btn navbar-auth-btn"
+                        aria-label="Login or Signup"><i class="fas fa-user" aria-hidden="true"></i><span>Login /
+                            Signup</span></button>
+                    <!-- LOGGED IN -->
+                    <div id="profileContainer" class="profile-container" style="display: none;">
+                        <button id="profileAvatarBtn" type="button" class="profile-avatar-btn"
+                            aria-label="Open profile menu" aria-expanded="false" aria-haspopup="true">
+                            <div id="navProfileAvatar" class="nav-profile-avatar">
+                                <i class="fas fa-user" aria-hidden="true"></i>
+                            </div>
+                            <i class="fas fa-chevron-down profile-chevron" aria-hidden="true"></i>
+                        </button>
+                        <div id="profileDropdown" class="profile-dropdown" role="menu" aria-hidden="true">
+                            <div class="profile-dropdown-header">
+                                <div id="dropdownProfileAvatar" class="dropdown-profile-avatar">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                </div>
+                                <div class="profile-dropdown-user">
+                                    <strong id="dropdownProfileName">Account</strong>
+                                    <span id="dropdownProfileEmail">Manage your profile</span>
+                                </div>
+                            </div>
+                            <div class="profile-dropdown-divider"></div>
+                            <!-- EDIT PROFILE -->
+                            <button id="editProfileBtn" type="button" class="profile-dropdown-btn" role="menuitem">
+                                <span class="profile-menu-icon">
+                                    <i class="fas fa-user-edit" aria-hidden="true"></i>
+                                </span>
+                                <span class="profile-menu-text">
+                                    Edit Profile
+                                </span>
+                                <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
+                            </button>
+                            <!-- LOGOUT -->
+                            <button id="logoutBtn" type="button" class="profile-dropdown-btn logout-dropdown-btn"
+                                role="menuitem">
+                                <span class="profile-menu-icon"><i class="fas fa-sign-out-alt"
+                                        aria-hidden="true"></i></span>
+                                <span class="profile-menu-text">Logout</span>
+                                <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ═══════════ AUTH DIALOGS ═══════════ -->
+    <div id="loginDialog" class="dialog">
+        <div class="dialog-box"
+            style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+            <button id="closeLoginDialog" type="button"
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+            <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">LOGIN</h4>
+            <p style="font-size: 20px; color: white; margin-bottom: 25px;">Welcome Back!</p>
+
+            <div id="loginAlert"
+                style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email Address</label>
+                <input type="text" id="loginEmail" placeholder="johndoe@gmail.com"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Password</label>
+                <div style="position: relative;">
+                    <input type="password" id="loginPwd" placeholder="••••••••"
+                        style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+                    <i class="far fa-eye" id="loginEye"
+                        style="position: absolute; right: 15px; top: 15px; color: #666; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <a href="#" class="forgot-link"
+                style="display: block; text-align: right; color: var(--accent); font-size: 12px; margin-bottom: 25px; text-decoration: none;">Forgot
+                Password?</a>
+
+            <button id="loginBtnAction"
+                style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 20px;">Login</button>
+
+            <p style="text-align: center; margin-top: 25px; font-size: 12px; color: #888;">Don't have an account? <a
+                    href="#" id="goToSignup"
+                    style="color: var(--accent); text-decoration: none; font-weight: bold;">Sign Up</a></p>
+        </div>
+    </div>
+
+    <div id="signupDialog" class="dialog">
+        <div class="dialog-box"
+            style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+            <button id="closeSignupDialog" type="button"
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+            <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">SIGN UP
+            </h4>
+            <p style="font-size: 20px; color: white; margin-bottom: 25px;">Create Account</p>
+
+            <div id="signupAlert"
+                style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Full Name</label>
+                <input type="text" id="signupName" placeholder="Enter your name"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Mobile Number</label>
+                <input type="text" id="signupPhone" placeholder="+91 98765 43210"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email Address</label>
+                <input type="email" id="signupEmail" placeholder="Enter your email"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Password</label>
+                <div style="position: relative;">
+                    <input type="password" id="signupPwd" placeholder="Enter password"
+                        style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+                    <i class="far fa-eye" id="signupEye"
+                        style="position: absolute; right: 15px; top: 15px; color: #666; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <button id="signupBtnAction"
+                style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 20px;">Sign
+                Up</button>
+
+            <p style="text-align: center; margin-top: 25px; font-size: 12px; color: #888;">Already have an account?
+                <a href="#" id="goToLogin"
+                    style="color: var(--accent); text-decoration: none; font-weight: bold;">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- PROFILE DIALOG -->
+    <div id="profileDialog" class="dialog">
+        <div class="dialog-box"
+            style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+            <button id="closeProfileDialog" type="button"
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+            <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">
+                PROFILE SETTINGS</h4>
+
+            <div id="profileAlert"
+                style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+            </div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="position: relative; display: inline-block;">
+                    <div id="profileImagePreview"
+                        style="width: 80px; height: 80px; border-radius: 50%; background: var(--avatar-bg, #222); color: var(--avatar-color, #fff); display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent); font-size: 32px;">
+                        <i class="fas fa-user"></i>
+                    </div>
+
+                    <label for="profileImageInput"
+                        style="position: absolute; bottom: 0; right: 0; background: var(--accent); color: black; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px;">
+                        <i class="fas fa-camera"></i>
+                    </label>
+
+                    <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Full Name</label>
+                <input type="text" id="profileName" placeholder="Enter your name"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email Address</label>
+                <input type="email" id="profileEmail" readonly
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: #666; font-size: 14px; cursor: not-allowed;">
+            </div>
+
+            <button id="saveProfileBtn"
+                style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 15px;">Save
+                Changes</button>
+        </div>
+    </div>
+
+    <!-- LOGOUT CONFIRM DIALOG -->
+    <div id="logoutConfirmDialog" class="dialog logout-dialog" aria-hidden="true" style="display: none;">
+        <div class="dialog-box logout-confirm-box" role="dialog" aria-modal="true" aria-labelledby="logoutDialogTitle">
+            <button id="cancelLogoutTop" type="button" class="logout-close-btn" aria-label="Close logout dialog">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+            <div class="logout-icon"><i class="fas fa-sign-out-alt"></i></div>
+            <div class="logout-content">
+                <span class="logout-label">ACCOUNT ACTION</span>
+                <h2 id="logoutDialogTitle">Logout?</h2>
+                <p>Are you sure you want to logout from your account?</p>
+            </div>
+            <div class="logout-actions">
+                <button id="cancelLogoutBtn" type="button" class="cancel-btn"><span>Stay Logged In</span></button>
+                <button id="confirmLogoutBtn" type="button" class="logout-confirm-btn"><span>Yes, Logout</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ HERO SECTION ═══ -->
+    <section class="builds-hero" id="buildsHero">
+        <div class="builds-hero-content">
+            <span class="builds-badge"><i class="fas fa-hammer"></i> Custom Engineering & Builds</span>
+            <h1>Masterpiece <span class="accent">Builds</span> & Transformations</h1>
+            <p>From track-bred aerodynamic streetfighters to handcrafted cafe racers and rugged touring setups.
+                Explore our proudest custom garage transformations with before-and-after details.</p>
+
+            <div class="builds-stats-ribbon">
+                <div class="build-stat-pill">
+                    <i class="fas fa-motorcycle"></i>
+                    <div>
+                        <strong>150+</strong>
+                        <span>Custom Builds</span>
+                    </div>
+                </div>
+                <div class="build-stat-pill">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <div>
+                        <strong>+25%</strong>
+                        <span>Avg Dyno Gain</span>
+                    </div>
+                </div>
+                <div class="build-stat-pill">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <strong>100%</strong>
+                        <span>Street Legal</span>
+                    </div>
+                </div>
+                <div class="build-stat-pill">
+                    <i class="fas fa-award"></i>
+                    <div>
+                        <strong>5★ Rated</strong>
+                        <span>Customer Satisfaction</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FILTER BAR ═══ -->
+    <div class="builds-filter-bar">
+        <div class="builds-filter-inner">
+            <button class="build-filter-btn active" data-filter="all">All Builds (6)</button>
+            <button class="build-filter-btn" data-filter="caferacer">Cafe Racer</button>
+            <button class="build-filter-btn" data-filter="streetfighter">Streetfighter</button>
+            <button class="build-filter-btn" data-filter="touring">Touring & Adventure</button>
+            <button class="build-filter-btn" data-filter="scrambler">Scrambler / Bobber</button>
+        </div>
+    </div>
+
+    <!-- ═══ BUILDS GRID SECTION ═══ -->
+    <main class="builds-main">
+        <div class="builds-section-header">
+            <span class="builds-label"><i class="fas fa-wrench"></i> Handcrafted Perfection</span>
+            <h2>Featured Custom <span class="accent">Projects</span></h2>
+        </div>
+
+        <div class="builds-projects-grid" id="buildsGrid">
+            <!-- Cards rendered dynamically via JS for full interactive sync -->
+        </div>
+    </main>
+
+    <!-- ═══ BUILD DETAILS MODAL ═══ -->
+    <div class="build-modal-backdrop" id="buildModalBackdrop" aria-hidden="true">
+        <div class="build-modal-dialog" role="dialog" aria-modal="true">
+            <button class="build-modal-close-btn" id="closeBuildModal" aria-label="Close modal">&times;</button>
+            <div class="build-modal-content" id="buildModalContent">
+                <!-- Dynamically populated when card is clicked -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="svc-footer">
+        <p>&copy; 2025 JE BikeZ. All rights reserved. Designed for speed, precision, and passion.</p>
+    </footer>
+
+    <!-- ═══ BUILDS PAGE SCRIPT ═══ -->
+    <script>
+        const buildsData = [
+            {
+                id: "build-1",
+                title: "Royal Enfield Classic 350",
+                subtitle: "Stage 2 Touring & Scrambler Conversion",
+                category: "touring",
+                categoryLabel: "Touring & Scrambler",
+                cost: "₹18,000",
+                duration: "8 Days",
+                engine: "349cc J-Series",
+                powerGain: "+4.2 HP Dyno",
+                likes: 124,
+                images: [
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5384_md6ioo.jpg",
+                        caption: "Completed Build – Final Showcase"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5393_z5ifnq.jpg",
+                        caption: "Initial State Before JE BikeZ Customization"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5389_gcrjn8.jpg",
+                        caption: "Exhaust & Engine Detailing Angle"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1774035979/bike1_to3ndy.png",
+                        caption: "Cockpit & LED Frontal Setup"
+                    }
+                ],
+                beforeImg: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5393_z5ifnq.jpg",
+                afterImg: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5384_md6ioo.jpg",
+                specs: {
+                    baseModel: "Royal Enfield Classic 350 (2023)",
+                    paint: "Matte Stealth Charcoal with Gold Pinstripes",
+                    exhaust: "Handmade Free-Flow Stainless Steel Canister",
+                    lighting: "High-Beam Projector LED + Dual Aux Pods (60W)",
+                    seating: "Waterproof Custom Quilted Touring Gel Saddle",
+                    tyres: "Dual-Sport All-Terrain Block Tread Tyres"
+                },
+                mods: [
+                    "High-flow air filter kit with custom velocity intake",
+                    "Custom CNC aluminum bar-end mirrors & crash guards",
+                    "Integrated rear LED tail strip with sequential blinkers",
+                    "Heavy-duty touring pannier stay mounts & sump guard",
+                    "Full ceramic engine detailing and heat shield wrap"
+                ],
+                quote: "“JE BikeZ took my stock Classic 350 and turned it into an unshakeable touring beast. The road presence is unreal!” — Karthik V."
+            },
+            {
+                id: "build-2",
+                title: "Yamaha FZ V3 'Urban Fighter'",
+                subtitle: "Aggressive Streetfighter & Custom LED Redesign",
+                category: "streetfighter",
+                categoryLabel: "Streetfighter",
+                cost: "₹15,500",
+                duration: "6 Days",
+                engine: "149cc FI",
+                powerGain: "+2.8 HP Tuned",
+                likes: 98,
+                images: [
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5385_b8ttli.jpg",
+                        caption: "Completed Streetfighter Finish"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5390_dj2edp.jpg",
+                        caption: "Factory Stock Bike Before Modification"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731554/naked_a5hden.jpg",
+                        caption: "Aggressive Streetfighter Side Stance"
+                    }
+                ],
+                beforeImg: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5390_dj2edp.jpg",
+                afterImg: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5385_b8ttli.jpg",
+                specs: {
+                    baseModel: "Yamaha FZ V3 FI (2022)",
+                    paint: "Hyper Orange Candy Pearl + Gloss Black Accents",
+                    exhaust: "Underbelly Shorty Exhaust with Removable DB Killer",
+                    lighting: "Dual Predator LED Projector Headlamp Assembly",
+                    seating: "Split-Step Grip Seat with Red Stitching",
+                    tyres: "140-Section Radial Rear Performance Tyre"
+                },
+                mods: [
+                    "Tail tidy kit with integrated micro-LED indicators",
+                    "Adjustable CNC racing levers with anti-break pivot",
+                    "ECU remap for crisp low-end and mid-range throttle torque",
+                    "Front fork lowering & pre-load spacer calibration",
+                    "Matte black engine guard and radiator stone guard"
+                ],
+                quote: "“The throttle response and exhaust note will turn heads everywhere in the city.” — Arjun S."
+            },
+            {
+                id: "build-3",
+                title: "KTM Duke 390 'Apex Razor'",
+                subtitle: "Track & Stunt Spec Aero Transformation",
+                category: "streetfighter",
+                categoryLabel: "Streetfighter",
+                cost: "₹24,000",
+                duration: "10 Days",
+                engine: "373cc Single Cylinder",
+                powerGain: "+5.6 HP Dyno",
+                likes: 184,
+                images: [
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5387_cyd0nf.jpg",
+                        caption: "High Gloss Carbon-Look Finish"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5391_rk4ebp.jpg",
+                        caption: "Stock Duke 390 Prior to Stripping"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731554/sports_zt8uwz.jpg",
+                        caption: "Track Cockpit & Aerodynamic Winglets"
+                    }
+                ],
+                beforeImg: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5391_rk4ebp.jpg",
+                afterImg: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5387_cyd0nf.jpg",
+                specs: {
+                    baseModel: "KTM Duke 390 ABS (2021)",
+                    paint: "Forged Carbon Wrap with Neon Orange Detailing",
+                    exhaust: "Full System Titanium Link Pipe & Carbon Muffler",
+                    lighting: "Dual RGB Angel Eye Halo Headlamp System",
+                    seating: "Alcantara Track Comfort Saddle",
+                    tyres: "Metzeler Sportec M9 RR High Grip Tyres"
+                },
+                mods: [
+                    "Stage 2 Dyno tune with FuelX Autotune module",
+                    "Quickshifter calibration and sintered racing brake pads",
+                    "Heavy duty engine crash sliders and axle bobbins",
+                    "Aerodynamic side winglets for high-speed front stability",
+                    "Lightweight rear sprocket for explosive off-the-line launch"
+                ],
+                quote: "“Pure adrenaline. JE BikeZ tuned the Duke into an unstoppable apex carver!” — Rahul M."
+            },
+            {
+                id: "build-4",
+                title: "Yamaha R15 V4 'Dark Stealth'",
+                subtitle: "Aerodynamic SuperSport Custom Build",
+                category: "caferacer",
+                categoryLabel: "SuperSport / Custom",
+                cost: "₹19,500",
+                duration: "7 Days",
+                engine: "155cc VVA Liquid-Cooled",
+                powerGain: "+3.4 HP Tuned",
+                likes: 210,
+                images: [
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5388_i4fqri.jpg",
+                        caption: "Aerodynamic Stealth Livery"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904141/IMG_5395_zex3rs.jpg",
+                        caption: "Factory Baseline Before Custom Work"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1773770484/bike2_afuml4.jpg",
+                        caption: "Carbon Cowl & Clip-on Handlebars"
+                    }
+                ],
+                beforeImg: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904141/IMG_5395_zex3rs.jpg",
+                afterImg: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5388_i4fqri.jpg",
+                specs: {
+                    baseModel: "Yamaha YZF R15 V4 (2024)",
+                    paint: "Satin Nardo Grey with Neon Accents",
+                    exhaust: "Full Exhaust Header with Akrapovic Style End-Can",
+                    lighting: "Demon Eye Bi-LED Projector with DRL Switchback",
+                    seating: "Single-Seat Racing Cowl Conversion",
+                    tyres: "Apollo Alpha H1 Steel Radial Tyres"
+                },
+                mods: [
+                    "Double-bubble smoked racing windscreen",
+                    "Adjustable rear-set footpegs for aggressive track lean",
+                    "Custom tank grip pads and carbon fiber front fender",
+                    "Custom mapped variable valve actuation response",
+                    "Under-seat wiring harness tidy & lightweight battery"
+                ],
+                quote: "“The finish looks straight out of an international motorshow. Top tier craftsmanship.” — Deepan K."
+            },
+            {
+                id: "build-5",
+                title: "Royal Enfield Interceptor 650 'Brat Scrambler'",
+                subtitle: "Twin-Cylinder Desert Explorer Conversion",
+                category: "scrambler",
+                categoryLabel: "Scrambler / Bobber",
+                cost: "₹32,000",
+                duration: "14 Days",
+                engine: "648cc Parallel Twin",
+                powerGain: "+6.8 HP Dyno",
+                likes: 156,
+                images: [
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731553/adv_n8l3dc.jpg",
+                        caption: "High Clearance Scrambler Stance"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904141/IMG_5394_ifbrld.jpg",
+                        caption: "Base Interceptor 650"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1773770497/bike4_dmhdjq.jpg",
+                        caption: "Handmade Scrambler High Pipes"
+                    }
+                ],
+                beforeImg: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904141/IMG_5394_ifbrld.jpg",
+                afterImg: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731553/adv_n8l3dc.jpg",
+                specs: {
+                    baseModel: "Royal Enfield Interceptor 650 (2022)",
+                    paint: "Brushed Aluminum Tank with Clear Coat Ceramic",
+                    exhaust: "Custom 2-into-1 High-Mounted Scrambler Exhaust",
+                    lighting: "Classic 7-inch LED Headlight with Stone Mesh Guard",
+                    seating: "Hand-Stitched Tan Leather Brat Seat",
+                    tyres: "Pirelli Scorpion Rally STR Knobbed Tyres"
+                },
+                mods: [
+                    "Raised suspension setup with heavy-duty fork springs",
+                    "Reinforced scrambler handlebar with crossbar and pad",
+                    "Shortened rear subframe with loop weld and LED bar",
+                    "High-mounted brushed aluminum front mudguard",
+                    "Custom engine bash plate and brass fluid reservoir caps"
+                ],
+                quote: "“A twin-cylinder scrambler dream come true. Sounds legendary and handles rough trails with ease.” — Vignesh N."
+            },
+            {
+                id: "build-6",
+                title: "TVS Apache RTR 200 'Track Special'",
+                subtitle: "Race Replica & Performance Dynamics",
+                category: "caferacer",
+                categoryLabel: "Cafe Racer / Track",
+                cost: "₹16,800",
+                duration: "6 Days",
+                engine: "197.7cc 4V Slipper Clutch",
+                powerGain: "+3.1 HP Tuned",
+                likes: 112,
+                images: [
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png",
+                        caption: "Finished Track Spec Race Replica"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5393_z5ifnq.jpg",
+                        caption: "Base Bike Prior to Overhaul"
+                    },
+                    {
+                        url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731553/cruser_n0w95g.jpg",
+                        caption: "Custom Monoshock & Swingarm Detail"
+                    }
+                ],
+                beforeImg: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5393_z5ifnq.jpg",
+                afterImg: "https://res.cloudinary.com/dzyrruoda/image/upload/v1773770490/bike3_f4sgyt.png",
+                specs: {
+                    baseModel: "TVS Apache RTR 200 4V (2023)",
+                    paint: "Matte Racing Blue with White Speed Decals",
+                    exhaust: "Race Tuned Stainless Header with Carbon Tip",
+                    lighting: "Dual LED Projector with Amber Daytime Running Lights",
+                    seating: "Slip-Resistant Ribbed Sport Saddle",
+                    tyres: "TVS Eurogrip Pro-Torq Extreme Radials"
+                },
+                mods: [
+                    "Adjustable front Showa suspension re-valved for track stiffness",
+                    "Braided stainless steel brake lines with DOT 5.1 racing fluid",
+                    "Lightweight clip-on handlebars with weighted bar ends",
+                    "Custom carbon wrap tank shroud and engine belly pan",
+                    "Dyno remapped fuel curve with reduced throttle lag"
+                ],
+                quote: "“The stability in corners and precision in braking is incredible. Outstanding job by the team!” — Praveen K."
+            }
+        ];
+
+        // Current active modal build state
+        let currentModalBuild = null;
+        let currentGalleryIndex = 0;
+
+        // Render Cards
+        function renderBuilds(filter = "all") {
+            const grid = document.getElementById("buildsGrid");
+            if (!grid) return;
+
+            const filtered = filter === "all"
+                ? buildsData
+                : buildsData.filter(b => b.category === filter);
+
+            grid.innerHTML = filtered.map(item => `
+                <div class="build-item-card" data-id="${item.id}" onclick="openBuildModal('${item.id}')">
+                    <div class="build-card-visual">
+                        <div class="build-card-split">
+                            <img src="${item.beforeImg}" alt="Before ${item.title}">
+                            <span class="build-tag-label before">Before</span>
+                        </div>
+                        <div class="build-card-split">
+                            <img src="${item.afterImg}" alt="After ${item.title}">
+                            <span class="build-tag-label after">After</span>
+                        </div>
+                        <div class="build-card-hover-overlay">
+                            <span><i class="fas fa-search-plus"></i> View Build Story & Details</span>
+                        </div>
+                    </div>
+                    <div class="build-card-body">
+                        <div class="build-card-top-row">
+                            <span class="build-category-badge">${item.categoryLabel}</span>
+                            <span class="build-likes-counter" onclick="event.stopPropagation(); toggleLike(this, '${item.id}')">
+                                <i class="far fa-heart"></i> <span>${item.likes}</span>
+                            </span>
+                        </div>
+                        <h3 class="build-card-title">${item.title}</h3>
+                        <p class="build-card-subtitle">${item.subtitle}</p>
+
+                        <div class="build-card-specs-grid">
+                            <div class="build-card-spec-item">
+                                <small>Build Time</small>
+                                <strong>${item.duration}</strong>
+                            </div>
+                            <div class="build-card-spec-item">
+                                <small>Engine</small>
+                                <strong>${item.engine}</strong>
+                            </div>
+                            <div class="build-card-spec-item">
+                                <small>Power Gain</small>
+                                <strong>${item.powerGain}</strong>
+                            </div>
+                        </div>
+
+                        <div class="build-card-footer">
+                            <div class="build-card-cost">
+                                <small>Estimated Investment</small>
+                                ${item.cost}
+                            </div>
+                            <button type="button" class="build-view-btn">
+                                <span>Explore</span> <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Like Counter Toggle
+        window.toggleLike = function (el, id) {
+            const icon = el.querySelector("i");
+            const span = el.querySelector("span");
+            let count = parseInt(span.textContent, 10);
+            if (el.classList.contains("liked")) {
+                el.classList.remove("liked");
+                icon.className = "far fa-heart";
+                span.textContent = count - 1;
+            } else {
+                el.classList.add("liked");
+                icon.className = "fas fa-heart";
+                span.textContent = count + 1;
+            }
+        };
+
+        // Filter Buttons
+        document.querySelectorAll(".build-filter-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                document.querySelectorAll(".build-filter-btn").forEach(b => b.classList.remove("active"));
+                this.classList.add("active");
+                renderBuilds(this.getAttribute("data-filter"));
+            });
+        });
+
+        // Open Modal
+        window.openBuildModal = function (id) {
+            const build = buildsData.find(b => b.id === id);
+            if (!build) return;
+
+            currentModalBuild = build;
+            currentGalleryIndex = 0;
+
+            const modalContent = document.getElementById("buildModalContent");
+            const modalBackdrop = document.getElementById("buildModalBackdrop");
+
+            modalContent.innerHTML = `
+                <div class="build-modal-header">
+                    <span class="modal-badge"><i class="fas fa-check-circle"></i> ${build.categoryLabel} Project</span>
+                    <h2>${build.title}</h2>
+                    <p>${build.subtitle}</p>
+                </div>
+
+                <!-- Showcase Gallery -->
+                <div class="build-gallery-container">
+                    <div class="build-gallery-main">
+                        <button class="build-gallery-nav-btn prev" onclick="prevModalImg()" aria-label="Previous Image">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <img id="mainGalleryImg" src="${build.images[0].url}" alt="${build.images[0].caption}">
+                        <button class="build-gallery-nav-btn next" onclick="nextModalImg()" aria-label="Next Image">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <div class="build-gallery-caption" id="galleryCaption">${build.images[0].caption} (1 of ${build.images.length})</div>
+                    </div>
+                    <div class="build-gallery-strip" id="galleryThumbStrip">
+                        ${build.images.map((img, i) => `
+                            <button class="build-thumb-btn ${i === 0 ? 'active' : ''}" onclick="selectModalImg(${i})">
+                                <img src="${img.url}" alt="${img.caption}">
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Details & Breakdown -->
+                <div class="build-modal-body-grid">
+                    <div class="build-detail-section">
+                        <h4><i class="fas fa-clipboard-list"></i> Build Specifications</h4>
+                        <table class="build-specs-table">
+                            <tbody>
+                                <tr><td>Base Motorcycle</td><td>${build.specs.baseModel}</td></tr>
+                                <tr><td>Custom Paintwork</td><td>${build.specs.paint}</td></tr>
+                                <tr><td>Exhaust System</td><td>${build.specs.exhaust}</td></tr>
+                                <tr><td>Lighting / LEDs</td><td>${build.specs.lighting}</td></tr>
+                                <tr><td>Saddle & Seating</td><td>${build.specs.seating}</td></tr>
+                                <tr><td>Tyre & Wheel Setup</td><td>${build.specs.tyres}</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4><i class="fas fa-tools"></i> Key Modifications Completed</h4>
+                        <ul class="build-mods-list">
+                            ${build.mods.map(m => `<li><i class="fas fa-check"></i> ${m}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="build-action-card">
+                        <div class="build-action-price">
+                            <small>Total Build Investment</small>
+                            <span>${build.cost}</span>
+                        </div>
+                        <div style="margin-bottom:15px; font-size:0.88rem; color:#4b5563;">
+                            <p style="margin:4px 0;"><strong><i class="fas fa-clock" style="color:var(--accent);"></i> Turnaround:</strong> ${build.duration}</p>
+                            <p style="margin:4px 0;"><strong><i class="fas fa-chart-line" style="color:var(--accent);"></i> Performance:</strong> ${build.powerGain}</p>
+                        </div>
+                        <a href="service.html#bookSection" class="build-modal-cta-btn">
+                            <i class="fas fa-calendar-check"></i> Book Similar Build
+                        </a>
+                        <a href="https://wa.me/919876543210?text=Hi%20JE%20BikeZ,%20I'm%20interested%20in%20the%20${encodeURIComponent(build.title)}%20build" 
+                           target="_blank" rel="noopener noreferrer" class="build-whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                        </a>
+
+                        <div class="build-modal-testimonial">
+                            ${build.quote}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modalBackdrop.classList.add("open");
+            modalBackdrop.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+        };
+
+        window.selectModalImg = function (index) {
+            if (!currentModalBuild || !currentModalBuild.images[index]) return;
+            currentGalleryIndex = index;
+            updateGalleryDisplay();
+        };
+
+        window.nextModalImg = function () {
+            if (!currentModalBuild) return;
+            currentGalleryIndex = (currentGalleryIndex + 1) % currentModalBuild.images.length;
+            updateGalleryDisplay();
+        };
+
+        window.prevModalImg = function () {
+            if (!currentModalBuild) return;
+            currentGalleryIndex = (currentGalleryIndex - 1 + currentModalBuild.images.length) % currentModalBuild.images.length;
+            updateGalleryDisplay();
+        };
+
+        function updateGalleryDisplay() {
+            const img = document.getElementById("mainGalleryImg");
+            const caption = document.getElementById("galleryCaption");
+            const strip = document.getElementById("galleryThumbStrip");
+            if (!img || !currentModalBuild) return;
+
+            const target = currentModalBuild.images[currentGalleryIndex];
+            img.style.opacity = "0.4";
+            setTimeout(() => {
+                img.src = target.url;
+                img.alt = target.caption;
+                img.style.opacity = "1";
+            }, 120);
+
+            if (caption) {
+                caption.textContent = `${target.caption} (${currentGalleryIndex + 1} of ${currentModalBuild.images.length})`;
+            }
+
+            if (strip) {
+                const buttons = strip.querySelectorAll(".build-thumb-btn");
+                buttons.forEach((btn, idx) => {
+                    btn.classList.toggle("active", idx === currentGalleryIndex);
+                });
+            }
+        }
+
+        // Close Modal
+        function closeBuildModalFunc() {
+            const modalBackdrop = document.getElementById("buildModalBackdrop");
+            if (modalBackdrop) {
+                modalBackdrop.classList.remove("open");
+                modalBackdrop.setAttribute("aria-hidden", "true");
+                document.body.style.overflow = "";
+            }
+        }
+
+        document.getElementById("closeBuildModal").addEventListener("click", closeBuildModalFunc);
+        document.getElementById("buildModalBackdrop").addEventListener("click", function (e) {
+            if (e.target === this) closeBuildModalFunc();
+        });
+
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") closeBuildModalFunc();
+            if (document.getElementById("buildModalBackdrop").classList.contains("open")) {
+                if (e.key === "ArrowRight") nextModalImg();
+                if (e.key === "ArrowLeft") prevModalImg();
+            }
+        });
+
+        // Initialize
+        renderBuilds("all");
+    </script>
+</body>
+
+</html>

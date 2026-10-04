@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="/frontend/style.css"> -->
     <link rel="preload" href="./style.css" as="style">
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./bike-service.css">
 </head>
 
 <body>
@@ -45,11 +46,11 @@
                 <div class="nav-links" id="navLinks">
 
                     <a href="#home" class="active">Home</a>
-                    <a href="#services">Services</a>
-                    <a href="#builds">Builds</a>
-                    <a href="#sales">Sales</a>
-                    <a href="#about">About Us</a>
-                    <a href="#contact">Contact</a>
+                    <a href="service.html">Services</a>
+                    <a href="builds.html">Builds</a>
+                    <a href="sales.html">Sales</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact</a>
 
                 </div>
 
@@ -450,7 +451,7 @@
                         <div class="section-header"
                             style="display: flex; justify-content: space-between; margin-bottom: 20px;">
                             <h2 class="section-title" style="margin:0;">COMPLETED BUILDS</h2>
-                            <a href="#" class="view-all-btn" style="color: var(--accent);">View All</a>
+                            <a href="builds.html" class="view-all-btn" style="color: var(--accent);">View All</a>
                         </div>
                         <div class="builds-grid">
                             <!-- Card 1 -->
@@ -628,7 +629,7 @@
                         <div class="section-header"
                             style="display: flex; justify-content: space-between; margin-bottom: 20px;">
                             <h2 class="section-title" style="margin:0;">BIKE SALES</h2>
-                            <a href="#" class="view-all-btn" style="color: var(--accent);">View All</a>
+                            <a href="sales.html" class="view-all-btn" style="color: var(--accent);">View All</a>
                         </div>
                         <div class="sales-grid">
                             <!-- Sale 1 -->
@@ -1339,15 +1340,15 @@
                 <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 15px; text-transform: uppercase;">Quick
                     Links</h4>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <a href="#services"
+                    <a href="service.html"
                         style="color: var(--text-secondary); text-decoration: none; font-size: 12px; transition: color 0.2s;"
                         onmouseover="this.style.color='var(--text-primary)'"
                         onmouseout="this.style.color='var(--text-secondary)'">Services</a>
-                    <a href="#builds"
+                    <a href="builds.html"
                         style="color: var(--text-secondary); text-decoration: none; font-size: 12px; transition: color 0.2s;"
                         onmouseover="this.style.color='var(--text-primary)'"
                         onmouseout="this.style.color='var(--text-secondary)'">Builds</a>
-                    <a href="#sales"
+                    <a href="sales.html"
                         style="color: var(--text-secondary); text-decoration: none; font-size: 12px; transition: color 0.2s;"
                         onmouseover="this.style.color='var(--text-primary)'"
                         onmouseout="this.style.color='var(--text-secondary)'">Sales</a>
@@ -1370,11 +1371,13 @@
                 <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 15px; text-transform: uppercase;">
                     Follow Us</h4>
                 <div style="display: flex; gap: 15px;">
-                    <a href="#"
+                    <a href="https://www.instagram.com/jebikez?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw=="
+                        target="_blank" rel="noopener noreferrer"
                         style="width: 35px; height: 35px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-primary); transition: all 0.3s;"
                         onmouseover="this.style.background='var(--accent)'; this.style.color='black';"
-                        onmouseout="this.style.background='var(--bg-card)'; this.style.color='var(--text-primary)';"><i
-                            class="fab fa-instagram"></i></a>
+                        onmouseout="this.style.background='var(--bg-card)'; this.style.color='var(--text-primary)';">
+                        <i class="fab fa-instagram"></i>
+                    </a>
                     <a href="#"
                         style="width: 35px; height: 35px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-primary); transition: all 0.3s;"
                         onmouseover="this.style.background='var(--accent)'; this.style.color='black';"
@@ -1397,9 +1400,9 @@
     <!-- ═══════════ BOTTOM NAV (MOBILE ONLY) ═══════════ -->
     <nav class="bottom-nav">
         <a href="#home" class="bottom-nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
-        <a href="#services" class="bottom-nav-item"><i class="fas fa-tools"></i><span>Services</span></a>
-        <a href="#builds" class="bottom-nav-item"><i class="fas fa-motorcycle"></i><span>Builds</span></a>
-        <a href="#sales" class="bottom-nav-item"><i class="fas fa-tags"></i><span>Sales</span></a>
+        <a href="service.html" class="bottom-nav-item"><i class="fas fa-tools"></i><span>Services</span></a>
+        <a href="builds.html" class="bottom-nav-item"><i class="fas fa-motorcycle"></i><span>Builds</span></a>
+        <a href="sales.html" class="bottom-nav-item"><i class="fas fa-tags"></i><span>Sales</span></a>
         <a href="#profile" class="bottom-nav-item"><i class="far fa-user"></i><span>Profile</span></a>
     </nav>
 

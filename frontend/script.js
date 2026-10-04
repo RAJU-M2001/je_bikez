@@ -35,16 +35,27 @@ document.addEventListener("DOMContentLoaded", function () {
     // API CONFIGURATION
     // ========================================================
 
-    // LOCAL
+    // API CONFIGURATION (Local & Render dynamic support)
     // const API_BASE_URL =
-    //     "http://127.0.0.1:10000";
+    //     window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    //         ? "http://127.0.0.1:10000"
+    //         : "https://bike-modification-api.onrender.com";
+
+    // ========================================================
+    // API CONFIGURATION
+    // ========================================================
+
+    // LOCAL
+    const API_BASE_URL =
+        "http://127.0.0.1:10000";
 
     // PRODUCTION
     // const API_BASE_URL = "https://api.je-bikez.com";
 
     // RENDER
-    const API_BASE_URL =
-        "https://bike-modification-api.onrender.com";
+    // const API_BASE_URL =
+    //     "https://bike-modification-api.onrender.com";
+
 
 
     // ========================================================
@@ -1162,6 +1173,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         setScrollLock(true);
     }
+
+    // Expose modal handlers globally
+    window.showModal = showModal;
+    window.hideAllModals = hideAllModals;
 
 
     // ========================================================
@@ -2555,30 +2570,46 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ========================================================
-    // BOOK SERVICE HERO BUTTON
+    // BOOK SERVICE HERO & BOOKING BUTTONS
     // ========================================================
 
-    if (bookServiceBtnHero) {
+    const heroBookButtons = [
+        bookServiceBtnHero,
+        document.getElementById("svcHeroBookBtn")
+    ];
 
-        bookServiceBtnHero.addEventListener(
-            "click",
-            function () {
-
-                if (!isLoggedIn) {
-
-                    showModal(
-                        loginDialog
-                    );
-
-                } else {
-
-                    showModal(
-                        addBikeDialog
-                    );
+    heroBookButtons.forEach(btn => {
+        if (btn) {
+            btn.addEventListener(
+                "click",
+                function (e) {
+                    if (!isLoggedIn) {
+                        e.preventDefault();
+                        showModal(
+                            loginDialog
+                        );
+                    } else {
+                        const bookSec = document.getElementById("bookSection");
+                        if (bookSec) {
+                            e.preventDefault();
+                            bookSec.scrollIntoView({ behavior: "smooth" });
+                        } else {
+                            window.location.href = "service.html#bookSection";
+                        }
+                    }
                 }
+            );
+        }
+    });
 
+    const svcBookBtn = document.getElementById("bookServiceBtn");
+    if (svcBookBtn) {
+        svcBookBtn.addEventListener("click", function (e) {
+            if (!isLoggedIn) {
+                e.preventDefault();
+                showModal(loginDialog);
             }
-        );
+        });
     }
 
 

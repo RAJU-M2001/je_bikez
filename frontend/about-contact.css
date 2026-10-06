@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
 /* =========================================================
    GLOBAL
 ========================================================= */
@@ -13,16 +15,10 @@ html {
 }
 
 body {
-    font-family:
-        Inter,
-        "Segoe UI",
-        Arial,
-        sans-serif;
-
-    color: #171c2b;
-    background: #f5f6fa;
-
-    line-height: 1.6;
+    font-family: 'Inter', 'Outfit', sans-serif;
+    color: #1a1a2e;
+    background: #f4f5f9;
+    line-height: 1.5;
 }
 
 a {
@@ -44,27 +40,26 @@ select {
 
 .navbar {
     width: 100%;
-    height: 80px;
-
-    background: #ffffff;
-
-    border-bottom: 1px solid #eeeeee;
-
-    position: relative;
-    z-index: 100;
+    height: 72px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .navbar-container {
     width: 100%;
-    max-width: 1500px;
-
+    max-width: 100%;
     height: 100%;
-
-    margin: auto;
-    padding: 0 48px;
-
+    margin: 0 auto;
+    padding: 0 40px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 
@@ -73,14 +68,12 @@ select {
 .logo {
     display: flex;
     align-items: center;
-
-    width: 55px;
+    flex-shrink: 0;
 }
 
 .logo img {
-    width: 42px;
-    height: auto;
-
+    height: 38px;
+    width: auto;
     object-fit: contain;
 }
 
@@ -90,50 +83,40 @@ select {
 .nav-links {
     display: flex;
     align-items: center;
-
-    gap: 38px;
-
-    margin-left: 45px;
+    gap: 32px;
+    margin-left: 50px;
 }
 
 .nav-links a {
     position: relative;
-
-    color: #252938;
-
-    font-size: 16px;
+    color: #1a1a2e;
+    font-size: 14px;
     font-weight: 500;
-
-    padding: 8px 0;
-
+    letter-spacing: 0.5px;
+    padding: 4px 0;
     transition: color 0.3s ease;
 }
 
-.nav-links a:hover {
-    color: #ff6500;
-}
-
-
-/* ACTIVE LINK */
-
-.nav-links a.active {
-    color: #ff6500;
-}
-
-.nav-links a.active::after {
+.nav-links a::after {
     content: "";
-
     position: absolute;
-
+    bottom: -2px;
     left: 0;
-    bottom: 0;
-
-    width: 100%;
+    width: 0;
     height: 2px;
-
-    background: #ff6500;
-
+    background: #ff6600;
     border-radius: 20px;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #ff6600;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 100%;
 }
 
 
@@ -141,32 +124,38 @@ select {
 
 .login-btn {
     margin-left: auto;
-
-    display: flex;
+    height: 42px;
+    display: inline-flex;
     align-items: center;
-    gap: 9px;
-
-    padding: 14px 22px;
-
-    background: #ff6500;
-
-    color: #111111;
-
-    border-radius: 13px;
-
-    font-size: 15px;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 20px;
+    background: #ff6600;
+    color: #000000;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 13px;
     font-weight: 700;
-
+    letter-spacing: 0.5px;
+    cursor: pointer;
     transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.login-btn i,
+.login-btn span {
+    color: #000000;
+    font-size: 13px;
+    font-weight: 700;
 }
 
 .login-btn:hover {
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 8px 20px rgba(255, 101, 0, 0.22);
+    background: #ff771a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.35);
 }
 
 
@@ -275,7 +264,7 @@ select {
 }
 
 .hero-content h1 {
-    margin-top: 25px;
+    /* margin-top: 25px;
 
     color: #171c2b;
 
@@ -283,7 +272,12 @@ select {
 
     line-height: 1.08;
 
+    font-weight: 800; */
+    font-size: 2.8rem;
     font-weight: 800;
+    color: #111827;
+    margin-bottom: 14px;
+    line-height: 1.15;
 }
 
 .hero-content h1 span {
@@ -642,13 +636,16 @@ select {
     align-items: start;
 }
 
+.contact-info {
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+}
+
 .contact-info h2 {
     margin: 15px 0 20px;
-
     font-size: 42px;
-
     line-height: 1.15;
-
     font-weight: 800;
 }
 
@@ -657,12 +654,10 @@ select {
 }
 
 .contact-description {
-    max-width: 500px;
-
+    max-width: 600px;
+    margin: 0 auto;
     color: #667085;
-
     font-size: 16px;
-
     line-height: 1.8;
 }
 
@@ -670,55 +665,65 @@ select {
 /* CONTACT DETAILS */
 
 .contact-details {
-    margin-top: 35px;
-
+    margin-top: 45px;
     display: grid;
-
-    gap: 23px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    text-align: left;
 }
 
 .contact-detail {
     display: flex;
-
     align-items: flex-start;
+    gap: 18px;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #eeeeee;
+    box-shadow: 0 4px 18px rgba(20, 25, 40, 0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
 
-    gap: 17px;
+.contact-detail:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 101, 0, 0.08);
+    border-color: rgba(255, 101, 0, 0.25);
 }
 
 .detail-icon {
     width: 48px;
     height: 48px;
-
     flex-shrink: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     border-radius: 13px;
-
     background: #fff0e5;
-
     color: #ff6500;
+    font-size: 18px;
 }
 
 .contact-detail h3 {
-    margin-bottom: 3px;
-
+    margin-bottom: 4px;
     font-size: 16px;
+    font-weight: 700;
 }
 
 .contact-detail p,
 .contact-detail a {
     color: #667085;
-
     font-size: 14px;
+    line-height: 1.6;
 }
 
 .contact-detail a {
     color: #ff6500;
-
     font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.contact-detail a:hover {
+    color: #e05500;
 }
 
 
@@ -1000,7 +1005,8 @@ select {
     }
 
     .login-btn {
-        padding: 12px 15px;
+        height: 38px;
+        padding: 0 14px;
     }
 
     .login-btn span {
@@ -1028,39 +1034,78 @@ select {
 @media (max-width: 768px) {
 
     .navbar {
-        height: auto;
+        height: 64px !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1000 !important;
     }
 
     .navbar-container {
-        min-height: 75px;
+        height: 100% !important;
+        min-height: 64px !important;
+        padding: 0 16px !important;
+        flex-wrap: nowrap !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
 
-        flex-wrap: wrap;
-
-        padding: 15px 20px;
+    .logo img {
+        height: 36px !important;
+        width: auto !important;
     }
 
     .nav-links {
-        order: 3;
+        display: none !important;
+    }
 
+    .login-btn {
+        height: 38px !important;
+        padding: 0 14px !important;
+        font-size: 12px !important;
+        margin-left: auto !important;
+        display: inline-flex !important;
+        align-items: center !important;
+    }
+
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
         width: 100%;
-
-        margin: 15px 0 0;
-
-        padding-bottom: 5px;
-
-        overflow-x: auto;
-
-        gap: 25px;
-
-        scrollbar-width: none;
+        background: rgba(255, 255, 255, 0.96);
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.06);
+        justify-content: space-around;
+        padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+        z-index: 10000;
     }
 
-    .nav-links::-webkit-scrollbar {
-        display: none;
+    .bottom-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #6c7280;
+        text-decoration: none;
+        font-size: 10px;
+        gap: 4px;
+        flex: 1;
+        min-width: 0;
+        transition: color 0.2s ease;
     }
 
-    .nav-links a {
-        white-space: nowrap;
+    .bottom-nav-item.active {
+        color: #ff6600 !important;
+    }
+
+    .bottom-nav-item i {
+        font-size: 18px;
+    }
+
+    body {
+        padding-bottom: 70px !important;
     }
 
     .section-container {
@@ -1085,7 +1130,8 @@ select {
     }
 
     .mission-grid,
-    .why-grid {
+    .why-grid,
+    .contact-details {
         grid-template-columns: 1fr;
     }
 

@@ -7,7 +7,30 @@
 
     <title>About Us | JE BikeZ</title>
 
-    <link rel="stylesheet" href="about-contact.css">
+    <!-- ANTI-FLICKER: apply auth & theme state immediately before first paint -->
+    <script>
+        (function () {
+            var loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            document.documentElement.classList.add(loggedIn ? 'auth-logged-in' : 'auth-logged-out');
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            } else if (savedTheme === 'dark') {
+                document.documentElement.classList.remove('light-mode');
+            }
+            var style = document.createElement('style');
+            style.id = 'auth-anti-flicker';
+            if (loggedIn) {
+                style.textContent = '#loginSignupBtn{display:none!important;}#profileContainer{display:flex!important;}';
+            } else {
+                style.textContent = '#loginSignupBtn{display:inline-flex!important;}#profileContainer{display:none!important;}';
+            }
+            document.head.appendChild(style);
+        })();
+    </script>
+
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="about.css">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -19,7 +42,7 @@
          NAVBAR
     ====================================================== -->
 
-    <header class="navbar">
+    <header class="navbar" id="mainNav">
 
         <div class="navbar-container">
 
@@ -30,7 +53,7 @@
             </a>
 
             <!-- NAVIGATION -->
-            <nav class="nav-links">
+            <nav class="nav-links" id="navLinks">
 
                 <a href="index.html">Home</a>
 
@@ -46,11 +69,45 @@
 
             </nav>
 
-            <!-- LOGIN -->
-            <a href="login.html" class="login-btn">
-                <i class="fa-solid fa-user"></i>
-                <span>Login / Signup</span>
-            </a>
+            <!-- AUTH / PROFILE CONTAINER -->
+            <div id="profileMenuContainer" class="profile-menu-container">
+                <button id="loginSignupBtn" type="button" class="nav-login-btn navbar-auth-btn"
+                    aria-label="Login or Signup">
+                    <i class="fas fa-user" aria-hidden="true"></i>
+                    <span>Login / Signup</span>
+                </button>
+                <div id="profileContainer" class="profile-container">
+                    <button id="profileAvatarBtn" type="button" class="profile-avatar-btn"
+                        aria-label="Open profile menu" aria-expanded="false" aria-haspopup="true">
+                        <div id="navProfileAvatar" class="nav-profile-avatar"><i class="fas fa-user"
+                                aria-hidden="true"></i></div>
+                        <i class="fas fa-chevron-down profile-chevron" aria-hidden="true"></i>
+                    </button>
+                    <div id="profileDropdown" class="profile-dropdown" role="menu" aria-hidden="true">
+                        <div class="profile-dropdown-header">
+                            <div id="dropdownProfileAvatar" class="dropdownProfile-avatar dropdown-profile-avatar"><i
+                                    class="fas fa-user" aria-hidden="true"></i></div>
+                            <div class="profile-dropdown-user">
+                                <strong id="dropdownProfileName">Account</strong>
+                                <span id="dropdownProfileEmail">Manage your profile</span>
+                            </div>
+                        </div>
+                        <div class="profile-dropdown-divider"></div>
+                        <button id="editProfileBtn" type="button" class="profile-dropdown-btn" role="menuitem">
+                            <span class="profile-menu-icon"><i class="fas fa-user-edit" aria-hidden="true"></i></span>
+                            <span class="profile-menu-text">Edit Profile</span>
+                            <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
+                        </button>
+                        <button id="logoutBtn" type="button" class="profile-dropdown-btn logout-dropdown-btn"
+                            role="menuitem">
+                            <span class="profile-menu-icon"><i class="fas fa-sign-out-alt"
+                                    aria-hidden="true"></i></span>
+                            <span class="profile-menu-text">Logout</span>
+                            <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
         </div>
 
@@ -438,6 +495,173 @@
         <a href="about.html" class="bottom-nav-item active"><i class="fas fa-info-circle"></i><span>About</span></a>
         <a href="contact.html" class="bottom-nav-item"><i class="fas fa-envelope"></i><span>Contact</span></a>
     </nav>
+    <!-- ═══════════ AUTH DIALOGS ═══════════ -->
+    <div id="loginDialog" class="dialog">
+        <div class="dialog-box"
+            style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+            <button id="closeLoginDialog" type="button"
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+            <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">LOGIN
+            </h4>
+            <p style="font-size: 20px; color: white; margin-bottom: 25px;">Welcome Back!</p>
+
+            <div id="loginAlert"
+                style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email
+                    Address</label>
+                <input type="text" id="loginEmail" placeholder="johndoe@gmail.com"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Password</label>
+                <div style="position: relative;">
+                    <input type="password" id="loginPwd" placeholder="••••••••"
+                        style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+                    <i class="far fa-eye" id="loginEye"
+                        style="position: absolute; right: 15px; top: 15px; color: #666; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <a href="#" class="forgot-link"
+                style="display: block; text-align: right; color: var(--accent); font-size: 12px; margin-bottom: 25px; text-decoration: none;">Forgot
+                Password?</a>
+
+            <button id="loginBtnAction"
+                style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 20px;">Login</button>
+
+            <p style="text-align: center; margin-top: 25px; font-size: 12px; color: #888;">Don't have an account? <a
+                    href="#" id="goToSignup"
+                    style="color: var(--accent); text-decoration: none; font-weight: bold;">Sign Up</a></p>
+        </div>
+    </div>
+
+    <div id="signupDialog" class="dialog">
+        <div class="dialog-box"
+            style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+            <button id="closeSignupDialog" type="button"
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+            <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">SIGN
+                UP</h4>
+            <p style="font-size: 20px; color: white; margin-bottom: 25px;">Create Account</p>
+
+            <div id="signupAlert"
+                style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Full Name</label>
+                <input type="text" id="signupName" placeholder="Enter your name"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Mobile
+                    Number</label>
+                <input type="text" id="signupPhone" placeholder="+91 98765 43210"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email
+                    Address</label>
+                <input type="email" id="signupEmail" placeholder="Enter your email"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Password</label>
+                <div style="position: relative;">
+                    <input type="password" id="signupPwd" placeholder="Enter password"
+                        style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+                    <i class="far fa-eye" id="signupEye"
+                        style="position: absolute; right: 15px; top: 15px; color: #666; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <button id="signupBtnAction"
+                style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 20px;">Sign
+                Up</button>
+
+            <p style="text-align: center; margin-top: 25px; font-size: 12px; color: #888;">Already have an account?
+                <a href="#" id="goToLogin"
+                    style="color: var(--accent); text-decoration: none; font-weight: bold;">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ═══ PROFILE SETTINGS DIALOG ═══ -->
+    <div id="profileDialog" class="dialog">
+        <div class="dialog-box"
+            style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">
+            <button id="closeProfileDialog" type="button"
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                onmouseover="this.style.color='white'" onmouseout="this.style.color='#666'">&times;</button>
+            <h4 style="color: var(--accent); font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">
+                PROFILE SETTINGS</h4>
+
+            <div id="profileAlert"
+                style="display: none; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 12px; text-align: center;">
+            </div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="position: relative; display: inline-block;">
+                    <div id="profileImagePreview"
+                        style="width: 80px; height: 80px; border-radius: 50%; background: var(--avatar-bg, #222); color: var(--avatar-color, #fff); display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent); font-size: 32px;">
+                        <i class="fas fa-user"></i>
+                    </div>
+
+                    <label for="profileImageInput"
+                        style="position: absolute; bottom: 0; right: 0; background: var(--accent); color: black; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px;">
+                        <i class="fas fa-camera"></i>
+                    </label>
+
+                    <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Full Name</label>
+                <input type="text" id="profileName" placeholder="Enter your name"
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: white; font-size: 14px;">
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 12px; color: #888; margin-bottom: 8px;">Email Address</label>
+                <input type="email" id="profileEmail" readonly
+                    style="width: 100%; background: #111; border: 1px solid #222; padding: 12px 15px; border-radius: 8px; color: #666; font-size: 14px; cursor: not-allowed;">
+            </div>
+
+            <button id="saveProfileBtn"
+                style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 15px;">Save
+                Changes</button>
+        </div>
+    </div>
+
+    <!-- LOGOUT DIALOG -->
+    <div id="logoutConfirmDialog" class="dialog logout-dialog" aria-hidden="true" style="display: none;">
+        <div class="dialog-box">
+            <div class="logout-icon"><i class="fas fa-sign-out-alt"></i></div>
+            <div class="logout-content">
+                <span class="logout-label">ACCOUNT ACTION</span>
+                <h2 id="logoutDialogTitle">Logout?</h2>
+                <p id="logoutDialogDescription">Are you sure you want to logout from your account? Your current session
+                    will be ended.</p>
+            </div>
+            <div class="logout-actions">
+                <button id="cancelLogoutBtn" type="button" class="cancel-btn"><i class="fas fa-arrow-left"></i>
+                    <span>Stay Logged In</span></button>
+                <button id="confirmLogoutBtn" type="button" class="logout-confirm-btn"><span>Yes, Logout</span> <i
+                        class="fas fa-sign-out-alt"></i></button>
+            </div>
+            <div class="logout-note"><i class="fas fa-shield-alt"></i> <span>You can sign in again anytime.</span></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 
 </html>

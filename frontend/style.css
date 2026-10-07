@@ -279,6 +279,25 @@ img {
 }
 
 /* ═══════════════════════════════════════════
+   AUTH ANTI-FLICKER CORE STYLES
+   ═══════════════════════════════════════════ */
+html.auth-logged-in #loginSignupBtn {
+    display: none !important;
+}
+
+html.auth-logged-in #profileContainer {
+    display: flex !important;
+}
+
+html.auth-logged-out #loginSignupBtn {
+    display: inline-flex !important;
+}
+
+html.auth-logged-out #profileContainer {
+    display: none !important;
+}
+
+/* ═══════════════════════════════════════════
    NAVBAR
    ═══════════════════════════════════════════ */
 
@@ -290,19 +309,34 @@ img {
     background: var(--bg-navbar);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 40px;
     height: 72px;
     z-index: 10000;
     border-bottom: 1px solid var(--border);
+    padding: 0;
+}
+
+.navbar-container {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .nav-left {
     display: flex;
     align-items: center;
     gap: 50px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
 }
 
 .logo a {
@@ -313,6 +347,8 @@ img {
 
 .logo img {
     height: 38px;
+    width: auto;
+    object-fit: contain;
 }
 
 .logo-text {
@@ -2800,7 +2836,7 @@ input:-webkit-autofill:active {
     /* Navbar adjustments */
     .navbar {
         height: 64px !important;
-        padding: 0 16px !important;
+        padding: 0 !important;
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
@@ -2809,6 +2845,16 @@ input:-webkit-autofill:active {
         left: 0 !important;
         width: 100% !important;
         z-index: 1000 !important;
+    }
+
+    .navbar-container {
+        height: 100% !important;
+        min-height: 64px !important;
+        padding: 0 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
     }
 
     .nav-left {

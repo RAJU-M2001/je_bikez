@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="light-mode">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8" />
@@ -7,6 +7,29 @@
     <title>JE BikeZ – Certified Pre-Owned Bikes & Sales</title>
     <meta name="description"
         content="Buy verified pre-owned & custom motorcycles with 100-point inspection, transparent pricing, and instant test ride bookings at JE BikeZ." />
+
+    <!-- ANTI-FLICKER: apply auth & theme state immediately before first paint -->
+    <script>
+        (function () {
+            var loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            document.documentElement.classList.add(loggedIn ? 'auth-logged-in' : 'auth-logged-out');
+            var savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            } else if (savedTheme === 'dark') {
+                document.documentElement.classList.remove('light-mode');
+            }
+            var style = document.createElement('style');
+            style.id = 'auth-anti-flicker';
+            if (loggedIn) {
+                style.textContent = '#loginSignupBtn{display:none!important;}#profileContainer{display:flex!important;}';
+            } else {
+                style.textContent = '#loginSignupBtn{display:inline-flex!important;}#profileContainer{display:none!important;}';
+            }
+            document.head.appendChild(style);
+        })();
+    </script>
+
     <link rel="stylesheet" href="./style.css" />
     <link rel="stylesheet" href="./service-page.css" />
     <link rel="stylesheet" href="./sales.css" />
@@ -16,73 +39,64 @@
 
 <body class="svc-body">
     <!-- ═══ NAVBAR ═══ -->
-    <header>
-        <nav class="navbar" id="mainNav">
-            <div class="nav-left">
-                <div class="logo">
-                    <a href="index.html" aria-label="JE BikeZ Home">
-                        <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
-                            alt="JE BikeZ" width="40" height="50">
-                    </a>
-                </div>
-                <div class="nav-links" id="navLinks">
-                    <a href="index.html">Home</a>
-                    <a href="service.html">Services</a>
-                    <a href="builds.html">Builds</a>
-                    <a href="sales.html" class="active">Sales</a>
-                    <a href="about.html">About Us</a>
-                    <a href="contact.html">Contact</a>
-                </div>
-            </div>
-            <div class="nav-right">
-                <div id="profileMenuContainer" class="profile-menu-container">
-                    <!-- LOGGED OUT -->
-                    <button id="loginSignupBtn" type="button" class="nav-login-btn navbar-auth-btn"
-                        aria-label="Login or Signup"><i class="fas fa-user" aria-hidden="true"></i><span>Login /
-                            Signup</span></button>
-                    <!-- LOGGED IN -->
-                    <div id="profileContainer" class="profile-container" style="display: none;">
-                        <button id="profileAvatarBtn" type="button" class="profile-avatar-btn"
-                            aria-label="Open profile menu" aria-expanded="false" aria-haspopup="true">
-                            <div id="navProfileAvatar" class="nav-profile-avatar">
-                                <i class="fas fa-user" aria-hidden="true"></i>
+    <header class="navbar" id="mainNav">
+        <div class="navbar-container">
+            <!-- LOGO -->
+            <a href="index.html" class="logo">
+                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                    alt="JE BikeZ">
+            </a>
+
+            <!-- NAVIGATION -->
+            <nav class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="service.html">Services</a>
+                <a href="builds.html">Builds</a>
+                <a href="sales.html" class="active">Sales</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <!-- AUTH / PROFILE CONTAINER -->
+            <div id="profileMenuContainer" class="profile-menu-container">
+                <button id="loginSignupBtn" type="button" class="nav-login-btn navbar-auth-btn"
+                    aria-label="Login or Signup">
+                    <i class="fas fa-user" aria-hidden="true"></i>
+                    <span>Login / Signup</span>
+                </button>
+                <div id="profileContainer" class="profile-container">
+                    <button id="profileAvatarBtn" type="button" class="profile-avatar-btn"
+                        aria-label="Open profile menu" aria-expanded="false" aria-haspopup="true">
+                        <div id="navProfileAvatar" class="nav-profile-avatar"><i class="fas fa-user"
+                                aria-hidden="true"></i></div>
+                        <i class="fas fa-chevron-down profile-chevron" aria-hidden="true"></i>
+                    </button>
+                    <div id="profileDropdown" class="profile-dropdown" role="menu" aria-hidden="true">
+                        <div class="profile-dropdown-header">
+                            <div id="dropdownProfileAvatar" class="dropdownProfile-avatar dropdown-profile-avatar"><i
+                                    class="fas fa-user" aria-hidden="true"></i></div>
+                            <div class="profile-dropdown-user">
+                                <strong id="dropdownProfileName">Account</strong>
+                                <span id="dropdownProfileEmail">Manage your profile</span>
                             </div>
-                            <i class="fas fa-chevron-down profile-chevron" aria-hidden="true"></i>
-                        </button>
-                        <div id="profileDropdown" class="profile-dropdown" role="menu" aria-hidden="true">
-                            <div class="profile-dropdown-header">
-                                <div id="dropdownProfileAvatar" class="dropdown-profile-avatar">
-                                    <i class="fas fa-user" aria-hidden="true"></i>
-                                </div>
-                                <div class="profile-dropdown-user">
-                                    <strong id="dropdownProfileName">Account</strong>
-                                    <span id="dropdownProfileEmail">Manage your profile</span>
-                                </div>
-                            </div>
-                            <div class="profile-dropdown-divider"></div>
-                            <!-- EDIT PROFILE -->
-                            <button id="editProfileBtn" type="button" class="profile-dropdown-btn" role="menuitem">
-                                <span class="profile-menu-icon">
-                                    <i class="fas fa-user-edit" aria-hidden="true"></i>
-                                </span>
-                                <span class="profile-menu-text">
-                                    Edit Profile
-                                </span>
-                                <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
-                            </button>
-                            <!-- LOGOUT -->
-                            <button id="logoutBtn" type="button" class="profile-dropdown-btn logout-dropdown-btn"
-                                role="menuitem">
-                                <span class="profile-menu-icon"><i class="fas fa-sign-out-alt"
-                                        aria-hidden="true"></i></span>
-                                <span class="profile-menu-text">Logout</span>
-                                <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
-                            </button>
                         </div>
+                        <div class="profile-dropdown-divider"></div>
+                        <button id="editProfileBtn" type="button" class="profile-dropdown-btn" role="menuitem">
+                            <span class="profile-menu-icon"><i class="fas fa-user-edit" aria-hidden="true"></i></span>
+                            <span class="profile-menu-text">Edit Profile</span>
+                            <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
+                        </button>
+                        <button id="logoutBtn" type="button" class="profile-dropdown-btn logout-dropdown-btn"
+                            role="menuitem">
+                            <span class="profile-menu-icon"><i class="fas fa-sign-out-alt"
+                                    aria-hidden="true"></i></span>
+                            <span class="profile-menu-text">Logout</span>
+                            <i class="fas fa-chevron-right profile-menu-arrow" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
             </div>
-        </nav>
+        </div>
     </header>
 
     <!-- ═══════════ AUTH DIALOGS ═══════════ -->

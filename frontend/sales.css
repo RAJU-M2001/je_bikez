@@ -20,6 +20,7 @@
     position: sticky;
     top: 0;
     z-index: 1000;
+    justify-content: space-between;
 }
 
 .svc-body .navbar a,
@@ -48,6 +49,7 @@
 .svc-body .profile-dropdown .profile-dropdown-btn {
     color: #eeeeee !important;
 }
+
 .svc-body .profile-dropdown .logout-dropdown-btn {
     color: #ff6b6b !important;
 }
@@ -947,9 +949,11 @@
     .sales-hero h1 {
         font-size: 2.2rem;
     }
+
     .sales-modal-body-grid {
         grid-template-columns: 1fr;
     }
+
     .sales-slider-stage {
         height: 280px;
     }
@@ -959,18 +963,23 @@
     .sales-hero {
         padding: 70px 16px 40px;
     }
+
     .sales-hero h1 {
         font-size: 1.8rem;
     }
+
     .sales-bikes-grid {
         grid-template-columns: 1fr;
     }
+
     .sales-card-media {
         height: 180px;
     }
+
     .sales-slider-stage {
         height: 220px;
     }
+
     .sales-modal-content {
         padding: 18px;
     }

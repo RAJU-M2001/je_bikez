@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function fetchThemeConfig() {
 
-        // 1. Check local storage first to prevent flickering
+        // 1. Apply cached theme immediately to prevent flicker
         const savedTheme = localStorage.getItem("theme");
         if (savedTheme === "light") {
             document.documentElement.classList.add("light-mode");
@@ -72,6 +72,17 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             document.documentElement.classList.remove("light-mode");
             document.body.classList.remove("light-mode");
+        }
+
+        // 2. Cache-first: use stored config response if already available
+        const cachedConfig = localStorage.getItem("app_config");
+        if (cachedConfig) {
+            try {
+                window.appConfig = JSON.parse(cachedConfig);
+            } catch (e) {
+                window.appConfig = null;
+            }
+            return;
         }
 
         try {
@@ -88,8 +99,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const data =
                 await response.json();
 
-            // 2. Update local storage with the API result
-            localStorage.setItem("theme", data.theme);
+            // 3. Store full config in localStorage and make available across the page
+            localStorage.setItem("app_config", JSON.stringify(data));
+            localStorage.setItem("app_config_ts", String(Date.now()));
+            localStorage.setItem("theme", data.theme || "light");
+            window.appConfig = data;
 
             if (data.theme === "light") {
 
@@ -818,8 +832,17 @@ document.addEventListener("DOMContentLoaded", function () {
     // FETCH & STORE USER PROFILE HELPER
     // ========================================================
 
-    function fetchAndStoreUserProfile(userId) {
+    function fetchAndStoreUserProfile(userId, forceRefresh) {
         if (!userId) return;
+        // Cache-first: skip API call if data already in localStorage
+        if (!forceRefresh && localStorage.getItem("user_object")) {
+            const cached = JSON.parse(localStorage.getItem("user_object"));
+            if (cached && cached.profile_picture) {
+                currentUserProfilePic = cached.profile_picture;
+            }
+            updateNavbarAuthUI();
+            return;
+        }
         fetch(`${API_BASE_URL}/api/user/${userId}`)
             .then(r => r.json())
             .then(profileData => {
@@ -830,8 +853,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (user.profile_picture) {
                     currentUserProfilePic = user.profile_picture;
                     localStorage.setItem("currentUserProfilePic", currentUserProfilePic);
-                    updateNavbarAuthUI();
                 }
+                updateNavbarAuthUI();
             })
             .catch(() => { });
     }
@@ -883,6 +906,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const profileMenuContainer =
         document.getElementById(
             "profileMenuContainer"
+        );
+
+    const dropdownProfileAvatar =
+        document.getElementById(
+            "dropdownProfileAvatar"
+        );
+
+    const dropdownProfileName =
+        document.getElementById(
+            "dropdownProfileName"
+        );
+
+    const dropdownProfileEmail =
+        document.getElementById(
+            "dropdownProfileEmail"
         );
 
 
@@ -1261,18 +1299,23 @@ document.addEventListener("DOMContentLoaded", function () {
     // ========================================================
 
     function updateNavbarProfile() {
+        const pic = isLoggedIn ? currentUserProfilePic : null;
 
-        if (!navProfileAvatar) {
-            return;
+        if (navProfileAvatar) {
+            setAvatar(navProfileAvatar, pic);
         }
 
+        if (dropdownProfileAvatar) {
+            setAvatar(dropdownProfileAvatar, pic);
+        }
 
-        setAvatar(
-            navProfileAvatar,
-            isLoggedIn
-                ? currentUserProfilePic
-                : null
-        );
+        if (dropdownProfileName) {
+            dropdownProfileName.textContent = (isLoggedIn && currentUserName) ? currentUserName : "Account";
+        }
+
+        if (dropdownProfileEmail) {
+            dropdownProfileEmail.textContent = (isLoggedIn && currentUserEmail) ? currentUserEmail : "Manage your profile";
+        }
     }
 
 
@@ -1303,17 +1346,16 @@ document.addEventListener("DOMContentLoaded", function () {
         // ====================================================
 
         if (isLoggedIn) {
+            document.documentElement.classList.add("auth-logged-in");
+            document.documentElement.classList.remove("auth-logged-out");
 
             loginSignupBtn.style.display =
                 "none";
 
-
             profileContainer.style.display =
-                "block";
-
+                "flex";
 
             updateNavbarProfile();
-
 
             return;
         }
@@ -1323,13 +1365,14 @@ document.addEventListener("DOMContentLoaded", function () {
         // LOGGED OUT
         // ====================================================
 
-        loginSignupBtn.style.display =
-            "flex";
+        document.documentElement.classList.add("auth-logged-out");
+        document.documentElement.classList.remove("auth-logged-in");
 
+        loginSignupBtn.style.display =
+            "inline-flex";
 
         profileContainer.style.display =
             "none";
-
 
         closeProfileDropdown();
 
@@ -3167,9 +3210,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     updateNavbarAuthUI();
 
-    // On page load/refresh, re-fetch full profile if already logged in
+    // Cache-first: use localStorage data immediately; only fetch from API if no cache
     if (isLoggedIn && currentUserId) {
-        fetchAndStoreUserProfile(currentUserId);
+        fetchAndStoreUserProfile(currentUserId, false);
     }
 
     // ========================================================

@@ -308,7 +308,7 @@
     <!-- ═══ FILTER BAR ═══ -->
     <div class="sales-filter-bar">
         <div class="sales-filter-inner">
-            <button class="sales-filter-btn active" data-filter="all">All Bikes (6)</button>
+            <button class="sales-filter-btn active" data-filter="all">All Bikes</button>
             <button class="sales-filter-btn" data-filter="street">Naked & Street</button>
             <button class="sales-filter-btn" data-filter="supersport">SuperSport</button>
             <button class="sales-filter-btn" data-filter="cruiser">Cruisers</button>
@@ -349,7 +349,9 @@
             ? "http://127.0.0.1:10000"
             : "https://bike-modification-api.onrender.com";
 
-        const salesBikesData = [
+        let salesBikesData = [];
+        /* HARDCODED DATA REMOVED - ONLY DYNAMIC API DATA USED
+        const _legacySalesBikes = [
             {
                 id: "bike-1",
                 name: "TVS Apache RTR 200 4V",
@@ -645,6 +647,7 @@
                 ]
             }
         ];
+        */
 
         // Active state for slider in modal
         let currentModalBike = null;
@@ -659,10 +662,25 @@
                 ? salesBikesData
                 : salesBikesData.filter(b => b.category === filter);
 
-            grid.innerHTML = filtered.map(item => `
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 70px 20px; color: var(--text-muted, #7a8ba0);">
+                        <i class="fas fa-motorcycle" style="font-size: 44px; margin-bottom: 16px; opacity: 0.35; display: block; color: var(--primary, #f5a623);"></i>
+                        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary, #fff);">No Certified Bikes Available</h3>
+                        <p style="font-size: 14px; max-width: 480px; margin: 0 auto; line-height: 1.6;">No bikes are currently listed for sale in this category. Certified pre-owned bikes added through the Admin Dashboard will appear here dynamically.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(item => {
+                const imgUrl = (item.images && item.images[0] && item.images[0].url) || item.imageUrl || "";
+                const rating = item.rating || "9.5 / 10";
+                const emi = item.emi ? `EMI from ${item.emi}` : "Flexible EMI Available";
+                return `
                 <div class="sales-bike-card" data-id="${item.id}" onclick="openSalesModal('${item.id}')">
                     <div class="sales-card-media">
-                        <img src="${item.images[0].url}" alt="${item.name}">
+                        <img src="${imgUrl}" alt="${item.name || 'Bike'}">
                         <span class="sales-tag-pill verified">
                             <i class="fas fa-shield-alt"></i> Verified
                         </span>
@@ -675,31 +693,31 @@
                     </div>
                     <div class="sales-card-body">
                         <div class="sales-card-top-row">
-                            <span class="sales-category-badge">${item.categoryLabel}</span>
-                            <span class="sales-condition-rating"><i class="fas fa-star"></i> ${item.rating}</span>
+                            <span class="sales-category-badge">${item.categoryLabel || item.category || 'Certified'}</span>
+                            <span class="sales-condition-rating"><i class="fas fa-star"></i> ${rating}</span>
                         </div>
-                        <h3 class="sales-bike-title">${item.name}</h3>
-                        <p class="sales-bike-subtitle">${item.subtitle}</p>
+                        <h3 class="sales-bike-title">${item.name || 'Certified Pre-Owned'}</h3>
+                        <p class="sales-bike-subtitle">${item.subtitle || ''}</p>
 
                         <div class="sales-card-specs-row">
                             <div class="sales-spec-item">
                                 <small>Model Year</small>
-                                <strong>${item.year}</strong>
+                                <strong>${item.year || '—'}</strong>
                             </div>
                             <div class="sales-spec-item">
                                 <small>Driven</small>
-                                <strong>${item.km}</strong>
+                                <strong>${item.km || '—'}</strong>
                             </div>
                             <div class="sales-spec-item">
                                 <small>Ownership</small>
-                                <strong>${item.owners}</strong>
+                                <strong>${item.owners || '1st Owner'}</strong>
                             </div>
                         </div>
 
                         <div class="sales-card-footer">
                             <div class="sales-card-price-group">
-                                <span class="price-val">${item.price}</span>
-                                <span class="emi-note">EMI from ${item.emi}</span>
+                                <span class="price-val">${item.price || 'Contact'}</span>
+                                <span class="emi-note">${emi}</span>
                             </div>
                             <button type="button" class="sales-explore-btn">
                                 <span>Details</span> <i class="fas fa-arrow-right"></i>
@@ -707,7 +725,7 @@
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         // Heart Like Toggle
@@ -735,6 +753,22 @@
         window.openSalesModal = function (id) {
             const bike = salesBikesData.find(b => b.id === id);
             if (!bike) return;
+
+            // Safe fallbacks for dynamic API records
+            bike.images = (Array.isArray(bike.images) && bike.images.length > 0)
+                ? bike.images
+                : [{ url: bike.imageUrl || "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=1200&q=80", caption: bike.name || "Motorcycle" }];
+            bike.specs = bike.specs || {};
+            bike.specs.rto = bike.specs.rto || "Available on Request";
+            bike.specs.insurance = bike.specs.insurance || "Valid";
+            bike.specs.tyreHealth = bike.specs.tyreHealth || "Inspected & Verified";
+            bike.specs.serviceStatus = bike.specs.serviceStatus || "Full Inspection Done";
+            bike.specs.fuelEconomy = bike.specs.fuelEconomy || "Standard OEM";
+            bike.checkpoints = (Array.isArray(bike.checkpoints) && bike.checkpoints.length > 0)
+                ? bike.checkpoints
+                : ["100-Point Inspection Completed", "Clear Title & Transfer Support", "Verified Service History", "Certified Pre-Owned Warranty"];
+            bike.price = bike.price || "₹ Contact for Price";
+            bike.emi = bike.emi || "EMI Available";
 
             currentModalBike = bike;
             currentSlideIndex = 0;
@@ -1024,8 +1058,34 @@
             }
         });
 
+        async function fetchDynamicSales() {
+            try {
+                const res = await fetch(`${API_URL}/api/sales`);
+                const data = await res.json();
+                if (data.success && Array.isArray(data.sales)) {
+                    salesBikesData = data.sales.map(s => ({
+                        ...s,
+                        id: s.id || s._id,
+                        categoryLabel: s.categoryLabel || s.category,
+                        images: Array.isArray(s.images) && s.images.length > 0 ? s.images : [{ url: s.imageUrl || "", caption: s.name }],
+                        specs: s.specs || {},
+                        checkpoints: s.checkpoints || []
+                    }));
+                } else {
+                    salesBikesData = [];
+                }
+            } catch (err) {
+                console.warn("Dynamic sales fetch failed:", err);
+                salesBikesData = [];
+            }
+            const activeBtn = document.querySelector(".sales-filter-btn.active");
+            const currentFilter = activeBtn ? activeBtn.getAttribute("data-filter") : "all";
+            renderSalesBikes(currentFilter);
+        }
+
         // Initialize
         renderSalesBikes("all");
+        fetchDynamicSales();
     </script>
 
     <!-- ═══════════ BOTTOM NAV (MOBILE ONLY) ═══════════ -->

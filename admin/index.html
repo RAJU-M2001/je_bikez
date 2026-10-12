@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JE BikeZ — Admin Control Center</title>
+    <link rel="icon" type="image/png"
+        href="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+
+    <!-- ═══════════════ LOGIN SECTION ═══════════════ -->
+    <section id="loginSection">
+        <div class="login-card">
+            <div class="login-logo">
+                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                    alt="JE BikeZ" />
+                <h1>JE BikeZ Admin</h1>
+                <p>Authorized Personnel Only</p>
+            </div>
+            <div id="loginError" class="login-error"></div>
+            <div class="form-group">
+                <label for="adminUser">Admin Username</label>
+                <input type="text" id="adminUser" placeholder="admin" autocomplete="off" />
+            </div>
+            <div class="form-group">
+                <label for="adminPass">Password</label>
+                <input type="password" id="adminPass" placeholder="••••••••••••" />
+            </div>
+            <button class="login-btn" id="adminLoginBtn">
+                <i class="fas fa-shield-alt"></i> Access Admin Dashboard
+            </button>
+        </div>
+    </section>
+
+    <!-- ═══════════════ DASHBOARD SECTION ═══════════════ -->
+    <section id="dashboardSection">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                    alt="JE BikeZ" />
+                <span>JE BikeZ Admin</span>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">General</div>
+                <button class="nav-item active" data-tab="overview">
+                    <i class="fas fa-chart-pie"></i> Overview
+                </button>
+
+                <div class="nav-section-label">Operations</div>
+                <button class="nav-item" data-tab="users">
+                    <i class="fas fa-users"></i> Users <span class="nav-badge" id="usersBadge">0</span>
+                </button>
+                <button class="nav-item" data-tab="services">
+                    <i class="fas fa-tools"></i> Services <span class="nav-badge" id="servicesBadge">0</span>
+                </button>
+                <button class="nav-item" data-tab="salesbookings">
+                    <i class="fas fa-tag"></i> Sale Inquiries <span class="nav-badge" id="saleInquiriesBadge">0</span>
+                </button>
+
+                <div class="nav-section-label">Catalog Management</div>
+                <button class="nav-item" data-tab="builds">
+                    <i class="fas fa-hammer"></i> Builds <span class="nav-badge" id="buildsBadge">0</span>
+                </button>
+                <button class="nav-item" data-tab="sales">
+                    <i class="fas fa-motorcycle"></i> Sales Bikes <span class="nav-badge" id="salesBadge">0</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="adminLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- 1. OVERVIEW TAB -->
+            <div class="tab-section active" id="section-overview">
+                <div class="page-header">
+                    <div>
+                        <h2>Control Center Overview</h2>
+                        <p>Live metrics and recent customer activities.</p>
+                    </div>
+                    <button class="btn btn-secondary" id="refreshAllBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh Data
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card c1">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-val" id="statUsers">0</div>
+                        <div class="stat-label">Registered Users</div>
+                    </div>
+                    <div class="stat-card c2">
+                        <div class="stat-icon"><i class="fas fa-tools"></i></div>
+                        <div class="stat-val" id="statServices">0</div>
+                        <div class="stat-label">Service Bookings</div>
+                    </div>
+                    <div class="stat-card c3">
+                        <div class="stat-icon"><i class="fas fa-hammer"></i></div>
+                        <div class="stat-val" id="statBuilds">0</div>
+                        <div class="stat-label">Custom Builds</div>
+                    </div>
+                    <div class="stat-card c4">
+                        <div class="stat-icon"><i class="fas fa-motorcycle"></i></div>
+                        <div class="stat-val" id="statSales">0</div>
+                        <div class="stat-label">Bikes for Sale</div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title"><i class="fas fa-clock"></i> Recent Service Requests</span>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Bike</th>
+                                    <th>Service Type</th>
+                                    <th>Preferred Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentServicesTableBody">
+                                <tr class="loading-row">
+                                    <td colspan="5"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. USERS TAB -->
+            <div class="tab-section" id="section-users">
+                <div class="page-header">
+                    <div>
+                        <h2>Registered Users</h2>
+                        <p>Accounts and contact information.</p>
+                    </div>
+                    <div class="search-row">
+                        <i class="fas fa-search" style="color:var(--text-muted)"></i>
+                        <input type="text" id="userSearchInput" placeholder="Search by name, email..."
+                            oninput="filterUsers()" />
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Mobile</th>
+                                    <th>Joined Date</th>
+                                    <th>Account Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr class="loading-row">
+                                    <td colspan="5"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. SERVICES TAB -->
+            <div class="tab-section" id="section-services">
+                <div class="page-header">
+                    <div>
+                        <h2>Service Bookings</h2>
+                        <p>Manage workshop repair & maintenance requests. Status updates sync in real time.</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>User ID</th>
+                                    <th>Bike Info</th>
+                                    <th>Service Package</th>
+                                    <th>Date</th>
+                                    <th>Current Status</th>
+                                    <th>Change Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="servicesTableBody">
+                                <tr class="loading-row">
+                                    <td colspan="7"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. SALE INQUIRIES TAB -->
+            <div class="tab-section" id="section-salesbookings">
+                <div class="page-header">
+                    <div>
+                        <h2>Sale Inquiries & Test Rides</h2>
+                        <p>Test ride inquiries submitted by customers for certified pre-owned bikes.</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Buyer Name</th>
+                                    <th>Phone</th>
+                                    <th>Bike Requested</th>
+                                    <th>Location</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Change Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="saleInquiriesTableBody">
+                                <tr class="loading-row">
+                                    <td colspan="7"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. BUILDS TAB -->
+            <div class="tab-section" id="section-builds">
+                <div class="page-header">
+                    <div>
+                        <h2>Custom Build Projects</h2>
+                        <p>Add, edit, and showcase modified bikes. Changes reflect dynamically on the public Builds
+                            page.</p>
+                    </div>
+                    <button class="btn btn-primary" id="addBuildBtn">
+                        <i class="fas fa-plus"></i> Add New Build
+                    </button>
+                </div>
+
+                <div class="panel">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Preview</th>
+                                    <th>Project Title</th>
+                                    <th>Category</th>
+                                    <th>Approx Cost</th>
+                                    <th>Duration</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="buildsTableBody">
+                                <tr class="loading-row">
+                                    <td colspan="6"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. SALES BIKES TAB -->
+            <div class="tab-section" id="section-sales">
+                <div class="page-header">
+                    <div>
+                        <h2>Pre-Owned & Certified Sale Bikes</h2>
+                        <p>Manage showroom bikes available for sale. Updates reflect dynamically on the public Sales
+                            page.</p>
+                    </div>
+                    <button class="btn btn-primary" id="addSaleBtn">
+                        <i class="fas fa-plus"></i> Add Sale Bike
+                    </button>
+                </div>
+
+                <div class="panel">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Preview</th>
+                                    <th>Model Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Year / KM</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="salesTableBody">
+                                <tr class="loading-row">
+                                    <td colspan="6"><i class="fas fa-circle-notch fa-spin"></i> Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <!-- ═══════════════ MODALS ═══════════════ -->
+    <!-- Build Modal -->
+    <div class="modal-backdrop" id="buildModal">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeModal('buildModal')">&times;</button>
+            <h3 id="buildModalTitle">Add Custom Build Project</h3>
+            <input type="hidden" id="buildEditId" />
+            <div class="modal-grid">
+                <div class="full-col">
+                    <label>Project Title *</label>
+                    <input type="text" id="buildTitle" placeholder="e.g. Royal Enfield Classic 350 Cafe Racer" />
+                </div>
+                <div class="full-col">
+                    <label>Subtitle / Highlights</label>
+                    <input type="text" id="buildSubtitle"
+                        placeholder="e.g. Stage 2 Custom Paint & Scrambler Conversion" />
+                </div>
+                <div>
+                    <label>Category</label>
+                    <select id="buildCategory">
+                        <option value="caferacer">Cafe Racer</option>
+                        <option value="streetfighter">Streetfighter</option>
+                        <option value="touring">Touring & Adventure</option>
+                        <option value="scrambler">Scrambler / Bobber</option>
+                        <option value="custom">Custom Build</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Estimated Cost</label>
+                    <input type="text" id="buildCost" placeholder="e.g. ₹18,000" />
+                </div>
+                <div>
+                    <label>Build Duration</label>
+                    <input type="text" id="buildDuration" placeholder="e.g. 8 Days" />
+                </div>
+                <div>
+                    <label>Engine Spec</label>
+                    <input type="text" id="buildEngine" placeholder="e.g. 349cc J-Series" />
+                </div>
+                <div class="full-col">
+                    <label>Power / Performance Gain</label>
+                    <input type="text" id="buildPower" placeholder="e.g. +4.2 HP Dyno" />
+                </div>
+                <div class="full-col">
+                    <label><i class="fas fa-images" style="color:var(--primary);margin-right:6px"></i>Project Showcase Gallery (Upload Multiple Images)</label>
+                    <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+                        <input type="file" id="buildImgFile" accept="image/*" multiple onchange="uploadMultipleImages(this, 'build', 'buildGallery', 'buildImgStatus')" style="padding:8px;" />
+                    </div>
+                    <div id="buildImgStatus" style="font-size:12px;color:var(--primary);margin-top:4px;display:none;"></div>
+                    <div id="buildGallery" class="multi-img-gallery"></div>
+                </div>
+                <div>
+                    <label><i class="fas fa-image" style="color:var(--primary);margin-right:6px"></i>Before Image (Optional)</label>
+                    <input type="file" id="buildBeforeImgFile" accept="image/*" onchange="uploadImage(this, 'build', 'buildBeforeImg', 'buildBeforeImgPreview', 'buildBeforeStatus')" style="padding:6px;margin-bottom:6px;" />
+                    <input type="text" id="buildBeforeImg" placeholder="Before Image URL" oninput="previewImage('buildBeforeImg', 'buildBeforeImgPreview')" />
+                    <div id="buildBeforeStatus" style="font-size:12px;color:var(--primary);margin-top:4px;display:none;"></div>
+                    <img id="buildBeforeImgPreview" class="img-preview" alt="Before Preview" />
+                </div>
+                <div>
+                    <label><i class="fas fa-image" style="color:var(--primary);margin-right:6px"></i>After Image (Optional)</label>
+                    <input type="file" id="buildAfterImgFile" accept="image/*" onchange="uploadImage(this, 'build', 'buildAfterImg', 'buildAfterImgPreview', 'buildAfterStatus')" style="padding:6px;margin-bottom:6px;" />
+                    <input type="text" id="buildAfterImg" placeholder="After Image URL" oninput="previewImage('buildAfterImg', 'buildAfterImgPreview')" />
+                    <div id="buildAfterStatus" style="font-size:12px;color:var(--primary);margin-top:4px;display:none;"></div>
+                    <img id="buildAfterImgPreview" class="img-preview" alt="After Preview" />
+                </div>
+                <div class="full-col">
+                    <label>Modifications / Work Done (One per line)</label>
+                    <textarea id="buildMods"
+                        placeholder="Hand-stitched leather seat&#10;Custom 2-into-1 stainless exhaust&#10;Ceramic coated fuel tank"></textarea>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('buildModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveBuild()"><i class="fas fa-save"></i> Save Build</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sale Bike Modal -->
+    <div class="modal-backdrop" id="saleModal">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeModal('saleModal')">&times;</button>
+            <h3 id="saleModalTitle">Add Certified Sale Bike</h3>
+            <input type="hidden" id="saleEditId" />
+            <div class="modal-grid">
+                <div class="full-col">
+                    <label>Bike Name *</label>
+                    <input type="text" id="saleName" placeholder="e.g. Kawasaki Ninja 300 ABS" />
+                </div>
+                <div class="full-col">
+                    <label>Subtitle / Condition</label>
+                    <input type="text" id="saleSubtitle"
+                        placeholder="e.g. Lime Green KRT Edition • Flawless Single Owner" />
+                </div>
+                <div>
+                    <label>Category</label>
+                    <select id="saleCategory">
+                        <option value="supersport">SuperSport</option>
+                        <option value="street">Naked / Street</option>
+                        <option value="cruiser">Cruiser / Classic</option>
+                        <option value="adventure">Adventure / Touring</option>
+                        <option value="commuter">Commuter</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Selling Price *</label>
+                    <input type="text" id="salePrice" placeholder="e.g. ₹2,75,000"/>
+                </div>
+                <div>
+                    <label>EMI Option</label>
+                    <input type="text" id="saleEmi" placeholder="e.g. ₹6,800 / month" />
+                </div>
+                <div>
+                    <label>Model Year</label>
+                    <input type="text" id="saleYear" placeholder="e.g. 2022" />
+                </div>
+                <div>
+                    <label>Odometer KM</label>
+                    <input type="text" id="saleKm" placeholder="e.g. 11,500 KM" />
+                </div>
+                <div>
+                    <label>Engine Capacity (CC)</label>
+                    <input type="text" id="saleCc" placeholder="e.g. 296cc Twin" />
+                </div>
+                <div class="full-col">
+                    <label>Ownership</label>
+                    <input type="text" id="saleOwners" placeholder="e.g. 1st Owner" />
+                </div>
+                <div class="full-col">
+                    <label><i class="fas fa-images" style="color:var(--primary);margin-right:6px"></i>Bike Images Gallery (Upload Multiple Images for Slider)</label>
+                    <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
+                        <input type="file" id="saleImgFile" accept="image/*" multiple onchange="uploadMultipleImages(this, 'sales', 'saleGallery', 'saleImgStatus')" style="padding:8px;" />
+                    </div>
+                    <div id="saleImgStatus" style="font-size:12px;color:var(--primary);margin-top:4px;display:none;"></div>
+                    <div id="saleGallery" class="multi-img-gallery"></div>
+                </div>
+                <div class="full-col">
+                    <label>Inspection Highlights (One per line)</label>
+                    <textarea id="saleCheckpoints"
+                        placeholder="Complete service logbook stamped&#10;Tyres 90% life remaining&#10;Clean RTO transfer NOC ready"></textarea>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('saleModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveSale()"><i class="fas fa-save"></i> Save Bike</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer"></div>
+    <script src="./script.js"></script>
+</body>
+
+</html>

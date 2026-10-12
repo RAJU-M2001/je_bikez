@@ -23,6 +23,9 @@ load_dotenv(env_path)
 FRONTEND_DIR = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "frontend")
 )
+ADMIN_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "admin")
+)
 
 app = Flask(__name__, static_folder=FRONTEND_DIR)
 app.config["MAX_CONTENT_LENGTH"] = int(os.getenv("MAX_UPLOAD_SIZE"))
@@ -36,19 +39,23 @@ cloudinary.config(
 )
 
 print(cloudinary.api.ping())
-# ✅ Serve index.html
+
+# ✅ Admin Panel routes (isolated admin app)
+@app.route("/admin")
+@app.route("/admin/")
+def admin_home():
+    return send_from_directory(ADMIN_DIR, "index.html")
+
+@app.route("/admin/<path:path>", methods=["GET"])
+def admin_static(path):
+    return send_from_directory(ADMIN_DIR, path)
+
+# ✅ Serve public frontend index.html
 @app.route("/")
 def home():
     return send_from_directory(FRONTEND_DIR, "index.html")
 
 
-# ✅ Serve all static files (CSS, JS, images) — never intercept /api/* routes
-@app.route("/<path:path>", methods=["GET"])
-def serve_static(path):
-    if path.startswith("api/"):
-        from flask import abort
-        abort(404)
-    return send_from_directory(FRONTEND_DIR, path)
 
 
 # 🔗 MongoDB Setup
@@ -66,6 +73,9 @@ collection = db[collection_name]
 user_collection = db[user]
 modification_collection = db[modification]
 book_sales_collection = db[book_sales]
+builds_collection = db["builds"]
+sales_collection = db["sales"]
+service_booking_collection = db["service-booking"]
 
 
 # Health Check API
@@ -507,12 +517,46 @@ def delete_account(user_id):
 @app.route("/api/service-history/<user_id>", methods=["GET"])
 def get_service_history(user_id):
     try:
-        history_coll = db["service_history"]
-        records = list(history_coll.find({"user_id": user_id}, {"_id": 0}))
-        for r in records:
-            if isinstance(r.get("date"), datetime):
-                r["date"] = r["date"].isoformat()
-        return jsonify({"success": True, "history": records}), 200
+        collection = db["service-booking"]
+        query_conditions = [{"user_id": user_id}, {"user_id": str(user_id)}]
+        if ObjectId.is_valid(user_id):
+            query_conditions.append({"user_id": ObjectId(user_id)})
+
+        bookings = list(collection.find({"$or": query_conditions}).sort("_id", -1))
+
+        history = []
+        for doc in bookings:
+            bike = doc.get("bike") if isinstance(doc.get("bike"), dict) else {}
+            date_val = doc.get("date")
+            if isinstance(date_val, datetime):
+                date_val = date_val.isoformat()
+
+            created_at = doc.get("created_at")
+            if isinstance(created_at, datetime):
+                created_at = created_at.isoformat()
+
+            updated_at = doc.get("updated_at")
+            if isinstance(updated_at, datetime):
+                updated_at = updated_at.isoformat()
+
+            history.append({
+                "booking_id": str(doc.get("_id")),
+                "_id": str(doc.get("_id")),
+                "user_id": str(doc.get("user_id")),
+                "manufacturer": doc.get("manufacturer") or bike.get("manufacturer", ""),
+                "model": doc.get("model") or bike.get("model", ""),
+                "variant": doc.get("variant") or bike.get("variant", ""),
+                "year": doc.get("year") or bike.get("year", ""),
+                "cc": doc.get("cc") or bike.get("cc", ""),
+                "serviceType": doc.get("serviceType") or doc.get("service_type", ""),
+                "date": date_val or "",
+                "status": doc.get("status", "Pending"),
+                "bike": bike,
+                "created_at": created_at,
+                "updated_at": updated_at
+            })
+
+        return jsonify({"success": True, "history": history}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
@@ -800,10 +844,315 @@ def book_sale():
         }), 500
 
 
+# ============================================================
+# 🛠️ HELPER FOR JSON SERIALIZATION
+# ============================================================
+def serialize_doc(doc):
+    if not doc:
+        return doc
+    doc["_id"] = str(doc["_id"])
+    if "id" not in doc:
+        doc["id"] = doc["_id"]
+    for k, v in list(doc.items()):
+        if isinstance(v, datetime):
+            doc[k] = v.isoformat()
+    return doc
+
+
+# ============================================================
+# 📸 ADMIN CLOUDINARY IMAGE UPLOAD API
+# ============================================================
+@app.route("/api/admin/upload", methods=["POST"], strict_slashes=False)
+def admin_upload_image():
+    try:
+        files = request.files.getlist("files")
+        if not files or len(files) == 0:
+            single_list = request.files.getlist("file")
+            if single_list:
+                files = single_list
+            else:
+                single = request.files.get("file") or request.files.get("image")
+                if single:
+                    files = [single]
+
+        valid_files = [f for f in files if f and f.filename]
+        if not valid_files:
+            return jsonify({"success": False, "error": "No image file provided"}), 400
+
+        upload_type = (request.form.get("type") or request.args.get("type", "build")).lower().strip()
+        if "sale" in upload_type:
+            folder = os.getenv("CLOUDINARY_SALES", "je-bikez/sales")
+        else:
+            folder = os.getenv("CLOUDINARY_BUILD", "je-bikez/build")
+
+        uploaded = []
+        for f in valid_files:
+            res = cloudinary.uploader.upload(
+                f,
+                folder=folder,
+                resource_type="image"
+            )
+            uploaded.append({
+                "url": res.get("secure_url"),
+                "public_id": res.get("public_id")
+            })
+
+        return jsonify({
+            "success": True,
+            "url": uploaded[0]["url"],
+            "urls": [u["url"] for u in uploaded],
+            "images": uploaded,
+            "count": len(uploaded),
+            "folder": folder
+        }), 200
+    except Exception as e:
+        print("❌ UPLOAD ERROR:", str(e))
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+# ============================================================
+# 🏍️ BUILDS API (LIST, CREATE, UPDATE, DELETE)
+# ============================================================
+@app.route("/api/builds", methods=["GET"], strict_slashes=False)
+def get_builds():
+    try:
+        builds = list(builds_collection.find().sort("_id", -1))
+        return jsonify({"success": True, "builds": [serialize_doc(b) for b in builds]}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/builds", methods=["POST"], strict_slashes=False)
+def create_build():
+    try:
+        data = request.get_json(silent=True) or {}
+        if not data.get("title"):
+            return jsonify({"success": False, "error": "Title is required"}), 400
+
+        data["created_at"] = datetime.now(UTC)
+        data["updated_at"] = datetime.now(UTC)
+        result = builds_collection.insert_one(data)
+        data["_id"] = str(result.inserted_id)
+        data["id"] = str(result.inserted_id)
+        return jsonify({"success": True, "message": "Build project created", "build": serialize_doc(data)}), 201
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/builds/<build_id>", methods=["PUT"], strict_slashes=False)
+def update_build(build_id):
+    try:
+        data = request.get_json(silent=True) or {}
+        data.pop("_id", None)
+        data["updated_at"] = datetime.now(UTC)
+
+        query = {"$or": [{"_id": ObjectId(build_id)} if ObjectId.is_valid(build_id) else None, {"id": build_id}]}
+        query["$or"] = [q for q in query["$or"] if q]
+
+        res = builds_collection.update_one(query, {"$set": data})
+        if res.matched_count == 0:
+            return jsonify({"success": False, "error": "Build not found"}), 404
+
+        updated = builds_collection.find_one(query)
+        return jsonify({"success": True, "message": "Build updated successfully", "build": serialize_doc(updated)}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/builds/<build_id>", methods=["DELETE"], strict_slashes=False)
+def delete_build(build_id):
+    try:
+        query = {"$or": [{"_id": ObjectId(build_id)} if ObjectId.is_valid(build_id) else None, {"id": build_id}]}
+        query["$or"] = [q for q in query["$or"] if q]
+        res = builds_collection.delete_one(query)
+        if res.deleted_count == 0:
+            return jsonify({"success": False, "error": "Build not found"}), 404
+        return jsonify({"success": True, "message": "Build deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+# ============================================================
+# 🏷️ SALES BIKES API (LIST, CREATE, UPDATE, DELETE)
+# ============================================================
+@app.route("/api/sales", methods=["GET"], strict_slashes=False)
+def get_sales():
+    try:
+        sales = list(sales_collection.find().sort("_id", -1))
+        return jsonify({"success": True, "sales": [serialize_doc(s) for s in sales]}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/sales", methods=["POST"], strict_slashes=False)
+def create_sale():
+    try:
+        data = request.get_json(silent=True) or {}
+        if not data.get("name"):
+            return jsonify({"success": False, "error": "Bike name is required"}), 400
+
+        data["created_at"] = datetime.now(UTC)
+        data["updated_at"] = datetime.now(UTC)
+        result = sales_collection.insert_one(data)
+        data["_id"] = str(result.inserted_id)
+        data["id"] = str(result.inserted_id)
+        return jsonify({"success": True, "message": "Sale bike created", "sale": serialize_doc(data)}), 201
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/sales/<sale_id>", methods=["PUT"], strict_slashes=False)
+def update_sale(sale_id):
+    try:
+        data = request.get_json(silent=True) or {}
+        data.pop("_id", None)
+        data["updated_at"] = datetime.now(UTC)
+
+        query = {"$or": [{"_id": ObjectId(sale_id)} if ObjectId.is_valid(sale_id) else None, {"id": sale_id}]}
+        query["$or"] = [q for q in query["$or"] if q]
+
+        res = sales_collection.update_one(query, {"$set": data})
+        if res.matched_count == 0:
+            return jsonify({"success": False, "error": "Sale bike not found"}), 404
+
+        updated = sales_collection.find_one(query)
+        return jsonify({"success": True, "message": "Sale bike updated successfully", "sale": serialize_doc(updated)}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/sales/<sale_id>", methods=["DELETE"], strict_slashes=False)
+def delete_sale(sale_id):
+    try:
+        query = {"$or": [{"_id": ObjectId(sale_id)} if ObjectId.is_valid(sale_id) else None, {"id": sale_id}]}
+        query["$or"] = [q for q in query["$or"] if q]
+        res = sales_collection.delete_one(query)
+        if res.deleted_count == 0:
+            return jsonify({"success": False, "error": "Sale bike not found"}), 404
+        return jsonify({"success": True, "message": "Sale bike deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+# ============================================================
+# 📊 ADMIN DASHBOARD APIs (USERS & BOOKINGS WITH EDITABLE STATUS)
+# ============================================================
+@app.route("/api/admin/users", methods=["GET"], strict_slashes=False)
+def admin_get_users():
+    try:
+        users = list(user_collection.find({}, {"password": 0}).sort("_id", -1))
+        return jsonify({"success": True, "users": [serialize_doc(u) for u in users]}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/admin/services", methods=["GET"], strict_slashes=False)
+def admin_get_services():
+    try:
+        bookings = list(service_booking_collection.find().sort("_id", -1))
+        formatted = []
+        for doc in bookings:
+            bike = doc.get("bike") if isinstance(doc.get("bike"), dict) else {}
+            date_val = doc.get("date")
+            if isinstance(date_val, datetime):
+                date_val = date_val.isoformat()
+
+            created_at = doc.get("created_at")
+            if isinstance(created_at, datetime):
+                created_at = created_at.isoformat()
+
+            updated_at = doc.get("updated_at")
+            if isinstance(updated_at, datetime):
+                updated_at = updated_at.isoformat()
+
+            formatted.append({
+                "booking_id": str(doc.get("_id")),
+                "_id": str(doc.get("_id")),
+                "user_id": str(doc.get("user_id")),
+                "manufacturer": doc.get("manufacturer") or bike.get("manufacturer", ""),
+                "model": doc.get("model") or bike.get("model", ""),
+                "variant": doc.get("variant") or bike.get("variant", ""),
+                "year": doc.get("year") or bike.get("year", ""),
+                "cc": doc.get("cc") or bike.get("cc", ""),
+                "serviceType": doc.get("serviceType") or doc.get("service_type", ""),
+                "date": date_val or "",
+                "status": doc.get("status", "Pending"),
+                "bike": bike,
+                "created_at": created_at,
+                "updated_at": updated_at
+            })
+        return jsonify({"success": True, "services": formatted}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/admin/services/<service_id>/status", methods=["PUT"], strict_slashes=False)
+def admin_update_service_status(service_id):
+    try:
+        data = request.get_json(silent=True) or {}
+        new_status = data.get("status")
+        if not new_status:
+            return jsonify({"success": False, "error": "Status is required"}), 400
+
+        query = {"$or": [{"_id": ObjectId(service_id)} if ObjectId.is_valid(service_id) else None, {"booking_id": service_id}]}
+        query["$or"] = [q for q in query["$or"] if q]
+
+        res = service_booking_collection.update_one(query, {"$set": {"status": new_status, "updated_at": datetime.now(UTC)}})
+        if res.matched_count == 0:
+            return jsonify({"success": False, "error": "Service booking not found"}), 404
+
+        return jsonify({"success": True, "message": "Service status updated successfully", "status": new_status}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/admin/sales-bookings", methods=["GET"], strict_slashes=False)
+def admin_get_sales_bookings():
+    try:
+        sales_bookings = list(book_sales_collection.find().sort("_id", -1))
+        return jsonify({"success": True, "sales_bookings": [serialize_doc(sb) for sb in sales_bookings]}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route("/api/admin/sales-bookings/<booking_id>/status", methods=["PUT"], strict_slashes=False)
+def admin_update_sale_booking_status(booking_id):
+    try:
+        data = request.get_json(silent=True) or {}
+        new_status = data.get("status")
+        if not new_status:
+            return jsonify({"success": False, "error": "Status is required"}), 400
+
+        query = {"$or": [{"_id": ObjectId(booking_id)} if ObjectId.is_valid(booking_id) else None, {"booking_id": booking_id}]}
+        query["$or"] = [q for q in query["$or"] if q]
+
+        res = book_sales_collection.update_one(query, {"$set": {"status": new_status, "updated_at": datetime.now(UTC)}})
+        if res.matched_count == 0:
+            return jsonify({"success": False, "error": "Booking request not found"}), 404
+
+        return jsonify({"success": True, "message": "Booking status updated successfully", "status": new_status}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+# ============================================================
+# 📁 SERVE FRONTEND STATIC FILES (FALLBACK)
+# ============================================================
+@app.route("/<path:path>", methods=["GET"])
+def serve_static(path):
+    if path.startswith("api/"):
+        return jsonify({"success": False, "error": f"Endpoint /{path} not found"}), 404
+    file_path = os.path.join(FRONTEND_DIR, path)
+    if os.path.isfile(file_path):
+        return send_from_directory(FRONTEND_DIR, path)
+    from flask import abort
+    abort(404)
+
+
 # 🚀 Run app
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=True)
 
 
 

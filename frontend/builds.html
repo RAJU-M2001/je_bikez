@@ -307,7 +307,7 @@
     <!-- ═══ FILTER BAR ═══ -->
     <div class="builds-filter-bar">
         <div class="builds-filter-inner">
-            <button class="build-filter-btn active" data-filter="all">All Builds (6)</button>
+            <button class="build-filter-btn active" data-filter="all">All Builds</button>
             <button class="build-filter-btn" data-filter="caferacer">Cafe Racer</button>
             <button class="build-filter-btn" data-filter="streetfighter">Streetfighter</button>
             <button class="build-filter-btn" data-filter="touring">Touring & Adventure</button>
@@ -344,7 +344,13 @@
 
     <!-- ═══ BUILDS PAGE SCRIPT ═══ -->
     <script>
-        const buildsData = [
+        const API_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+            ? "http://127.0.0.1:10000"
+            : "https://bike-modification-api.onrender.com";
+
+        let buildsData = [];
+        /* HARDCODED DATA REMOVED - ONLY DYNAMIC API DATA USED
+        const _legacyBuilds = [
             {
                 id: "build-1",
                 title: "Royal Enfield Classic 350",
@@ -614,6 +620,7 @@
                 quote: "“The stability in corners and precision in braking is incredible. Outstanding job by the team!” — Praveen K."
             }
         ];
+        */
 
         // Current active modal build state
         let currentModalBuild = null;
@@ -627,6 +634,17 @@
             const filtered = filter === "all"
                 ? buildsData
                 : buildsData.filter(b => b.category === filter);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 70px 20px; color: var(--text-muted, #7a8ba0);">
+                        <i class="fas fa-hammer" style="font-size: 44px; margin-bottom: 16px; opacity: 0.35; display: block; color: var(--primary, #f5a623);"></i>
+                        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary, #fff);">No Custom Projects Found</h3>
+                        <p style="font-size: 14px; max-width: 480px; margin: 0 auto; line-height: 1.6;">No build projects are currently listed under this category. Custom projects created in the Admin Dashboard will appear here dynamically.</p>
+                    </div>
+                `;
+                return;
+            }
 
             grid.innerHTML = filtered.map(item => `
                 <div class="build-item-card" data-id="${item.id}" onclick="openBuildModal('${item.id}')">
@@ -711,6 +729,26 @@
         window.openBuildModal = function (id) {
             const build = buildsData.find(b => b.id === id);
             if (!build) return;
+
+            // Safe fallbacks for dynamic API records
+            build.categoryLabel = build.categoryLabel || "Custom";
+            build.images = (Array.isArray(build.images) && build.images.length > 0)
+                ? build.images
+                : [{ url: build.afterImg || build.imageUrl || "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=1200&q=80", caption: build.title || "Custom Build" }];
+            build.specs = build.specs || {};
+            build.specs.baseModel = build.specs.baseModel || build.title || "Custom Build";
+            build.specs.paint = build.specs.paint || "Premium Custom Finish";
+            build.specs.exhaust = build.specs.exhaust || "Performance Tuned";
+            build.specs.lighting = build.specs.lighting || "Custom LED Setup";
+            build.specs.seating = build.specs.seating || "Handcrafted Saddle";
+            build.specs.tyres = build.specs.tyres || "High Grip Radials";
+            build.mods = (Array.isArray(build.mods) && build.mods.length > 0)
+                ? build.mods
+                : ["Full cosmetic & performance teardown", "Custom fabricated components", "High-performance Dyno tuning", "Quality inspection & track test"];
+            build.cost = build.cost || "Contact for Quote";
+            build.duration = build.duration || "Available on Request";
+            build.powerGain = build.powerGain || "Dyno Tuned";
+            build.quote = build.quote || "“Engineered with perfection at JE BikeZ Custom Works.”";
 
             currentModalBuild = build;
             currentGalleryIndex = 0;
@@ -863,8 +901,35 @@
             }
         });
 
+        async function fetchDynamicBuilds() {
+            try {
+                const res = await fetch(`${API_URL}/api/builds`);
+                const data = await res.json();
+                if (data.success && Array.isArray(data.builds) && data.builds.length > 0) {
+                    const normalized = data.builds.map(b => ({
+                        ...b,
+                        id: b.id || b._id,
+                        categoryLabel: b.categoryLabel || b.category,
+                        beforeImg: b.beforeImg || (b.images && b.images[0] && b.images[0].url) || "",
+                        afterImg: b.afterImg || (b.images && b.images[0] && b.images[0].url) || "",
+                        likes: b.likes || 0
+                    }));
+                    buildsData = normalized;
+                } else {
+                    buildsData = [];
+                }
+            } catch (err) {
+                console.warn("Dynamic builds fetch failed:", err);
+                buildsData = [];
+            }
+            const activeBtn = document.querySelector(".build-filter-btn.active");
+            const currentFilter = activeBtn ? activeBtn.getAttribute("data-filter") : "all";
+            renderBuilds(currentFilter);
+        }
+
         // Initialize
         renderBuilds("all");
+        fetchDynamicBuilds();
     </script>
 
     <!-- ═══════════ BOTTOM NAV (MOBILE ONLY) ═══════════ -->

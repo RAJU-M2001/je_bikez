@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //const API_BASE_URL = "https://api.je-bikez.com";
 
     // RENDER
-    const API_BASE_URL ="https://bike-modification-api.onrender.com";
+    const API_BASE_URL = "https://bike-modification-api.onrender.com";
 
 
 

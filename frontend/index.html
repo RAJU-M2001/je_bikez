@@ -109,88 +109,49 @@
      LOGOUT CONFIRMATION DIALOG
 ═══════════════════════════════════════════════════════════ -->
     <div id="logoutConfirmDialog" class="dialog logout-dialog" aria-hidden="true" style="display: none;">
-
         <div class="dialog-box logout-confirm-box" role="dialog" aria-modal="true" aria-labelledby="logoutDialogTitle"
             aria-describedby="logoutDialogDescription">
-
             <!-- CLOSE -->
             <button id="cancelLogoutTop" type="button" class="logout-close-btn" aria-label="Close logout dialog"
                 title="Close">
                 <i class="fas fa-times" aria-hidden="true"></i>
             </button>
 
-
             <!-- DECORATIVE GLOW -->
             <div class="logout-glow" aria-hidden="true"></div>
-
 
             <!-- LOGOUT ICON -->
             <div class="logout-icon" aria-hidden="true">
                 <i class="fas fa-sign-out-alt"></i>
             </div>
 
-
             <!-- CONTENT -->
             <div class="logout-content">
-
-                <span class="logout-label">
-                    ACCOUNT ACTION
-                </span>
-
-                <h2 id="logoutDialogTitle">
-                    Logout?
-                </h2>
-
+                <span class="logout-label">ACCOUNT ACTION</span>
+                <h2 id="logoutDialogTitle">Sign Out?</h2>
                 <p id="logoutDialogDescription">
-                    Are you sure you want to logout from your account?
-                    Your current session will be ended.
+                    Are you sure you want to log out from your account? Your active session will be ended safely.
                 </p>
-
             </div>
-
 
             <!-- ACTIONS -->
             <div class="logout-actions">
-
-                <!-- STAY LOGGED IN -->
                 <button id="cancelLogoutBtn" type="button" class="cancel-btn">
-
                     <i class="fas fa-arrow-left" aria-hidden="true"></i>
-
-                    <span>
-                        Stay Logged In
-                    </span>
-
+                    <span>Stay Logged In</span>
                 </button>
-
-
-                <!-- CONFIRM LOGOUT -->
                 <button id="confirmLogoutBtn" type="button" class="logout-confirm-btn">
-
-                    <span>
-                        Yes, Logout
-                    </span>
-
+                    <span>Yes, Log Out</span>
                     <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-
                 </button>
-
             </div>
-
 
             <!-- SECURITY NOTE -->
             <div class="logout-note">
-
                 <i class="fas fa-shield-alt" aria-hidden="true"></i>
-
-                <span>
-                    You can sign in again anytime.
-                </span>
-
+                <span>You can sign back in anytime to access your bookings.</span>
             </div>
-
         </div>
-
     </div>
 
     <main class="main-content">

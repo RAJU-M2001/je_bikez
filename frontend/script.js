@@ -1,25 +1,115 @@
 // ============================================================
-// PRELOADER LOGIC
+// FULL PAGE LOADER & PAGE NAVIGATION SYSTEM
 // ============================================================
 
+function createPageLoader() {
+    let loader = document.getElementById("pageLoader");
+    if (!loader) {
+        loader = document.createElement("div");
+        loader.id = "pageLoader";
+        loader.className = "page-loader active";
+        loader.innerHTML = `
+            <div class="page-loader-content">
+                <div class="page-loader-spinner">
+                    <div class="loader-ring"></div>
+                    <div class="loader-ring-inner"></div>
+                    <i class="fas fa-motorcycle loader-icon"></i>
+                </div>
+                <div class="loader-brand">JE <span>BIKEZ</span></div>
+                <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+            </div>
+        `;
+        if (document.body) {
+            document.body.prepend(loader);
+        }
+    }
+    return loader;
+}
+
+function showPageLoader() {
+    const loader = createPageLoader();
+    if (loader) {
+        loader.classList.add("active");
+    }
+}
+
+function hidePageLoader() {
+    const loader = document.getElementById("pageLoader");
+    if (loader) {
+        loader.classList.remove("active");
+    }
+}
+
+// Initialize loader as early as possible
+if (document.body) {
+    createPageLoader();
+} else {
+    document.addEventListener("DOMContentLoaded", createPageLoader);
+}
+
+// Hide loader after a clear 1-second interval once page has loaded
 window.addEventListener("load", function () {
+    setTimeout(hidePageLoader, 1000);
+});
 
-    const preloader =
-        document.getElementById("preloader");
+// Safety fallback to prevent stuck loader
+setTimeout(hidePageLoader, 4000);
 
-    if (preloader) {
+// Ensure loader is hidden when navigating with browser back/forward buttons
+window.addEventListener("pageshow", function () {
+    hidePageLoader();
+});
 
-        setTimeout(() => {
+// Intercept page navigation to show full-page loader
+document.addEventListener("click", function (e) {
+    const anchor = e.target.closest("a");
+    if (!anchor) return;
 
-            preloader.classList.add("loaded");
+    const href = anchor.getAttribute("href");
+    if (!href) return;
 
-            setTimeout(() => {
+    // Ignore anchor links, void links, email, telephone, new window tabs, and downloads
+    if (
+        href.startsWith("#") ||
+        href.startsWith("javascript:") ||
+        href.startsWith("mailto:") ||
+        href.startsWith("tel:") ||
+        anchor.target === "_blank" ||
+        anchor.hasAttribute("download") ||
+        e.ctrlKey ||
+        e.metaKey ||
+        e.shiftKey ||
+        e.altKey
+    ) {
+        return;
+    }
 
-                preloader.remove();
+    try {
+        const targetUrl = new URL(anchor.href, window.location.href);
+        const currentUrl = new URL(window.location.href);
 
-            }, 850);
+        // Same page with same path and query (only hash difference or identical) - skip loader
+        if (
+            targetUrl.origin === currentUrl.origin &&
+            targetUrl.pathname === currentUrl.pathname &&
+            targetUrl.search === currentUrl.search
+        ) {
+            return;
+        }
 
-        }, 1500);
+        e.preventDefault();
+        showPageLoader();
+        setTimeout(function () {
+            window.location.href = anchor.href;
+        }, 500);
+    } catch (err) {
+        if (!href.startsWith("#")) {
+            e.preventDefault();
+            showPageLoader();
+            setTimeout(function () {
+                window.location.href = anchor.href;
+            }, 500);
+        }
     }
 });
 
@@ -1354,6 +1444,8 @@ document.addEventListener("DOMContentLoaded", function () {
             profileContainer.style.display =
                 "flex";
 
+            closeProfileDropdown();
+
             updateNavbarProfile();
 
             return;
@@ -1837,20 +1929,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
                 confirmLogoutBtn.innerHTML =
-                    '<span>Yes, Logout</span><i class="fas fa-sign-out-alt"></i>';
+                    '<span>Yes, Log Out</span><i class="fas fa-sign-out-alt"></i>';
 
 
                 // --------------------------------------------
-                // SUCCESS MESSAGE
+                // FULL PAGE REFRESH
                 // --------------------------------------------
+
+                showPageLoader();
 
                 setTimeout(() => {
 
-                    alert(
-                        "You have been logged out successfully."
-                    );
+                    window.location.reload();
 
-                }, 100);
+                }, 400);
 
             }
         );
@@ -2333,11 +2425,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                             hideAllModals();
 
-
-                            // Open profile menu
-                            // after successful login
-
-                            openProfileDropdown();
+                            // Keep profile menu closed after login
+                            closeProfileDropdown();
 
                         }, 1200);
 
@@ -2558,11 +2647,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                             hideAllModals();
 
-
-                            // Open profile menu
-                            // after successful signup
-
-                            openProfileDropdown();
+                            // Keep profile menu closed after signup
+                            closeProfileDropdown();
 
                         }, 1200);
 

@@ -262,31 +262,24 @@
             </div>
             <div class="logout-content">
                 <span class="logout-label">ACCOUNT ACTION</span>
-                <h2 id="logoutDialogTitle">Logout?</h2>
+                <h2 id="logoutDialogTitle">Sign Out?</h2>
                 <p id="logoutDialogDescription">
-                    Are you sure you want to logout from your account?
-                    Your current session will be ended.
+                    Are you sure you want to log out from your account? Your active session will be ended safely.
                 </p>
             </div>
             <div class="logout-actions">
                 <button id="cancelLogoutBtn" type="button" class="cancel-btn">
                     <i class="fas fa-arrow-left" aria-hidden="true"></i>
-                    <span>
-                        Stay Logged In
-                    </span>
+                    <span>Stay Logged In</span>
                 </button>
                 <button id="confirmLogoutBtn" type="button" class="logout-confirm-btn">
-                    <span>
-                        Yes, Logout
-                    </span>
+                    <span>Yes, Log Out</span>
                     <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                 </button>
             </div>
             <div class="logout-note">
                 <i class="fas fa-shield-alt" aria-hidden="true"></i>
-                <span>
-                    You can sign in again anytime.
-                </span>
+                <span>You can sign back in anytime to access your bookings.</span>
             </div>
         </div>
     </div>
@@ -600,6 +593,34 @@
                 });
             }
 
+            const tbody = document.querySelector("#historyTable tbody");
+            const historyMsg = document.getElementById("historyMsg");
+            const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+            // Clear hardcoded demo rows immediately
+            if (tbody) tbody.innerHTML = '';
+
+            if (!isLoggedIn) {
+                // Non-logged-in user: show login prompt
+                document.getElementById("historyTable").style.display = "none";
+                if (historyMsg) historyMsg.innerHTML = '<div style="text-align:center;padding:30px 15px;color:#888;font-size:15px;"><i class="fas fa-lock" style="font-size:28px;margin-bottom:10px;display:block;color:#555;"></i>Please <a href="#" id="historyLoginLink" style="color:var(--accent);text-decoration:underline;font-weight:bold;">login</a> to view your service history.</div>';
+                const historyLoginLink = document.getElementById("historyLoginLink");
+                if (historyLoginLink) {
+                    historyLoginLink.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        const loginDialog = document.getElementById("loginDialog");
+                        if (window.showModal && loginDialog) {
+                            window.showModal(loginDialog);
+                        } else if (loginDialog) {
+                            loginDialog.classList.add("show");
+                            loginDialog.style.display = "flex";
+                        }
+                    });
+                }
+            } else {
+                loadHistory();
+            }
+
             // Load Service History
             function loadHistory() {
                 const userId = localStorage.getItem("currentUserId");
@@ -608,7 +629,8 @@
                     .then(r => r.json())
                     .then(res => {
                         if (res.success && res.history && res.history.length > 0) {
-                            const tbody = document.querySelector("#historyTable tbody");
+                            document.getElementById("historyTable").style.display = "";
+                            if (historyMsg) historyMsg.innerHTML = '';
                             if (tbody) {
                                 tbody.innerHTML = res.history.map(item => `
                                     <tr>
@@ -619,12 +641,14 @@
                                     </tr>
                                 `).join('');
                             }
+                        } else {
+                            document.getElementById("historyTable").style.display = "none";
+                            if (historyMsg) historyMsg.innerHTML = '<div style="text-align:center;padding:30px 15px;color:#888;font-size:15px;"><i class="fas fa-inbox" style="font-size:28px;margin-bottom:10px;display:block;color:#555;"></i>No past services found. Book your first service above!</div>';
                         }
-                    }).catch(() => { });
-            }
-
-            if (localStorage.getItem("isLoggedIn") === "true") {
-                loadHistory();
+                    }).catch(() => {
+                        document.getElementById("historyTable").style.display = "none";
+                        if (historyMsg) historyMsg.innerHTML = '<div style="text-align:center;padding:30px 15px;color:#888;font-size:15px;"><i class="fas fa-inbox" style="font-size:28px;margin-bottom:10px;display:block;color:#555;"></i>No past services found. Book your first service above!</div>';
+                    });
             }
         })();
     </script>

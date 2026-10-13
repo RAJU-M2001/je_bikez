@@ -3272,141 +3272,85 @@ input:-webkit-autofill:active {
 .logout-dialog {
     position: fixed;
     inset: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     padding: 20px;
-
-    background: rgba(0, 0, 0, 0.68);
-
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 9999;
 }
-
 
 /* ============================================================
    DIALOG BOX
 ============================================================ */
-
 .logout-confirm-box {
     position: relative;
-
     width: min(440px, calc(100vw - 40px));
-
-    padding: 42px 34px 28px;
-
+    padding: 40px 32px 28px;
     overflow: hidden;
-
     text-align: center;
-
-    background:
-        linear-gradient(145deg,
-            #ffffff 0%,
-            #fafafa 100%);
-
-    border: 1px solid rgba(0, 0, 0, 0.08);
-
-    border-radius: 22px;
-
+    background: linear-gradient(145deg, #161616 0%, #0d0d0d 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
     box-shadow:
-        0 30px 80px rgba(0, 0, 0, 0.30),
-        0 8px 30px rgba(0, 0, 0, 0.12);
-
-    animation: logoutDialogIn 0.25s ease-out;
+        0 30px 80px rgba(0, 0, 0, 0.8),
+        0 0 35px rgba(255, 102, 0, 0.08);
+    animation: logoutDialogIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 
 /* ============================================================
    TOP ACCENT LINE
 ============================================================ */
-
 .logout-confirm-box::before {
     content: "";
-
     position: absolute;
-
     top: 0;
     left: 0;
     right: 0;
-
     height: 4px;
-
-    background: linear-gradient(90deg,
-            #ff7043,
-            #ff4444,
-            #ff6b6b);
+    background: linear-gradient(90deg, #FF6600, #ff4444, #FF8533);
 }
-
 
 /* ============================================================
    DECORATIVE GLOW
 ============================================================ */
-
 .logout-glow {
     position: absolute;
-
-    top: -90px;
+    top: -80px;
     left: 50%;
-
-    width: 190px;
-    height: 190px;
-
+    width: 200px;
+    height: 200px;
     transform: translateX(-50%);
-
-    background: rgba(255, 68, 68, 0.08);
-
+    background: rgba(255, 102, 0, 0.12);
     border-radius: 50%;
-
-    filter: blur(35px);
-
+    filter: blur(40px);
     pointer-events: none;
 }
-
 
 /* ============================================================
    CLOSE BUTTON
 ============================================================ */
-
 .logout-close-btn {
     position: absolute;
-
     top: 16px;
     right: 16px;
-
-    width: 36px;
-    height: 36px;
-
+    width: 34px;
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
-
     padding: 0;
-
-    border: 1px solid #e5e5e5;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-
-    background: #ffffff;
-
-    color: #333333;
-
-    font-size: 14px;
-
+    background: #1c1c1c;
+    color: #a0a0a0;
+    font-size: 13px;
     line-height: 1;
-
     cursor: pointer;
-
     z-index: 5;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .logout-close-btn i {
@@ -3415,79 +3359,52 @@ input:-webkit-autofill:active {
 }
 
 .logout-close-btn:hover {
-    background: #fff1f1;
-
-    color: #ff4444;
-
-    border-color: #ffcccc;
-
+    background: #282828;
+    color: #ffffff;
+    border-color: rgba(255, 102, 0, 0.4);
     transform: rotate(90deg);
-
-    box-shadow: 0 4px 12px rgba(255, 68, 68, 0.12);
 }
 
 .logout-close-btn:focus-visible {
-    outline: 3px solid rgba(255, 68, 68, 0.20);
+    outline: 3px solid rgba(255, 102, 0, 0.3);
     outline-offset: 2px;
 }
-
 
 /* ============================================================
    LOGOUT ICON
 ============================================================ */
-
 .logout-icon {
     position: relative;
-
-    width: 76px;
-    height: 76px;
-
-    margin: 8px auto 22px;
-
+    width: 72px;
+    height: 72px;
+    margin: 4px auto 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    background:
-        linear-gradient(145deg,
-            #fff4f4,
-            #ffe9e9);
-
-    color: #ff4444;
-
-    border: 1px solid rgba(255, 68, 68, 0.22);
-
+    background: radial-gradient(circle, rgba(255, 102, 0, 0.16) 0%, rgba(255, 68, 68, 0.08) 100%);
+    color: #FF6600;
+    border: 1px solid rgba(255, 102, 0, 0.35);
     border-radius: 50%;
-
-    font-size: 28px;
-
-    box-shadow:
-        0 8px 25px rgba(255, 68, 68, 0.12);
-
+    font-size: 26px;
+    box-shadow: 0 8px 25px rgba(255, 102, 0, 0.2);
     z-index: 2;
 }
 
 .logout-icon::after {
     content: "";
-
     position: absolute;
-
-    inset: -7px;
-
-    border: 1px solid rgba(255, 68, 68, 0.10);
-
+    inset: -6px;
+    border: 1px solid rgba(255, 102, 0, 0.15);
     border-radius: 50%;
 }
 
 .logout-icon i {
-    color: #ff4444;
+    color: #FF6600;
 }
-
 
 /* ============================================================
    CONTENT
 ============================================================ */
-
 .logout-content {
     position: relative;
     z-index: 2;
@@ -3495,160 +3412,93 @@ input:-webkit-autofill:active {
 
 .logout-label {
     display: inline-block;
-
-    margin-bottom: 7px;
-
-    font-size: 10px;
-
+    margin-bottom: 8px;
+    font-size: 11px;
     font-weight: 700;
-
-    letter-spacing: 1.8px;
-
-    color: #ff5a45;
+    letter-spacing: 2px;
+    color: #FF6600;
+    text-transform: uppercase;
 }
 
 .logout-confirm-box h2 {
-    margin: 0 0 12px;
-
-    color: #181818;
-
-    font-size: 28px;
-
-    font-weight: 750;
-
-    letter-spacing: -0.5px;
+    margin: 0 0 10px;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    font-family: 'Outfit', 'Inter', sans-serif;
 }
 
 .logout-confirm-box p {
     max-width: 340px;
-
-    margin: 0 auto 30px;
-
-    color: #666666;
-
-    font-size: 14px;
-
-    line-height: 1.65;
+    margin: 0 auto 26px;
+    color: #a0a0a0;
+    font-size: 13.5px;
+    line-height: 1.6;
 }
-
 
 /* ============================================================
    ACTION BUTTONS
 ============================================================ */
-
 .logout-actions {
     position: relative;
     z-index: 2;
-
     display: flex;
-
     gap: 12px;
-
     width: 100%;
-
-    margin-top: 4px;
 }
 
 .logout-actions button {
-    position: relative;
-
     flex: 1;
-
-    min-height: 48px;
-
+    min-height: 46px;
     display: flex;
     align-items: center;
     justify-content: center;
-
     gap: 8px;
-
-    padding: 12px 16px;
-
+    padding: 12px 18px;
     border-radius: 10px;
-
     font-family: inherit;
-
-    font-size: 14px;
-
-    font-weight: 700;
-
-    line-height: 1;
-
-    white-space: nowrap;
-
+    font-size: 13.5px;
+    font-weight: 600;
     cursor: pointer;
-
-    outline: none;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .logout-actions button i {
     font-size: 13px;
 }
 
-
 /* ============================================================
    STAY LOGGED IN BUTTON
 ============================================================ */
-
 .logout-actions .cancel-btn {
-    background: #ffffff;
-
-    color: #292929;
-
-    border: 1px solid #d8d8d8;
-
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .logout-actions .cancel-btn span {
-    color: #292929;
+    color: #ffffff;
 }
 
 .logout-actions .cancel-btn i {
-    color: #555555;
+    color: #a0a0a0;
 }
 
 .logout-actions .cancel-btn:hover {
-    background: #f7f7f7;
-
-    color: #111111;
-
-    border-color: #bdbdbd;
-
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
     transform: translateY(-1px);
-
-    box-shadow:
-        0 6px 15px rgba(0, 0, 0, 0.08);
 }
-
-.logout-actions .cancel-btn:hover i {
-    color: #222222;
-}
-
 
 /* ============================================================
-   YES LOGOUT BUTTON
+   CONFIRM LOGOUT BUTTON
 ============================================================ */
-
 .logout-actions .logout-confirm-btn {
-    background:
-        linear-gradient(135deg,
-            #ff4b4b,
-            #f23838);
-
+    background: linear-gradient(135deg, #FF6600, #e65100);
     color: #ffffff;
-
-    border: 1px solid #ff4b4b;
-
-    box-shadow:
-        0 6px 16px rgba(255, 68, 68, 0.22);
+    border: 1px solid #FF6600;
+    box-shadow: 0 4px 18px rgba(255, 102, 0, 0.35);
 }
 
 .logout-actions .logout-confirm-btn span,
@@ -3657,76 +3507,84 @@ input:-webkit-autofill:active {
 }
 
 .logout-actions .logout-confirm-btn:hover {
-    background:
-        linear-gradient(135deg,
-            #f23838,
-            #df2929);
-
-    border-color: #f23838;
-
+    background: linear-gradient(135deg, #ff7a1a, #f55a00);
+    box-shadow: 0 6px 22px rgba(255, 102, 0, 0.5);
     transform: translateY(-1px);
-
-    box-shadow:
-        0 9px 22px rgba(255, 68, 68, 0.30);
 }
 
 .logout-actions .logout-confirm-btn:active {
     transform: translateY(0);
 }
 
-
 /* ============================================================
    SECURITY NOTE
 ============================================================ */
-
 .logout-note {
     position: relative;
     z-index: 2;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     gap: 7px;
-
-    margin-top: 20px;
-
-    color: #999999;
-
-    font-size: 11px;
+    margin-top: 18px;
+    color: #777777;
+    font-size: 12px;
 }
 
 .logout-note i {
-    color: #999999;
-
-    font-size: 11px;
+    color: #FF6600;
+    font-size: 12px;
 }
-
 
 /* ============================================================
    DISABLED STATE
 ============================================================ */
-
 .logout-actions button:disabled {
     opacity: 0.55;
-
     cursor: not-allowed;
-
     transform: none !important;
-
     box-shadow: none !important;
 }
-
 
 /* ============================================================
    KEYBOARD ACCESSIBILITY
 ============================================================ */
-
 .logout-actions button:focus-visible {
-    outline: 3px solid rgba(255, 68, 68, 0.20);
-
+    outline: 3px solid rgba(255, 102, 0, 0.3);
     outline-offset: 2px;
+}
+
+/* ============================================================
+   LIGHT MODE OVERRIDES FOR LOGOUT
+============================================================ */
+:root.light-mode .logout-confirm-box {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+}
+
+:root.light-mode .logout-confirm-box h2 {
+    color: #111111;
+}
+
+:root.light-mode .logout-confirm-box p {
+    color: #555555;
+}
+
+:root.light-mode .logout-close-btn {
+    background: #f0f0f0;
+    border-color: #ddd;
+    color: #444;
+}
+
+:root.light-mode .logout-actions .cancel-btn {
+    background: #f3f3f3;
+    border-color: #d0d0d0;
+    color: #222222;
+}
+
+:root.light-mode .logout-actions .cancel-btn span {
+    color: #222222;
 }
 
 
@@ -4841,4 +4699,153 @@ input:-webkit-autofill:active {
         margin-top: 16px;
     }
 
+}
+
+/* ═══════════════════════════════════════════
+   FULL PAGE LOADER
+   ═══════════════════════════════════════════ */
+.page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.page-loader.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+}
+
+.page-loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.page-loader-spinner {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+}
+
+.loader-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 102, 0, 0.15);
+    border-top-color: #FF6600;
+    border-right-color: #FF8533;
+    animation: loaderSpin 0.9s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+    box-shadow: 0 0 25px rgba(255, 102, 0, 0.25);
+}
+
+.loader-ring-inner {
+    position: absolute;
+    inset: 9px;
+    border-radius: 50%;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-bottom-color: #FF6600;
+    animation: loaderSpinReverse 1.4s linear infinite;
+}
+
+.loader-icon {
+    font-size: 26px;
+    color: #FF6600;
+    animation: loaderPulse 1.4s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 102, 0, 0.6));
+}
+
+.loader-brand {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+}
+
+.loader-brand span {
+    color: #FF6600;
+}
+
+.loader-bar {
+    width: 140px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+    overflow: hidden;
+    position: relative;
+}
+
+.loader-bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 45%;
+    background: linear-gradient(90deg, #FF6600, #FFA366);
+    border-radius: 99px;
+    animation: loaderBarMove 1.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes loaderSpin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes loaderSpinReverse {
+    0% {
+        transform: rotate(360deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes loaderPulse {
+
+    0%,
+    100% {
+        transform: scale(0.92);
+        opacity: 0.85;
+    }
+
+    50% {
+        transform: scale(1.08);
+        opacity: 1;
+    }
+}
+
+@keyframes loaderBarMove {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(320%);
+    }
 }

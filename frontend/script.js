@@ -120,30 +120,14 @@ document.addEventListener("click", function (e) {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-
     // ========================================================
     // API CONFIGURATION
     // ========================================================
-
-    // API CONFIGURATION (Local & Render dynamic support)
-    // const API_BASE_URL =
-    //     window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-    //         ? "http://127.0.0.1:10000"
-    //         : "https://bike-modification-api.onrender.com";
-
-    // ========================================================
-    // API CONFIGURATION
-    // ========================================================
-
-    // LOCAL
-    // const API_BASE_URL =
-    //     "http://127.0.0.1:10000";
-
-    // PRODUCTION
-    //const API_BASE_URL = "https://api.je-bikez.com";
-
-    // RENDER
-    const API_BASE_URL = "https://bike-modification-api.onrender.com";
+    const API_BASE_URL =
+        localStorage.getItem("API_BASE_URL") ||
+        (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+            ? (window.location.port === "10000" ? window.location.origin : "http://127.0.0.1:10000")
+            : "https://bike-modification-api.onrender.com");
 
 
 
@@ -3390,4 +3374,188 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+
+    // ========================================================
+    // LANDING PAGE: DYNAMIC BUILDS & SALES FROM GET API
+    // ========================================================
+    async function loadLandingPageBuildsAndSales() {
+        const buildsContainer = document.getElementById("landingBuildsGrid") || document.querySelector(".builds-panel .builds-grid");
+        const salesContainer = document.getElementById("landingSalesGrid") || document.querySelector(".sales-panel .sales-grid");
+
+        // If not on the landing page, exit
+        if (!buildsContainer && !salesContainer) return;
+
+        function safeHtml(str) {
+            if (!str) return "";
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // --- 1. FETCH & RENDER BUILDS ---
+        if (buildsContainer) {
+            try {
+                // Try /build, fallback to /api/builds or /api/build
+                let res = await fetch(`${API_BASE_URL}/build`).catch(() => null);
+                if (!res || !res.ok) {
+                    res = await fetch(`${API_BASE_URL}/api/builds`).catch(() => null);
+                }
+                if (!res || !res.ok) {
+                    res = await fetch(`${API_BASE_URL}/api/build`).catch(() => null);
+                }
+
+                if (!res || !res.ok) {
+                    throw new Error("Builds API response not ok");
+                }
+
+                const data = await res.json();
+                const builds = Array.isArray(data) ? data : (data.builds || data.data || []);
+
+                if (!builds || builds.length === 0) {
+                    buildsContainer.innerHTML = `
+                        <div class="empty-state-notice" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: var(--bg-tertiary); border-radius: 8px; border: 1px dashed var(--border);">
+                            <i class="fas fa-hammer" style="font-size: 28px; color: var(--accent); margin-bottom: 12px; display: inline-block;"></i>
+                            <h4 style="margin: 0 0 6px; font-size: 15px; color: var(--text-primary); font-weight: 600;">No Completed Builds Available</h4>
+                            <p style="margin: 0; font-size: 12px; color: var(--text-muted);">New custom build projects are currently in progress. Please check back soon!</p>
+                        </div>
+                    `;
+                } else {
+                    buildsContainer.innerHTML = builds.map(build => {
+                        const beforeImg = build.beforeImg || (build.images && build.images[1] && build.images[1].url) || "";
+                        const afterImg = build.afterImg || (build.images && build.images[0] && build.images[0].url) || build.imageUrl || "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5384_md6ioo.jpg";
+                        const title = safeHtml(build.title || "Custom Build Project");
+                        const subtitle = safeHtml(build.subtitle || build.categoryLabel || build.category || "Custom Project");
+                        const cost = safeHtml(build.cost || "₹ Contact");
+                        const likes = build.likes || 0;
+
+                        let imageBlock = "";
+                        if (beforeImg && afterImg) {
+                            imageBlock = `
+                                <div class="build-images" style="display:flex; height: 120px;">
+                                    <div class="build-before" style="flex:1; position:relative;">
+                                        <img src="${beforeImg}" alt="Before" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5393_z5ifnq.jpg';">
+                                        <span class="build-label" style="position:absolute; top:5px; left:5px; background: rgba(0,0,0,0.6); font-size:10px; padding: 2px 5px; border-radius: 3px; color: white;">Before</span>
+                                    </div>
+                                    <div class="build-after" style="flex:1; position:relative;">
+                                        <img src="${afterImg}" alt="After" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null;this.src='https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5384_md6ioo.jpg';">
+                                        <span class="build-label" style="position:absolute; top:5px; right:5px; background: var(--accent); color: black; font-size:10px; padding: 2px 5px; border-radius: 3px; font-weight: bold;">After</span>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            imageBlock = `
+                                <div class="build-images" style="position:relative; height: 120px;">
+                                    <img src="${afterImg}" alt="${title}" style="width:100%; height:100%; object-fit:cover;">
+                                    <span class="build-label" style="position:absolute; top:5px; right:5px; background: var(--accent); color: black; font-size:10px; padding: 2px 5px; border-radius: 3px; font-weight: bold;">Featured</span>
+                                </div>
+                            `;
+                        }
+
+                        return `
+                            <div class="build-card" style="background: var(--bg-tertiary); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s;" onclick="window.location.href='builds.html'">
+                                ${imageBlock}
+                                <div class="build-info" style="padding: 10px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                                    <div>
+                                        <h4 style="margin: 0 0 5px; font-size: 14px; font-weight: 600; color: var(--text-primary);">${title}</h4>
+                                        <p style="margin: 0 0 10px; font-size: 12px; color: var(--text-muted);">${subtitle}</p>
+                                    </div>
+                                    <div class="build-meta" style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-top: auto;">
+                                        <span class="build-price" style="color: var(--accent); font-weight: bold;">${cost}</span>
+                                        <span class="build-stats" style="color: var(--text-muted);"><i class="fas fa-heart" style="color: var(--accent); margin-right: 3px;"></i> ${likes}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join("");
+                }
+            } catch (err) {
+                console.warn("Could not load dynamic builds on landing page:", err);
+                buildsContainer.innerHTML = `
+                    <div class="empty-state-notice" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: var(--bg-tertiary); border-radius: 8px; border: 1px dashed var(--border);">
+                        <i class="fas fa-hammer" style="font-size: 28px; color: var(--accent); margin-bottom: 12px; display: inline-block;"></i>
+                        <h4 style="margin: 0 0 6px; font-size: 15px; color: var(--text-primary); font-weight: 600;">No Completed Builds Available</h4>
+                        <p style="margin: 0; font-size: 12px; color: var(--text-muted);">New custom build projects are currently in progress. Please check back soon!</p>
+                    </div>
+                `;
+            }
+        }
+
+        // --- 2. FETCH & RENDER SALES ---
+        if (salesContainer) {
+            try {
+                // Try /sales, fallback to /api/sales or /api/sale
+                let res = await fetch(`${API_BASE_URL}/sales`).catch(() => null);
+                if (!res || !res.ok) {
+                    res = await fetch(`${API_BASE_URL}/api/sales`).catch(() => null);
+                }
+                if (!res || !res.ok) {
+                    res = await fetch(`${API_BASE_URL}/api/sale`).catch(() => null);
+                }
+
+                if (!res || !res.ok) {
+                    throw new Error("Sales API response not ok");
+                }
+
+                const data = await res.json();
+                const sales = Array.isArray(data) ? data : (data.sales || data.data || []);
+
+                if (!sales || sales.length === 0) {
+                    salesContainer.innerHTML = `
+                        <div class="empty-state-notice" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: var(--bg-tertiary); border-radius: 8px; border: 1px dashed var(--border);">
+                            <i class="fas fa-motorcycle" style="font-size: 28px; color: var(--accent); margin-bottom: 12px; display: inline-block;"></i>
+                            <h4 style="margin: 0 0 6px; font-size: 15px; color: var(--text-primary); font-weight: 600;">No Sale Bikes Available</h4>
+                            <p style="margin: 0; font-size: 12px; color: var(--text-muted);">All pre-owned bikes are currently reserved or sold out. Check back for fresh arrivals!</p>
+                        </div>
+                    `;
+                } else {
+                    salesContainer.innerHTML = sales.map(sale => {
+                        const imgUrl = (sale.images && sale.images[0] && sale.images[0].url) || sale.imageUrl || "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=600&q=80";
+                        const name = safeHtml(sale.name || "Certified Motorcycle");
+                        const year = safeHtml(sale.year || "");
+                        const km = safeHtml(sale.km || "");
+                        const price = safeHtml(sale.price || "₹ Contact");
+
+                        const specParts = [];
+                        if (year) specParts.push(`<span>${year}</span>`);
+                        if (km) specParts.push(`<span>${km}</span>`);
+                        const specsHtml = specParts.length > 0 ? specParts.join("") : `<span>Certified Pre-Owned</span>`;
+
+                        return `
+                            <div class="bike-sale-card" style="background: var(--bg-tertiary); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s;" onclick="window.location.href='sales.html'">
+                                <div class="bike-sale-image" style="height: 120px; position:relative;">
+                                    <img src="${imgUrl}" alt="${name}" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=600&q=80';">
+                                    <i class="far fa-heart" style="position:absolute; top:10px; right:10px; color: white;" onclick="event.stopPropagation(); this.classList.toggle('fas'); this.classList.toggle('far'); this.style.color = this.classList.contains('fas') ? 'var(--accent)' : 'white';"></i>
+                                </div>
+                                <div class="bike-sale-info" style="padding: 10px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                                    <div>
+                                        <h4 class="bike-sale-name" style="margin: 0 0 5px; font-size: 14px; font-weight: 600; color: var(--text-primary);">${name}</h4>
+                                        <div class="bike-sale-specs" style="font-size: 11px; color: var(--text-muted); display: flex; gap: 10px; margin-bottom: 10px;">
+                                            ${specsHtml}
+                                        </div>
+                                    </div>
+                                    <div class="bike-sale-footer">
+                                        <span class="bike-sale-price" style="color: var(--accent); font-weight: bold; font-size: 14px;">${price}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join("");
+                }
+            } catch (err) {
+                console.warn("Could not load dynamic sales on landing page:", err);
+                salesContainer.innerHTML = `
+                    <div class="empty-state-notice" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: var(--bg-tertiary); border-radius: 8px; border: 1px dashed var(--border);">
+                        <i class="fas fa-motorcycle" style="font-size: 28px; color: var(--accent); margin-bottom: 12px; display: inline-block;"></i>
+                        <h4 style="margin: 0 0 6px; font-size: 15px; color: var(--text-primary); font-weight: 600;">No Sale Bikes Available</h4>
+                        <p style="margin: 0; font-size: 12px; color: var(--text-muted);">All pre-owned bikes are currently reserved or sold out. Check back for fresh arrivals!</p>
+                    </div>
+                `;
+            }
+        }
+    }
+
+    loadLandingPageBuildsAndSales();
 });

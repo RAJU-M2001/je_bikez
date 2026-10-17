@@ -914,12 +914,16 @@ def admin_upload_image():
 # 🏍️ BUILDS API (LIST, CREATE, UPDATE, DELETE)
 # ============================================================
 @app.route("/api/builds", methods=["GET"], strict_slashes=False)
+@app.route("/api/build", methods=["GET"], strict_slashes=False)
+@app.route("/builds", methods=["GET"], strict_slashes=False)
+@app.route("/build", methods=["GET"], strict_slashes=False)
 def get_builds():
     try:
         builds = list(builds_collection.find().sort("_id", -1))
-        return jsonify({"success": True, "builds": [serialize_doc(b) for b in builds]}), 200
+        serialized = [serialize_doc(b) for b in builds]
+        return jsonify({"success": True, "builds": serialized, "data": serialized}), 200
     except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
+        return jsonify({"success": False, "error": str(e), "builds": [], "data": []}), 500
 
 
 @app.route("/api/builds", methods=["POST"], strict_slashes=False)
@@ -976,12 +980,16 @@ def delete_build(build_id):
 # 🏷️ SALES BIKES API (LIST, CREATE, UPDATE, DELETE)
 # ============================================================
 @app.route("/api/sales", methods=["GET"], strict_slashes=False)
+@app.route("/api/sale", methods=["GET"], strict_slashes=False)
+@app.route("/sales", methods=["GET"], strict_slashes=False)
+@app.route("/sale", methods=["GET"], strict_slashes=False)
 def get_sales():
     try:
         sales = list(sales_collection.find().sort("_id", -1))
-        return jsonify({"success": True, "sales": [serialize_doc(s) for s in sales]}), 200
+        serialized = [serialize_doc(s) for s in sales]
+        return jsonify({"success": True, "sales": serialized, "data": serialized}), 200
     except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
+        return jsonify({"success": False, "error": str(e), "sales": [], "data": []}), 500
 
 
 @app.route("/api/sales", methods=["POST"], strict_slashes=False)

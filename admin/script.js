@@ -148,16 +148,62 @@ function showDashboard() {
     loadAllData();
 }
 
-// Sidebar Navigation
-document.querySelectorAll(".nav-item[data-tab]").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document.querySelectorAll(".nav-item").forEach(x => x.classList.remove("active"));
-        document.querySelectorAll(".tab-section").forEach(x => x.classList.remove("active"));
-        btn.classList.add("active");
-        const target = document.getElementById("section-" + btn.dataset.tab);
-        if (target) target.classList.add("active");
+// Tab Navigation (Desktop & Mobile)
+function switchTab(tabName) {
+    document.querySelectorAll(".nav-item[data-tab]").forEach(x => {
+        x.classList.toggle("active", x.dataset.tab === tabName);
     });
+    document.querySelectorAll(".mob-nav-item[data-tab]").forEach(x => {
+        x.classList.toggle("active", x.dataset.tab === tabName);
+    });
+    document.querySelectorAll(".tab-section").forEach(x => {
+        x.classList.remove("active");
+    });
+    const target = document.getElementById("section-" + tabName);
+    if (target) {
+        target.classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    closeMobileSidebar();
+}
+
+document.querySelectorAll(".nav-item[data-tab]").forEach(btn => {
+    btn.addEventListener("click", () => switchTab(btn.dataset.tab));
 });
+
+document.querySelectorAll(".mob-nav-item[data-tab]").forEach(btn => {
+    btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+});
+
+// Mobile Drawer & Overlay Handlers
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const sidebarCloseBtn = document.getElementById("sidebarCloseBtn");
+const sidebarOverlay = document.getElementById("sidebarOverlay");
+const adminSidebar = document.getElementById("adminSidebar");
+
+function openMobileSidebar() {
+    if (adminSidebar) adminSidebar.classList.add("open");
+    if (sidebarOverlay) sidebarOverlay.classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+
+function closeMobileSidebar() {
+    if (adminSidebar) adminSidebar.classList.remove("open");
+    if (sidebarOverlay) sidebarOverlay.classList.remove("active");
+    document.body.style.overflow = "";
+}
+
+if (hamburgerBtn) hamburgerBtn.onclick = openMobileSidebar;
+if (sidebarCloseBtn) sidebarCloseBtn.onclick = closeMobileSidebar;
+if (sidebarOverlay) sidebarOverlay.onclick = closeMobileSidebar;
+
+const logoutBtnMobile = document.getElementById("adminLogoutBtnMobile");
+if (logoutBtnMobile) {
+    logoutBtnMobile.onclick = () => {
+        sessionStorage.removeItem("je_admin_auth");
+        location.reload();
+    };
+}
 
 const refreshBtn = document.getElementById("refreshAllBtn");
 if (refreshBtn) refreshBtn.onclick = loadAllData;
@@ -197,11 +243,11 @@ function renderUsers(list) {
         const dateStr = u.created_at ? new Date(u.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "—";
         return `
             <tr>
-                <td><span class="user-avatar">${initial}</span><strong>${escapeHtml(u.name || "—")}</strong></td>
-                <td style="color:var(--text-muted)">${escapeHtml(u.email || "—")}</td>
-                <td>${escapeHtml(u.phone || u.mobile || "—")}</td>
-                <td style="color:var(--text-muted);font-size:12px">${dateStr}</td>
-                <td><span class="badge-status ${u.deleted_account ? 'cancelled' : 'completed'}">${u.deleted_account ? 'Deleted' : 'Active'}</span></td>
+                <td data-label="User"><span class="user-avatar">${initial}</span><strong>${escapeHtml(u.name || "—")}</strong></td>
+                <td data-label="Email" style="color:var(--text-muted)">${escapeHtml(u.email || "—")}</td>
+                <td data-label="Mobile">${escapeHtml(u.phone || u.mobile || "—")}</td>
+                <td data-label="Joined Date" style="color:var(--text-muted);font-size:12px">${dateStr}</td>
+                <td data-label="Account Status"><span class="badge-status ${u.deleted_account ? 'cancelled' : 'completed'}">${u.deleted_account ? 'Deleted' : 'Active'}</span></td>
             </tr>
         `;
     }).join("");
@@ -247,13 +293,13 @@ function renderServices() {
         const optionsHtml = STATUS_OPTIONS.map(opt => `<option value="${opt}" ${opt === currentStatus ? "selected" : ""}>${opt}</option>`).join("");
         return `
             <tr>
-                <td style="font-size:11px;color:var(--text-muted);font-family:monospace">${s.booking_id ? s.booking_id.slice(-8) : "—"}</td>
-                <td style="font-size:12px;color:var(--text-muted)">${s.user_id ? s.user_id.slice(-8) : "—"}</td>
-                <td><strong>${escapeHtml(bikeName.trim() || "—")}</strong></td>
-                <td>${escapeHtml(s.serviceType || "—")}</td>
-                <td style="font-size:12px">${dateStr}</td>
-                <td><span class="badge-status ${statusClass(currentStatus)}">${currentStatus}</span></td>
-                <td>
+                <td data-label="Booking ID" style="font-size:11px;color:var(--text-muted);font-family:monospace">${s.booking_id ? s.booking_id.slice(-8) : "—"}</td>
+                <td data-label="User ID" style="font-size:12px;color:var(--text-muted)">${s.user_id ? s.user_id.slice(-8) : "—"}</td>
+                <td data-label="Bike Info"><strong>${escapeHtml(bikeName.trim() || "—")}</strong></td>
+                <td data-label="Service Package">${escapeHtml(s.serviceType || "—")}</td>
+                <td data-label="Date" style="font-size:12px">${dateStr}</td>
+                <td data-label="Current Status"><span class="badge-status ${statusClass(currentStatus)}">${currentStatus}</span></td>
+                <td data-label="Change Status">
                     <select class="status-select" onchange="updateServiceStatus('${s.booking_id}', this.value, this)">
                         ${optionsHtml}
                     </select>
@@ -277,11 +323,11 @@ function renderRecentBookings() {
         const currentStatus = s.status || "Pending";
         return `
             <tr>
-                <td style="font-size:12px;color:var(--text-muted);font-family:monospace">${s.user_id ? s.user_id.slice(-8) : "—"}</td>
-                <td><strong>${escapeHtml(bikeName.trim() || "—")}</strong></td>
-                <td>${escapeHtml(s.serviceType || "—")}</td>
-                <td style="font-size:12px">${dateStr}</td>
-                <td><span class="badge-status ${statusClass(currentStatus)}">${currentStatus}</span></td>
+                <td data-label="User ID" style="font-size:12px;color:var(--text-muted);font-family:monospace">${s.user_id ? s.user_id.slice(-8) : "—"}</td>
+                <td data-label="Bike"><strong>${escapeHtml(bikeName.trim() || "—")}</strong></td>
+                <td data-label="Service Type">${escapeHtml(s.serviceType || "—")}</td>
+                <td data-label="Preferred Date" style="font-size:12px">${dateStr}</td>
+                <td data-label="Status"><span class="badge-status ${statusClass(currentStatus)}">${currentStatus}</span></td>
             </tr>
         `;
     }).join("");
@@ -333,13 +379,13 @@ function renderSalesBookings() {
         const optionsHtml = STATUS_OPTIONS.map(opt => `<option value="${opt}" ${opt === currentStatus ? "selected" : ""}>${opt}</option>`).join("");
         return `
             <tr>
-                <td><strong>${escapeHtml(s.name || "—")}</strong></td>
-                <td><a href="tel:${s.phone}" style="color:var(--primary);text-decoration:none">${escapeHtml(s.phone || "—")}</a></td>
-                <td>${escapeHtml(s.bike_name || "—")}</td>
-                <td>${escapeHtml(s.location || "—")}</td>
-                <td style="font-size:12px">${dateStr}</td>
-                <td><span class="badge-status ${statusClass(currentStatus)}">${currentStatus}</span></td>
-                <td>
+                <td data-label="Buyer Name"><strong>${escapeHtml(s.name || "—")}</strong></td>
+                <td data-label="Phone"><a href="tel:${s.phone}" style="color:var(--primary);text-decoration:none">${escapeHtml(s.phone || "—")}</a></td>
+                <td data-label="Bike Requested">${escapeHtml(s.bike_name || "—")}</td>
+                <td data-label="Location">${escapeHtml(s.location || "—")}</td>
+                <td data-label="Date" style="font-size:12px">${dateStr}</td>
+                <td data-label="Status"><span class="badge-status ${statusClass(currentStatus)}">${currentStatus}</span></td>
+                <td data-label="Change Status">
                     <select class="status-select" onchange="updateSaleBookingStatus('${s._id}', this.value, this)">
                         ${optionsHtml}
                     </select>
@@ -394,12 +440,12 @@ function renderBuilds() {
         const img = (b.images && b.images[0] && b.images[0].url) || b.afterImg || "";
         return `
             <tr>
-                <td>${img ? `<img src="${img}" style="width:58px;height:42px;object-fit:cover;border-radius:6px;border:1px solid var(--border)">` : "—"}</td>
-                <td><strong>${escapeHtml(b.title || "—")}</strong><br><span style="font-size:11px;color:var(--text-muted)">${escapeHtml(b.subtitle || "")}</span></td>
-                <td><span class="badge-status pending" style="font-size:11px">${escapeHtml(b.categoryLabel || b.category || "—")}</span></td>
-                <td>${escapeHtml(b.cost || "—")}</td>
-                <td>${escapeHtml(b.duration || "—")}</td>
-                <td>
+                <td data-label="Preview">${img ? `<img src="${img}" style="width:58px;height:42px;object-fit:cover;border-radius:6px;border:1px solid var(--border)">` : "—"}</td>
+                <td data-label="Project Title"><strong>${escapeHtml(b.title || "—")}</strong><br><span style="font-size:11px;color:var(--text-muted)">${escapeHtml(b.subtitle || "")}</span></td>
+                <td data-label="Category"><span class="badge-status pending" style="font-size:11px">${escapeHtml(b.categoryLabel || b.category || "—")}</span></td>
+                <td data-label="Approx Cost">${escapeHtml(b.cost || "—")}</td>
+                <td data-label="Duration">${escapeHtml(b.duration || "—")}</td>
+                <td data-label="Actions">
                     <button class="btn btn-secondary btn-sm" onclick="editBuild('${b._id}')"><i class="fas fa-edit"></i> Edit</button>
                     <button class="btn btn-danger btn-sm" onclick="deleteBuild('${b._id}')"><i class="fas fa-trash"></i></button>
                 </td>
@@ -525,12 +571,12 @@ function renderSales() {
         const img = (s.images && s.images[0] && s.images[0].url) || s.imageUrl || "";
         return `
             <tr>
-                <td>${img ? `<img src="${img}" style="width:58px;height:42px;object-fit:cover;border-radius:6px;border:1px solid var(--border)">` : "—"}</td>
-                <td><strong>${escapeHtml(s.name || "—")}</strong><br><span style="font-size:11px;color:var(--text-muted)">${escapeHtml(s.subtitle || "")}</span></td>
-                <td><span class="badge-status in-progress" style="font-size:11px">${escapeHtml(s.categoryLabel || s.category || "—")}</span></td>
-                <td><strong>${escapeHtml(s.price || "—")}</strong></td>
-                <td style="font-size:12px;color:var(--text-muted)">${escapeHtml(s.year || "—")} / ${escapeHtml(s.km || "—")}</td>
-                <td>
+                <td data-label="Preview">${img ? `<img src="${img}" style="width:58px;height:42px;object-fit:cover;border-radius:6px;border:1px solid var(--border)">` : "—"}</td>
+                <td data-label="Model Name"><strong>${escapeHtml(s.name || "—")}</strong><br><span style="font-size:11px;color:var(--text-muted)">${escapeHtml(s.subtitle || "")}</span></td>
+                <td data-label="Category"><span class="badge-status in-progress" style="font-size:11px">${escapeHtml(s.categoryLabel || s.category || "—")}</span></td>
+                <td data-label="Price"><strong>${escapeHtml(s.price || "—")}</strong></td>
+                <td data-label="Year / KM" style="font-size:12px;color:var(--text-muted)">${escapeHtml(s.year || "—")} / ${escapeHtml(s.km || "—")}</td>
+                <td data-label="Actions">
                     <button class="btn btn-secondary btn-sm" onclick="editSale('${s._id}')"><i class="fas fa-edit"></i> Edit</button>
                     <button class="btn btn-danger btn-sm" onclick="deleteSale('${s._id}')"><i class="fas fa-trash"></i></button>
                 </td>

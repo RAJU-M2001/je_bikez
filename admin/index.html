@@ -39,12 +39,31 @@
 
     <!-- ═══════════════ DASHBOARD SECTION ═══════════════ -->
     <section id="dashboardSection">
+
+        <!-- Mobile Top Bar -->
+        <header class="mobile-topbar">
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="mobile-topbar-logo">
+                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png" alt="JE BikeZ" />
+                <span>JE BikeZ Admin</span>
+            </div>
+            <button class="logout-btn-mobile" id="adminLogoutBtnMobile">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </header>
+
+        <!-- Sidebar Overlay (mobile) -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="adminSidebar">
             <div class="sidebar-logo">
                 <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
                     alt="JE BikeZ" />
                 <span>JE BikeZ Admin</span>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn"><i class="fas fa-times"></i></button>
             </div>
             <nav class="sidebar-nav">
                 <div class="nav-section-label">General</div>
@@ -77,6 +96,34 @@
                 </button>
             </div>
         </aside>
+
+        <!-- Mobile Bottom Navigation -->
+        <nav class="mobile-bottom-nav" id="mobileBottomNav">
+            <button class="mob-nav-item active" data-tab="overview">
+                <i class="fas fa-chart-pie"></i>
+                <span>Overview</span>
+            </button>
+            <button class="mob-nav-item" data-tab="users">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </button>
+            <button class="mob-nav-item" data-tab="services">
+                <i class="fas fa-tools"></i>
+                <span>Services</span>
+            </button>
+            <button class="mob-nav-item" data-tab="salesbookings">
+                <i class="fas fa-tag"></i>
+                <span>Inquiries</span>
+            </button>
+            <button class="mob-nav-item" data-tab="builds">
+                <i class="fas fa-hammer"></i>
+                <span>Builds</span>
+            </button>
+            <button class="mob-nav-item" data-tab="sales">
+                <i class="fas fa-motorcycle"></i>
+                <span>Sales</span>
+            </button>
+        </nav>
 
         <!-- Main Content Area -->
         <main class="main-content">

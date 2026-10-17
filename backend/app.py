@@ -1184,8 +1184,11 @@ def admin_update_sale_booking_status(booking_id):
 # ============================================================
 # 📋 RECENT ENQUIRIES API (PUBLIC - for landing page)
 # ============================================================
-@app.route("/api/recent-enquiries", methods=["GET"], strict_slashes=False)
+@app.route("/api/recent-enquiries", methods=["GET", "OPTIONS"], strict_slashes=False)
+@app.route("/recent-enquiries", methods=["GET", "OPTIONS"], strict_slashes=False)
 def recent_enquiries():
+    if request.method == "OPTIONS":
+        return "", 204
     try:
         bookings = list(service_booking_collection.find().sort("_id", -1))
         result = []

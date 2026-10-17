@@ -7,6 +7,7 @@
     background: #f4f5f9;
     color: #1a1a2e;
     font-family: 'Inter', 'Outfit', sans-serif;
+    overflow-x: hidden;
 }
 
 .svc-body .navbar {
@@ -279,20 +280,22 @@
 .svc-field label {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 0.82rem;
+    gap: 8px;
+    font-size: 0.85rem;
     font-weight: 600;
-    color: #444;
-    margin-bottom: 6px;
+    color: #1a1a2e;
+    margin-bottom: 7px;
 }
 
 .svc-field label i {
     color: var(--accent);
-    font-size: 0.8rem;
+    font-size: 0.95rem;
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
 }
 
 .svc-field select,
-.svc-field input[type="date"],
 .svc-field input[type="text"] {
     width: 100%;
     padding: 11px 14px;
@@ -303,23 +306,54 @@
     font-size: 0.9rem;
     font-family: inherit;
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
-    appearance: auto;
     cursor: pointer;
     box-sizing: border-box;
 }
 
-.svc-field input[type="text"] {
-    cursor: text;
+.svc-field input[type="date"] {
+    width: 100%;
+    min-height: 48px;
+    height: 48px;
+    padding: 11px 14px;
+    padding-right: 44px;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: #1a1a2e;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: block;
+    position: relative;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff6600'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 20px 20px;
 }
 
-.svc-field input[type="text"]::placeholder {
-    color: #aaa;
+.svc-field input[type="date"]::-webkit-date-and-time-value {
+    text-align: left !important;
+    min-height: 1.4em !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
 }
 
 .svc-field input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: none !important;
-    opacity: 0.85 !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0 !important;
     cursor: pointer !important;
 }
 
@@ -451,6 +485,10 @@
 }
 
 /* ── History Table ── */
+.history-table-container {
+    width: 100%;
+}
+
 #historyTable {
     width: 100%;
     border-collapse: separate;
@@ -540,19 +578,82 @@
         grid-template-columns: 1fr;
     }
 
+    .svc-field label {
+        font-size: 0.85rem;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+
+    .svc-field select,
+    .svc-field input[type="date"],
+    .svc-field input[type="text"] {
+        min-height: 48px;
+        font-size: 16px !important;
+        /* Prevents auto-zoom on iOS */
+    }
+
     .svc-hero {
-        padding: 90px 24px 50px;
+        padding: 95px 20px 45px;
     }
 
     .svc-book-section {
         margin: 0 10px 30px;
         border-radius: 18px;
     }
+
+    /* ── Past Service History Container (Mobile View Only) ── */
+    .history-table-container {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 14px;
+        border: 1px solid #eee;
+        background: #fff;
+        scrollbar-width: thin;
+        scrollbar-color: var(--accent) #f0f0f4;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .history-table-container::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .history-table-container::-webkit-scrollbar-track {
+        background: #f0f0f4;
+        border-radius: 4px;
+    }
+
+    .history-table-container::-webkit-scrollbar-thumb {
+        background: var(--accent);
+        border-radius: 4px;
+    }
+
+    .history-table-container #historyTable {
+        min-width: 620px;
+        border: none;
+        border-radius: 0;
+    }
+
+    #historyTable th,
+    #historyTable td {
+        padding: 12px 14px;
+        white-space: nowrap;
+    }
 }
 
 @media (max-width: 480px) {
     .svc-grid {
         grid-template-columns: 1fr;
+    }
+
+    .svc-hero {
+        padding: 95px 16px 40px;
+    }
+
+    .svc-badge {
+        font-size: 0.8rem;
+        padding: 5px 14px;
     }
 
     .svc-hero h1 {

@@ -436,7 +436,7 @@
                             </div>
                         </div>
                         <div class="svc-field" style="margin-top:16px;">
-                            <label for="dateInput"><i class="fas fa-clock"></i> Preferred Date</label>
+                            <label for="dateInput"><i class="fas fa-calendar-alt"></i> Preferred Date</label>
                             <input type="date" id="dateInput" name="date" required />
                         </div>
                         <div class="svc-field" style="margin-top:16px;">
@@ -493,37 +493,42 @@
                     <span class="svc-label"><i class="fas fa-history"></i> Service History</span>
                     <h2>Past <span class="accent">Services</span></h2>
                 </div>
-                <table id="historyTable">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Bike</th>
-                            <th>Reg. No.</th>
-                            <th>Service(s)</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>12 Aug 2025</td>
-                            <td>Yamaha R15 V4</td>
-                            <td>General Service + Chain Clean</td>
-                            <td><span class="svc-status completed">Completed</span></td>
-                        </tr>
-                        <tr>
-                            <td>28 May 2025</td>
-                            <td>KTM Duke 390</td>
-                            <td>Oil Change + Filter Change</td>
-                            <td><span class="svc-status completed">Completed</span></td>
-                        </tr>
-                        <tr>
-                            <td>15 Feb 2025</td>
-                            <td>Royal Enfield Classic 350</td>
-                            <td>General Service + Brake Check</td>
-                            <td><span class="svc-status completed">Completed</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="history-table-container">
+                    <table id="historyTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Bike</th>
+                                <th>Reg. No.</th>
+                                <th>Service(s)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>12 Aug 2025</td>
+                                <td>Yamaha R15 V4</td>
+                                <td>TN01AB1234</td>
+                                <td>General Service + Chain Clean</td>
+                                <td><span class="svc-status completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>28 May 2025</td>
+                                <td>KTM Duke 390</td>
+                                <td>KL07CD5678</td>
+                                <td>Oil Change + Filter Change</td>
+                                <td><span class="svc-status completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>15 Feb 2025</td>
+                                <td>Royal Enfield Classic 350</td>
+                                <td>KA03EF9012</td>
+                                <td>General Service + Brake Check</td>
+                                <td><span class="svc-status completed">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div id="historyMsg"></div>
             </div>
         </section>
@@ -632,6 +637,16 @@
                             }
                         });
                 });
+            }
+
+            // Date input min date and initial value setup for iOS Safari
+            const dateInputEl = document.getElementById("dateInput");
+            if (dateInputEl) {
+                const todayStr = new Date().toISOString().split("T")[0];
+                dateInputEl.setAttribute("min", todayStr);
+                if (!dateInputEl.value) {
+                    dateInputEl.value = todayStr;
+                }
             }
 
             // Bike image preview wiring

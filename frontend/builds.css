@@ -56,7 +56,7 @@
 /* ── Hero Section ── */
 .builds-hero {
     background: linear-gradient(135deg, #fff5ed 0%, #ffe0c2 40%, #ffc89a 100%);
-    padding: 90px 24px 50px;
+    padding: 100px 40px 60px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -855,11 +855,15 @@
     .build-gallery-main {
         height: 280px;
     }
+
+    .builds-hero {
+        padding: 95px 24px 50px;
+    }
 }
 
 @media (max-width: 600px) {
     .builds-hero {
-        padding: 70px 16px 40px;
+        padding: 95px 20px 45px;
     }
 
     .builds-hero h1 {
@@ -880,5 +884,16 @@
 
     .build-modal-content {
         padding: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .builds-hero {
+        padding: 95px 16px 40px;
+    }
+
+    .builds-badge {
+        font-size: 0.8rem;
+        padding: 5px 14px;
     }
 }

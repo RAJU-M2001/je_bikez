@@ -1638,6 +1638,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
 }
 
+.light-mode input[type="date"]::-webkit-calendar-picker-indicator,
+.svc-body input[type="date"]::-webkit-calendar-picker-indicator,
+.sales-page input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: none;
+    opacity: 0.85;
+}
+
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
     opacity: 1;
 }

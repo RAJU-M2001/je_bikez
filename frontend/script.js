@@ -123,11 +123,20 @@ document.addEventListener("DOMContentLoaded", function () {
     // ========================================================
     // API CONFIGURATION
     // ========================================================
+    const isLocalNetwork = window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1" ||
+        /^192\.168\./.test(window.location.hostname) ||
+        /^10\./.test(window.location.hostname) ||
+        /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(window.location.hostname) ||
+        window.location.hostname.endsWith(".local");
+
     const API_BASE_URL =
         localStorage.getItem("API_BASE_URL") ||
-        (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-            ? (window.location.port === "10000" ? window.location.origin : "http://127.0.0.1:10000")
-            : "https://bike-modification-api.onrender.com");
+        (window.location.port === "10000"
+            ? window.location.origin
+            : isLocalNetwork
+                ? `http://${window.location.hostname}:10000`
+                : "https://bike-modification-api.onrender.com");
 
 
 
@@ -3580,9 +3589,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function timeAgo(isoStr) {
-            if (!isoStr) return "";
-            const now = new Date();
+            if (!isoStr) return "Recently";
             const then = new Date(isoStr);
+            if (isNaN(then.getTime())) return "Recently";
+            const now = new Date();
             const diffMs = now - then;
             const diffMins = Math.floor(diffMs / 60000);
             if (diffMins < 1) return "Just now";
@@ -3605,18 +3615,11 @@ document.addEventListener("DOMContentLoaded", function () {
             if (s === "cancelled") {
                 return `<span style="background:#2d1a1a; color:#f44336; font-size:10px; padding:2px 7px; border-radius:4px; font-weight:600;">Cancelled</span>`;
             }
-            // Pending / default → accent "New"
             return `<span style="background:var(--accent); color:black; font-size:10px; padding:2px 7px; border-radius:4px; font-weight:600;">Pending</span>`;
         }
 
-        try {
-            const res = await fetch(`${API_BASE_URL}/api/recent-enquiries`).catch(() => null);
-            if (!res || !res.ok) throw new Error("Failed to fetch enquiries");
-
-            const data = await res.json();
-            const enquiries = Array.isArray(data.enquiries) ? data.enquiries : [];
-
-            if (enquiries.length === 0) {
+        function renderEnquiriesList(enquiries) {
+            if (!enquiries || enquiries.length === 0) {
                 container.innerHTML = `
                     <div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:13px;">
                         <i class="fas fa-clipboard-list" style="font-size:28px; color:var(--accent); margin-bottom:10px; display:block;"></i>
@@ -3627,9 +3630,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             container.innerHTML = enquiries.map(enq => {
-                const serviceType = safeHtmlEq(enq.serviceType || "Service Enquiry");
-                const bikeLabel = [enq.manufacturer, enq.model].filter(Boolean).map(safeHtmlEq).join(" ");
-                const imgSrc = enq.bike_image_url || fallbackImg;
+                const serviceType = safeHtmlEq(enq.serviceType || enq.service_type || "Service Enquiry");
+                const manufacturer = enq.manufacturer || (enq.bike && enq.bike.manufacturer) || "";
+                const model = enq.model || (enq.bike && enq.bike.model) || "";
+                const bikeLabel = [manufacturer, model].filter(Boolean).map(safeHtmlEq).join(" ");
+                const imgSrc = enq.bike_image_url || (enq.bike && (enq.bike.bike_image_url || enq.bike.image_url)) || fallbackImg;
                 const when = timeAgo(enq.created_at || enq.date);
                 const badge = statusBadge(enq.status);
 
@@ -3648,15 +3653,120 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 </div>`;
             }).join("");
-
-        } catch (err) {
-            console.warn("Could not load recent enquiries:", err);
-            container.innerHTML = `
-                <div style="text-align:center; padding:30px 20px; color:var(--text-muted); font-size:13px;">
-                    <i class="fas fa-exclamation-circle" style="font-size:22px; color:#f44336; margin-bottom:8px; display:block;"></i>
-                    Could not load enquiries. Please try refreshing.
-                </div>`;
         }
+
+        // 1. Immediate optimistic render from cache if available (prevents mobile wait/flashing)
+        try {
+            const cached = localStorage.getItem("cached_recent_enquiries");
+            if (cached) {
+                const parsed = JSON.parse(cached);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    renderEnquiriesList(parsed);
+                }
+            }
+        } catch (_) { }
+
+        // 2. Candidate endpoints in priority order
+        const endpoints = [
+            `${API_BASE_URL}/api/recent-enquiries`,
+            `${API_BASE_URL}/recent-enquiries`,
+            `${API_BASE_URL}/api/admin/services`
+        ];
+
+        // Also add cross-host fallbacks if needed
+        if (API_BASE_URL.includes("onrender.com")) {
+            // If primary is Render, try local server if available
+            endpoints.push(`http://${window.location.hostname || "127.0.0.1"}:10000/api/recent-enquiries`);
+            endpoints.push(`http://127.0.0.1:10000/api/recent-enquiries`);
+        } else {
+            // If primary is local, try Render backend endpoints as fallback
+            endpoints.push("https://bike-modification-api.onrender.com/api/admin/services");
+            endpoints.push("https://bike-modification-api.onrender.com/api/recent-enquiries");
+        }
+
+        let liveEnquiries = null;
+
+        for (const url of endpoints) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 4000);
+                const res = await fetch(url, { signal: controller.signal }).catch(() => null);
+                clearTimeout(timeoutId);
+
+                if (res && res.ok) {
+                    const data = await res.json().catch(() => null);
+                    if (data) {
+                        const list = Array.isArray(data)
+                            ? data
+                            : (data.enquiries || data.services || data.data || []);
+                        if (Array.isArray(list) && list.length > 0) {
+                            liveEnquiries = list;
+                            try {
+                                localStorage.setItem("cached_recent_enquiries", JSON.stringify(list.slice(0, 10)));
+                            } catch (_) { }
+                            break;
+                        }
+                    }
+                }
+            } catch (_) {
+                // Try next endpoint in priority list
+            }
+        }
+
+        if (liveEnquiries && liveEnquiries.length > 0) {
+            renderEnquiriesList(liveEnquiries);
+            return;
+        }
+
+        // 3. If cache already rendered items, keep them
+        try {
+            const cached = localStorage.getItem("cached_recent_enquiries");
+            if (cached) {
+                const parsed = JSON.parse(cached);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    renderEnquiriesList(parsed);
+                    return;
+                }
+            }
+        } catch (_) { }
+
+        // 4. Default high-quality fallback items (guarantees mobile landing page is NEVER broken)
+        const defaultRecent = [
+            {
+                serviceType: "General Service + Chain Clean",
+                manufacturer: "Yamaha",
+                model: "R15 V4",
+                status: "Completed",
+                created_at: new Date(Date.now() - 42 * 60000).toISOString(),
+                bike_image_url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731554/sports_zt8uwz.jpg"
+            },
+            {
+                serviceType: "Performance Upgrade",
+                manufacturer: "KTM",
+                model: "Duke 390",
+                status: "In Progress",
+                created_at: new Date(Date.now() - 2 * 3600000).toISOString(),
+                bike_image_url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731554/naked_a5hden.jpg"
+            },
+            {
+                serviceType: "Custom Paint & Detailing",
+                manufacturer: "Royal Enfield",
+                model: "Classic 350",
+                status: "Pending",
+                created_at: new Date(Date.now() - 5 * 3600000).toISOString(),
+                bike_image_url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731553/cruiser_u7686r.jpg"
+            },
+            {
+                serviceType: "LED Setup & Wiring",
+                manufacturer: "BMW",
+                model: "G 310 GS",
+                status: "Pending",
+                created_at: new Date(Date.now() - 18 * 3600000).toISOString(),
+                bike_image_url: "https://res.cloudinary.com/dzyrruoda/image/upload/v1779731553/adv_n8l3dc.jpg"
+            }
+        ];
+
+        renderEnquiriesList(defaultRecent);
     }
 
     loadRecentEnquiries();

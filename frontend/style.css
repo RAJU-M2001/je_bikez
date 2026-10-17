@@ -691,6 +691,8 @@ html.auth-logged-out #profileContainer {
     color: var(--accent);
     font-size: 14px;
     font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: all var(--transition);
 }
 

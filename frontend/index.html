@@ -425,7 +425,7 @@
                             <h2 class="section-title"
                                 style="margin:0; flex-grow: 1; min-width: 0; word-wrap: break-word;">POPULAR SERVICES
                             </h2>
-                            <a href="#" class="view-all-btn"
+                            <a href="service.html" class="view-all-btn"
                                 style="color: var(--accent); white-space: nowrap; flex-shrink: 0; margin-left: 10px;">View
                                 All</a>
                         </div>
@@ -543,79 +543,20 @@
                     <!-- Recent Enquiries -->
                     <div class="panel-box enquiries-panel">
                         <div class="section-header"
-                            style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 10px;">
                             <h2 class="section-title" style="margin:0;">RECENT ENQUIRIES</h2>
-                            <a href="#" class="view-all-btn" style="color: var(--accent);">View All</a>
+                            <a href="service.html" class="view-all-btn"
+                                style="color: var(--accent); white-space: nowrap; flex-shrink: 0;">View All</a>
                         </div>
-                        <div class="enquiries-list">
-                            <div class="enquiry-item"
-                                style="display: flex; justify-content: space-between; background: var(--bg-tertiary); margin-bottom: 10px; border-radius: 8px;">
-                                <div class="enquiry-left" style="display: flex; gap: 10px; align-items: center;">
-                                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5393_z5ifnq.jpg"
-                                        class="enquiry-img">
-                                    <div class="enquiry-info">
-                                        <h5 style="margin:0; font-size: 13px;">Modification Suggestion</h5>
-                                        <p style="margin:0; font-size: 11px; color: #888;">For Royal Enfield Classic 350
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="enquiry-right"
-                                    style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
-                                    <span class="enquiry-time" style="font-size: 11px; color: #888;">2h ago</span>
-                                    <span class="enquiry-badge new"
-                                        style="background: var(--accent); color: black; font-size: 10px; padding: 2px 6px; border-radius: 4px;">New</span>
-                                </div>
-                            </div>
-                            <div class="enquiry-item"
-                                style="display: flex; justify-content: space-between; background: var(--bg-tertiary); margin-bottom: 10px; border-radius: 8px;">
-                                <div class="enquiry-left" style="display: flex; gap: 10px; align-items: center;">
-                                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1779904142/IMG_5391_rk4ebp.jpg"
-                                        class="enquiry-img">
-                                    <div class="enquiry-info">
-                                        <h5 style="margin:0; font-size: 13px;">Performance Upgrade</h5>
-                                        <p style="margin:0; font-size: 11px; color: #888;">For KTM Duke 200</p>
-                                    </div>
-                                </div>
-                                <div class="enquiry-right"
-                                    style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
-                                    <span class="enquiry-time" style="font-size: 11px; color: #888;">5h ago</span>
-                                    <span class="enquiry-badge new"
-                                        style="background: var(--accent); color: black; font-size: 10px; padding: 2px 6px; border-radius: 4px;">New</span>
-                                </div>
-                            </div>
-                            <div class="enquiry-item"
-                                style="display: flex; justify-content: space-between; background: var(--bg-tertiary); margin-bottom: 10px; border-radius: 8px;">
-                                <div class="enquiry-left" style="display: flex; gap: 10px; align-items: center;">
-                                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1779731554/sports_zt8uwz.jpg"
-                                        class="enquiry-img">
-                                    <div class="enquiry-info">
-                                        <h5 style="margin:0; font-size: 13px;">Custom Paint</h5>
-                                        <p style="margin:0; font-size: 11px; color: #888;">For Yamaha R15 V4</p>
-                                    </div>
-                                </div>
-                                <div class="enquiry-right"
-                                    style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
-                                    <span class="enquiry-time" style="font-size: 11px; color: #888;">1d ago</span>
-                                    <span class="enquiry-badge replied"
-                                        style="background: #333; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px;">Replied</span>
-                                </div>
-                            </div>
-                            <div class="enquiry-item"
-                                style="display: flex; justify-content: space-between; background: var(--bg-tertiary); margin-bottom: 10px; border-radius: 8px;">
-                                <div class="enquiry-left" style="display: flex; gap: 10px; align-items: center;">
-                                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1779731553/adv_n8l3dc.jpg"
-                                        class="enquiry-img">
-                                    <div class="enquiry-info">
-                                        <h5 style="margin:0; font-size: 13px;">LED Setup</h5>
-                                        <p style="margin:0; font-size: 11px; color: #888;">For Apache RTR 160 4V</p>
-                                    </div>
-                                </div>
-                                <div class="enquiry-right"
-                                    style="display: flex; flex-direction: column; align-items: flex-end; gap: 5px;">
-                                    <span class="enquiry-time" style="font-size: 11px; color: #888;">2d ago</span>
-                                    <span class="enquiry-badge replied"
-                                        style="background: #333; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px;">Replied</span>
-                                </div>
+                        <!-- Dynamic list — populated by script.js loadRecentEnquiries() -->
+                        <div class="enquiries-list" id="recentEnquiriesList"
+                            style="max-height: 320px; overflow-y: auto; padding-right: 4px; scrollbar-width: thin; scrollbar-color: var(--accent) transparent;">
+                            <!-- Loading skeleton -->
+                            <div id="enquiriesLoader"
+                                style="text-align:center; padding: 30px 0; color: var(--text-muted); font-size:13px;">
+                                <i class="fas fa-spinner fa-spin"
+                                    style="font-size:20px; color:var(--accent); margin-bottom:8px; display:block;"></i>
+                                Loading enquiries...
                             </div>
                         </div>
                     </div>

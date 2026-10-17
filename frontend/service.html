@@ -439,6 +439,25 @@
                             <label for="dateInput"><i class="fas fa-clock"></i> Preferred Date</label>
                             <input type="date" id="dateInput" name="date" required />
                         </div>
+                        <div class="svc-field" style="margin-top:16px;">
+                            <label for="registerNumber"><i class="fas fa-id-card"></i> Register Number <span
+                                    style="font-size:0.78em;color:#aaa;font-weight:400;">(Optional)</span></label>
+                            <input type="text" id="registerNumber" name="registerNumber"
+                                placeholder="e.g. TN01AB1234" />
+                        </div>
+                        <div class="svc-field" style="margin-top:16px;">
+                            <label><i class="fas fa-camera"></i> Bike Image <span
+                                    style="font-size:0.78em;color:#aaa;font-weight:400;">(Optional – for mechanic
+                                    reference)</span></label>
+                            <label for="bikeImageInput" id="bikeImageLabel" class="svc-img-upload-label">
+                                <i class="fas fa-upload"></i>
+                                <span id="bikeImageName">Click to upload bike photo</span>
+                            </label>
+                            <input type="file" id="bikeImageInput" accept="image/*" style="display:none;" />
+                            <div id="bikeImagePreview" class="svc-img-preview">
+                                <img id="bikePreviewImg" src="" alt="Bike preview" />
+                            </div>
+                        </div>
                         <button type="submit" class="svc-submit-btn" id="bookServiceBtn">
                             <i class="fas fa-paper-plane"></i> Book Service
                         </button>
@@ -479,6 +498,7 @@
                         <tr>
                             <th>Date</th>
                             <th>Bike</th>
+                            <th>Reg. No.</th>
                             <th>Service(s)</th>
                             <th>Status</th>
                         </tr>
@@ -524,7 +544,7 @@
             // Service Booking Handler
             const bookForm = document.getElementById("bookServiceForm");
             if (bookForm) {
-                bookForm.addEventListener("submit", function (e) {
+                bookForm.addEventListener("submit", async function (e) {
                     e.preventDefault();
 
                     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -543,6 +563,28 @@
                     const userId = localStorage.getItem("currentUserId");
                     const submitBtn = document.getElementById("bookServiceBtn");
                     const resDiv = document.getElementById("bookingResult");
+
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Booking...';
+                    }
+
+                    // Optional: upload bike image first
+                    let bikeImageUrl = null;
+                    const bikeImageFile = document.getElementById("bikeImageInput").files[0];
+                    if (bikeImageFile) {
+                        try {
+                            const fd = new FormData();
+                            fd.append("file", bikeImageFile);
+                            fd.append("type", "service");
+                            const uploadRes = await fetch(API + "/api/admin/upload", { method: "POST", body: fd });
+                            const uploadData = await uploadRes.json();
+                            if (uploadData.success) bikeImageUrl = uploadData.url;
+                        } catch (_) { /* image upload failed silently, proceed without */ }
+                    }
+
+                    const registerNumber = (document.getElementById("registerNumber").value || "").trim();
+
                     const payload = {
                         user_id: userId || "demo-user",
                         manufacturer: document.getElementById("manufacturer").value,
@@ -552,13 +594,10 @@
                         cc: document.getElementById("cc").value,
                         serviceType: document.getElementById("serviceType").value,
                         date: document.getElementById("dateInput").value,
-                        status: "Pending"
+                        status: "Pending",
+                        ...(registerNumber && { register_number: registerNumber }),
+                        ...(bikeImageUrl && { bike_image_url: bikeImageUrl })
                     };
-
-                    if (submitBtn) {
-                        submitBtn.disabled = true;
-                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Booking...';
-                    }
 
                     fetch(API + "/api/book-service", {
                         method: "POST",
@@ -572,6 +611,8 @@
                                     resDiv.innerHTML = '<div class="svc-alert success" style="margin-top:15px;padding:12px;border-radius:8px;background:#e6fffa;color:#047857;border:1px solid #a7f3d0;text-align:center;">' + (data.message || 'Service booked successfully!') + '</div>';
                                 }
                                 bookForm.reset();
+                                document.getElementById("bikeImagePreview").style.display = "none";
+                                document.getElementById("bikeImageName").textContent = "Click to upload bike photo";
                                 loadHistory();
                             } else {
                                 if (resDiv) {
@@ -590,6 +631,25 @@
                                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Book Service';
                             }
                         });
+                });
+            }
+
+            // Bike image preview wiring
+            const bikeImgInput = document.getElementById("bikeImageInput");
+            if (bikeImgInput) {
+                bikeImgInput.addEventListener("change", function () {
+                    const file = this.files[0];
+                    const preview = document.getElementById("bikeImagePreview");
+                    const previewImg = document.getElementById("bikePreviewImg");
+                    const nameSpan = document.getElementById("bikeImageName");
+                    if (file) {
+                        nameSpan.textContent = file.name;
+                        previewImg.src = URL.createObjectURL(file);
+                        preview.style.display = "block";
+                    } else {
+                        nameSpan.textContent = "Click to upload bike photo";
+                        preview.style.display = "none";
+                    }
                 });
             }
 
@@ -636,6 +696,7 @@
                                     <tr>
                                         <td>${item.date ? new Date(item.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}</td>
                                         <td>${item.manufacturer || ''} ${item.model || ''} (${item.variant || ''})</td>
+                                        <td>${item.register_number ? `<span style="font-weight:600;">${item.register_number}</span>` : '<span style="color:#aaa;">—</span>'}</td>
                                         <td>${item.serviceType || 'General Service'}</td>
                                         <td><span class="svc-status ${(item.status || '').toLowerCase() === 'completed' ? 'completed' : 'pending'}">${item.status || 'Pending'}</span></td>
                                     </tr>

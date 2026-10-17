@@ -3558,4 +3558,106 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     loadLandingPageBuildsAndSales();
+
+
+    // ========================================================
+    // LANDING PAGE: RECENT ENQUIRIES FROM SERVICE-BOOKING API
+    // ========================================================
+    async function loadRecentEnquiries() {
+        const container = document.getElementById("recentEnquiriesList");
+        if (!container) return;
+
+        const fallbackImg = "https://res.cloudinary.com/dzyrruoda/image/upload/v1779903176/IMG_5389_gcrjn8.jpg";
+
+        function safeHtmlEq(str) {
+            if (!str) return "";
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function timeAgo(isoStr) {
+            if (!isoStr) return "";
+            const now = new Date();
+            const then = new Date(isoStr);
+            const diffMs = now - then;
+            const diffMins = Math.floor(diffMs / 60000);
+            if (diffMins < 1) return "Just now";
+            if (diffMins < 60) return `${diffMins}m ago`;
+            const diffHrs = Math.floor(diffMins / 60);
+            if (diffHrs < 24) return `${diffHrs}h ago`;
+            const diffDays = Math.floor(diffHrs / 24);
+            if (diffDays < 30) return `${diffDays}d ago`;
+            return then.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+        }
+
+        function statusBadge(status) {
+            const s = (status || "Pending").toLowerCase();
+            if (s === "completed" || s === "done") {
+                return `<span style="background:#1e4d2b; color:#4caf50; font-size:10px; padding:2px 7px; border-radius:4px; font-weight:600;">Completed</span>`;
+            }
+            if (s === "in progress" || s === "in-progress") {
+                return `<span style="background:#1a2e4a; color:#2196f3; font-size:10px; padding:2px 7px; border-radius:4px; font-weight:600;">In Progress</span>`;
+            }
+            if (s === "cancelled") {
+                return `<span style="background:#2d1a1a; color:#f44336; font-size:10px; padding:2px 7px; border-radius:4px; font-weight:600;">Cancelled</span>`;
+            }
+            // Pending / default → accent "New"
+            return `<span style="background:var(--accent); color:black; font-size:10px; padding:2px 7px; border-radius:4px; font-weight:600;">Pending</span>`;
+        }
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/recent-enquiries`).catch(() => null);
+            if (!res || !res.ok) throw new Error("Failed to fetch enquiries");
+
+            const data = await res.json();
+            const enquiries = Array.isArray(data.enquiries) ? data.enquiries : [];
+
+            if (enquiries.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:40px 20px; color:var(--text-muted); font-size:13px;">
+                        <i class="fas fa-clipboard-list" style="font-size:28px; color:var(--accent); margin-bottom:10px; display:block;"></i>
+                        No service bookings yet.<br>
+                        <a href="service.html" style="color:var(--accent); text-decoration:none; font-weight:600; margin-top:8px; display:inline-block;">Book a Service →</a>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = enquiries.map(enq => {
+                const serviceType = safeHtmlEq(enq.serviceType || "Service Enquiry");
+                const bikeLabel = [enq.manufacturer, enq.model].filter(Boolean).map(safeHtmlEq).join(" ");
+                const imgSrc = enq.bike_image_url || fallbackImg;
+                const when = timeAgo(enq.created_at || enq.date);
+                const badge = statusBadge(enq.status);
+
+                return `
+                <div class="enquiry-item" style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-tertiary); margin-bottom:10px; border-radius:8px; padding:10px; gap:10px; transition:background 0.2s;" onmouseover="this.style.background='var(--bg-card)'" onmouseout="this.style.background='var(--bg-tertiary)'">
+                    <div class="enquiry-left" style="display:flex; gap:10px; align-items:center; min-width:0;">
+                        <img src="${imgSrc}" alt="Bike" class="enquiry-img" style="width:40px; height:40px; border-radius:6px; object-fit:cover; flex-shrink:0;" onerror="this.onerror=null;this.src='${fallbackImg}';">
+                        <div class="enquiry-info" style="min-width:0;">
+                            <h5 style="margin:0; font-size:13px; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${serviceType}</h5>
+                            <p style="margin:0; font-size:11px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${bikeLabel ? "For " + bikeLabel : "Service Booking"}</p>
+                        </div>
+                    </div>
+                    <div class="enquiry-right" style="display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0;">
+                        <span style="font-size:11px; color:var(--text-muted);">${when}</span>
+                        ${badge}
+                    </div>
+                </div>`;
+            }).join("");
+
+        } catch (err) {
+            console.warn("Could not load recent enquiries:", err);
+            container.innerHTML = `
+                <div style="text-align:center; padding:30px 20px; color:var(--text-muted); font-size:13px;">
+                    <i class="fas fa-exclamation-circle" style="font-size:22px; color:#f44336; margin-bottom:8px; display:block;"></i>
+                    Could not load enquiries. Please try refreshing.
+                </div>`;
+        }
+    }
+
+    loadRecentEnquiries();
 });

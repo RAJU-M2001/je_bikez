@@ -551,6 +551,8 @@ def get_service_history(user_id):
                 "serviceType": doc.get("serviceType") or doc.get("service_type", ""),
                 "date": date_val or "",
                 "status": doc.get("status", "Pending"),
+                "register_number": doc.get("register_number", ""),
+                "bike_image_url": doc.get("bike_image_url", ""),
                 "bike": bike,
                 "created_at": created_at,
                 "updated_at": updated_at
@@ -583,10 +585,13 @@ def book_service():
     try:
 
         # --------------------------------------------------------
-        # READ JSON BODY
+        # SUPPORT BOTH multipart/form-data AND application/json
         # --------------------------------------------------------
 
-        data = request.get_json(silent=True)
+        if request.content_type and "multipart/form-data" in request.content_type:
+            data = request.form.to_dict()
+        else:
+            data = request.get_json(silent=True)
 
         if not data:
 
@@ -701,6 +706,37 @@ def book_service():
 
             "updated_at": datetime.now(UTC)
         }
+
+        # --------------------------------------------------------
+        # OPTIONAL: REGISTER NUMBER
+        # --------------------------------------------------------
+
+        register_number = str(data.get("register_number") or "").strip()
+        if register_number:
+            booking_data["register_number"] = register_number
+
+        # --------------------------------------------------------
+        # OPTIONAL: BIKE IMAGE (URL already uploaded by frontend)
+        # OR file sent directly as multipart
+        # --------------------------------------------------------
+
+        bike_image_url = str(data.get("bike_image_url") or "").strip()
+
+        if not bike_image_url and "bike_image" in request.files:
+            img_file = request.files["bike_image"]
+            if img_file and img_file.filename:
+                service_folder = os.getenv(
+                    "CLOUDINARY_SERVICE", "je-bikez/book-service"
+                )
+                upload_result = cloudinary.uploader.upload(
+                    img_file,
+                    folder=service_folder,
+                    resource_type="image"
+                )
+                bike_image_url = upload_result.get("secure_url", "")
+
+        if bike_image_url:
+            booking_data["bike_image_url"] = bike_image_url
 
 
         # --------------------------------------------------------
@@ -882,6 +918,8 @@ def admin_upload_image():
         upload_type = (request.form.get("type") or request.args.get("type", "build")).lower().strip()
         if "sale" in upload_type:
             folder = os.getenv("CLOUDINARY_SALES", "je-bikez/sales")
+        elif "service" in upload_type:
+            folder = os.getenv("CLOUDINARY_SERVICE", "je-bikez/book-service")
         else:
             folder = os.getenv("CLOUDINARY_BUILD", "je-bikez/build")
 
@@ -1141,6 +1179,40 @@ def admin_update_sale_booking_status(booking_id):
         return jsonify({"success": True, "message": "Booking status updated successfully", "status": new_status}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+
+
+# ============================================================
+# 📋 RECENT ENQUIRIES API (PUBLIC - for landing page)
+# ============================================================
+@app.route("/api/recent-enquiries", methods=["GET"], strict_slashes=False)
+def recent_enquiries():
+    try:
+        bookings = list(service_booking_collection.find().sort("_id", -1))
+        result = []
+        for doc in bookings:
+            bike = doc.get("bike") if isinstance(doc.get("bike"), dict) else {}
+            manufacturer = doc.get("manufacturer") or bike.get("manufacturer", "")
+            model = doc.get("model") or bike.get("model", "")
+            service_type = doc.get("serviceType") or doc.get("service_type", "Service Enquiry")
+            date_val = doc.get("date", "")
+            created_at = doc.get("created_at")
+            if isinstance(created_at, datetime):
+                created_at = created_at.isoformat()
+            bike_image_url = doc.get("bike_image_url", "")
+            status = doc.get("status", "Pending")
+            result.append({
+                "booking_id": str(doc.get("_id")),
+                "serviceType": service_type,
+                "manufacturer": manufacturer,
+                "model": model,
+                "bike_image_url": bike_image_url,
+                "date": str(date_val),
+                "status": status,
+                "created_at": created_at
+            })
+        return jsonify({"success": True, "enquiries": result, "total": len(result)}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e), "enquiries": []}), 500
 
 
 # ============================================================

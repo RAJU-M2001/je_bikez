@@ -129,20 +129,24 @@ html.auth-logged-out #profileContainer {
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 115px 25px 65px;
-    background: linear-gradient(180deg, #fff3e8 0%, #ffd9b5 100%);
+    padding: 100px 40px 60px;
+    background: linear-gradient(135deg, #fff5ed 0%, #ffe0c2 40%, #ffc89a 100%);
     width: 100%;
     box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
 }
 
 .hero-content {
-    max-width: 960px;
+    max-width: 680px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 .section-badge {
@@ -150,34 +154,35 @@ html.auth-logged-out #profileContainer {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 8px 22px;
-    border: 1px solid rgba(255, 102, 0, 0.4);
+    padding: 6px 18px;
+    border: 1px solid rgba(255, 102, 0, 0.2);
     border-radius: 50px;
-    color: #ff6500;
-    background: rgba(255, 255, 255, 0.5);
-    font-size: 13.5px;
+    color: var(--accent, #ff6600);
+    background: rgba(255, 102, 0, 0.1);
+    font-size: 0.85rem;
     font-weight: 700;
     margin: 0 auto 18px auto;
 }
 
 .hero-content h1 {
-    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
     font-weight: 800;
-    color: #171c2b;
-    margin-bottom: 16px;
-    line-height: 1.25;
+    color: #1a1a2e;
+    margin-bottom: 14px;
+    line-height: 1.15;
     width: 100%;
 }
 
 .hero-content h1 span {
-    color: #ff6500;
+    color: var(--accent, #ff6600);
 }
 
 .hero-content p {
-    max-width: 720px;
-    margin: 0 auto;
-    color: #556070;
-    font-size: 16px;
+    font-size: 1.05rem;
+    color: #555570;
+    max-width: 540px;
+    margin: 0 auto 28px;
     line-height: 1.6;
     width: 100%;
 }

@@ -3406,6 +3406,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // --- 1. FETCH & RENDER BUILDS ---
         if (buildsContainer) {
+            buildsContainer.innerHTML = `
+                <div class="builds-loader-placeholder" style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 10px; color: var(--text-muted); text-align: center;">
+                    <i class="fas fa-circle-notch fa-spin" style="font-size: 24px; color: var(--accent); margin-bottom: 8px;"></i>
+                    <p style="margin: 0; font-size: 12px; color: var(--text-muted); font-weight: 500;">Loading custom builds...</p>
+                </div>
+            `;
             try {
                 // Try /build, fallback to /api/builds or /api/build
                 let res = await fetch(`${API_BASE_URL}/build`).catch(() => null);
@@ -3494,6 +3500,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // --- 2. FETCH & RENDER SALES ---
         if (salesContainer) {
+            salesContainer.innerHTML = `
+                <div class="sales-loader-placeholder" style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 10px; color: var(--text-muted); text-align: center;">
+                    <i class="fas fa-circle-notch fa-spin" style="font-size: 24px; color: var(--accent); margin-bottom: 8px;"></i>
+                    <p style="margin: 0; font-size: 12px; color: var(--text-muted); font-weight: 500;">Loading certified sales...</p>
+                </div>
+            `;
             try {
                 // Try /sales, fallback to /api/sales or /api/sale
                 let res = await fetch(`${API_BASE_URL}/sales`).catch(() => null);
@@ -3656,15 +3668,26 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // 1. Immediate optimistic render from cache if available (prevents mobile wait/flashing)
+        let hasCachedEnquiries = false;
         try {
             const cached = localStorage.getItem("cached_recent_enquiries");
             if (cached) {
                 const parsed = JSON.parse(cached);
                 if (Array.isArray(parsed) && parsed.length > 0) {
                     renderEnquiriesList(parsed);
+                    hasCachedEnquiries = true;
                 }
             }
         } catch (_) { }
+
+        if (!hasCachedEnquiries) {
+            container.innerHTML = `
+                <div id="enquiriesLoader" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 35px 10px; color: var(--text-muted); font-size: 12px; text-align: center;">
+                    <i class="fas fa-circle-notch fa-spin" style="font-size: 22px; color: var(--accent); margin-bottom: 8px;"></i>
+                    <span style="font-weight: 500;">Loading recent enquiries...</span>
+                </div>
+            `;
+        }
 
         // 2. Candidate endpoints in priority order
         const endpoints = [

@@ -296,6 +296,13 @@
                             <a href="builds.html" class="view-all-btn" style="color: var(--accent);">View All</a>
                         </div>
                         <div class="builds-grid" id="landingBuildsGrid">
+                            <div class="builds-loader-placeholder"
+                                style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 10px; color: var(--text-muted); text-align: center;">
+                                <i class="fas fa-circle-notch fa-spin"
+                                    style="font-size: 24px; color: var(--accent); margin-bottom: 8px;"></i>
+                                <p style="margin: 0; font-size: 12px; color: var(--text-muted); font-weight: 500;">
+                                    Loading custom builds...</p>
+                            </div>
                             <!-- HARDCODED BUILDS (COMMENTED OUT - LOADED DYNAMICALLY VIA GET /build OR /api/builds)
                             <div class="build-card"
                                 style="background: var(--bg-tertiary); border-radius: 8px; overflow: hidden;">
@@ -472,6 +479,13 @@
                             <a href="sales.html" class="view-all-btn" style="color: var(--accent);">View All</a>
                         </div>
                         <div class="sales-grid" id="landingSalesGrid">
+                            <div class="sales-loader-placeholder"
+                                style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 10px; color: var(--text-muted); text-align: center;">
+                                <i class="fas fa-circle-notch fa-spin"
+                                    style="font-size: 24px; color: var(--accent); margin-bottom: 8px;"></i>
+                                <p style="margin: 0; font-size: 12px; color: var(--text-muted); font-weight: 500;">
+                                    Loading certified sales...</p>
+                            </div>
                             <!-- HARDCODED SALES (COMMENTED OUT - LOADED DYNAMICALLY VIA GET /sales OR /api/sales)
                             <div class="bike-sale-card"
                                 style="background: var(--bg-tertiary); border-radius: 8px; overflow: hidden;">
@@ -553,10 +567,10 @@
                             style="max-height: 320px; overflow-y: auto; padding-right: 4px; scrollbar-width: thin; scrollbar-color: var(--accent) transparent;">
                             <!-- Loading skeleton -->
                             <div id="enquiriesLoader"
-                                style="text-align:center; padding: 30px 0; color: var(--text-muted); font-size:13px;">
-                                <i class="fas fa-spinner fa-spin"
-                                    style="font-size:20px; color:var(--accent); margin-bottom:8px; display:block;"></i>
-                                Loading enquiries...
+                                style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 35px 10px; color: var(--text-muted); font-size: 12px; text-align: center;">
+                                <i class="fas fa-circle-notch fa-spin"
+                                    style="font-size: 22px; color: var(--accent); margin-bottom: 8px;"></i>
+                                <span style="font-weight: 500;">Loading recent enquiries...</span>
                             </div>
                         </div>
                     </div>

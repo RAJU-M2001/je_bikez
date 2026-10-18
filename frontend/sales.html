@@ -341,7 +341,13 @@
         </div>
 
         <div class="sales-bikes-grid" id="salesGrid">
-            <!-- Cards populated dynamically via JS for full interactive sync -->
+            <div class="sales-loader-placeholder"
+                style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: var(--text-muted, #7a8ba0); text-align: center;">
+                <i class="fas fa-circle-notch fa-spin"
+                    style="font-size: 28px; color: var(--accent, #f5a623); margin-bottom: 12px;"></i>
+                <p style="font-size: 13px; margin: 0; color: var(--text-muted, #888); font-weight: 500;">Loading
+                    certified motorcycles...</p>
+            </div>
         </div>
     </main>
 
@@ -1076,6 +1082,15 @@
         });
 
         async function fetchDynamicSales() {
+            const grid = document.getElementById("salesGrid");
+            if (grid && (!salesBikesData || salesBikesData.length === 0)) {
+                grid.innerHTML = `
+                    <div class="sales-loader-placeholder" style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: var(--text-muted, #7a8ba0); text-align: center;">
+                        <i class="fas fa-circle-notch fa-spin" style="font-size: 28px; color: var(--accent, #f5a623); margin-bottom: 12px;"></i>
+                        <p style="font-size: 13px; margin: 0; color: var(--text-muted, #888); font-weight: 500;">Loading certified motorcycles...</p>
+                    </div>
+                `;
+            }
             try {
                 const res = await fetch(`${API_URL}/api/sales`);
                 const data = await res.json();
@@ -1101,7 +1116,6 @@
         }
 
         // Initialize
-        renderSalesBikes("all");
         fetchDynamicSales();
     </script>
 

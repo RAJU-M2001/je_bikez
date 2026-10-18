@@ -645,6 +645,202 @@
         ];
         */
 
+        // Helper: extract video platform metadata (Instagram Reel, YouTube Short, YouTube, Direct video, etc.)
+        function getVideoPlatformInfo(url) {
+            if (!url) return null;
+            let str = String(url).trim();
+            if (!str) return null;
+            if (!/^https?:\/\//i.test(str) && (str.includes('instagram.com') || str.includes('youtube.com') || str.includes('youtu.be'))) {
+                str = 'https://' + str;
+            }
+
+            // 1. Instagram Reel, Post, or IGTV
+            const igMatch = str.match(/instagram\.com\/(reel|reels|p|tv)\/([A-Za-z0-9_-]+)/i);
+            if (igMatch) {
+                const type = igMatch[1].toLowerCase() === 'p' ? 'p' : 'reel';
+                const shortcode = igMatch[2];
+                return {
+                    platform: 'instagram',
+                    label: 'Instagram Reel Showcase',
+                    badgeLabel: 'Reel',
+                    icon: 'fab fa-instagram',
+                    iconColor: '#E1306C',
+                    embedUrl: 'https://www.instagram.com/' + type + '/' + shortcode + '/embed/',
+                    isVertical: true,
+                    rawUrl: str
+                };
+            }
+
+            // 2. YouTube Shorts or standard YouTube
+            let ytId = null;
+            let isShort = false;
+            try {
+                const u = new URL(str);
+                if (u.hostname.includes('youtube.com') || u.hostname === 'youtu.be') {
+                    if (u.pathname.includes('/shorts/')) {
+                        const parts = u.pathname.split('/shorts/')[1].split('/')[0].split('?')[0];
+                        ytId = parts;
+                        isShort = true;
+                    } else if (u.hostname === 'youtu.be') {
+                        ytId = u.pathname.slice(1).split('/')[0].split('?')[0];
+                    } else if (u.searchParams.get('v')) {
+                        ytId = u.searchParams.get('v');
+                    } else if (u.pathname.startsWith('/embed/')) {
+                        ytId = u.pathname.split('/embed/')[1].split('/')[0].split('?')[0];
+                    }
+                }
+            } catch (e) {
+                const ytMatch = str.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/i);
+                if (ytMatch) {
+                    ytId = ytMatch[1];
+                    isShort = str.includes('/shorts/');
+                }
+            }
+
+            if (ytId) {
+                return {
+                    platform: isShort ? 'youtube-short' : 'youtube',
+                    label: isShort ? 'YouTube Short Showcase' : 'YouTube Video Showcase',
+                    badgeLabel: isShort ? 'Short' : 'Video',
+                    icon: 'fab fa-youtube',
+                    iconColor: '#ff3333',
+                    embedUrl: 'https://www.youtube.com/embed/' + ytId,
+                    isVertical: isShort,
+                    rawUrl: str
+                };
+            }
+
+            // 3. Direct Video file (MP4, WebM, OGG, or Cloudinary /video/)
+            if (/\.(mp4|webm|ogg)(\?|$)/i.test(str) || str.includes('/video/upload/')) {
+                return {
+                    platform: 'direct',
+                    label: 'Modification Video',
+                    badgeLabel: 'Video',
+                    icon: 'fas fa-play-circle',
+                    iconColor: '#ff3333',
+                    embedUrl: null,
+                    isVertical: false,
+                    rawUrl: str
+                };
+            }
+
+            // 4. Fallback / other video link
+            return {
+                platform: 'other',
+                label: 'Modification Video',
+                badgeLabel: 'Video',
+                icon: 'fas fa-external-link-alt',
+                iconColor: '#ff3333',
+                embedUrl: null,
+                isVertical: false,
+                rawUrl: str
+            };
+        }
+
+        // Helper: render video button badge on build card
+        function renderVideoBadge(videoUrl) {
+            if (!videoUrl) return '';
+            const info = getVideoPlatformInfo(videoUrl);
+            if (!info) return '';
+            const isIg = info.platform === 'instagram';
+            const bg = isIg ? 'rgba(225,48,108,0.12)' : 'rgba(255,0,0,0.12)';
+            const border = isIg ? 'rgba(225,48,108,0.25)' : 'rgba(255,0,0,0.2)';
+            const color = info.iconColor;
+            return '<a href="' + info.rawUrl + '" target="_blank" rel="noopener" onclick="event.stopPropagation();" style="display:inline-flex;align-items:center;gap:5px;background:' + bg + ';color:' + color + ';border:1px solid ' + border + ';border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;text-decoration:none;transition:all .2s;" onmouseover="this.style.opacity=\'0.85\'" onmouseout="this.style.opacity=\'1\'"><i class="' + info.icon + '"></i> ' + info.badgeLabel + '</a>';
+        }
+
+        // Helper: build the video showcase HTML for the modal
+        function buildVideoShowcaseHtml(videoUrl) {
+            if (!videoUrl) return '';
+            const info = getVideoPlatformInfo(videoUrl);
+            if (!info) return '';
+
+            const header = `
+                <div style="display:flex; align-items:center; justify-content:space-between; padding: 12px 16px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); border-bottom: 1px solid rgba(255,255,255,0.06);">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <i class="${info.icon}" style="font-size:18px; color:${info.iconColor};"></i>
+                        <span style="font-size:14px; font-weight:600; color:var(--text-primary, #fff);">${info.label}</span>
+                    </div>
+                    <a href="${info.rawUrl}" target="_blank" rel="noopener" style="font-size:12px; color:var(--text-muted, #9ca3af); text-decoration:none; display:inline-flex; align-items:center; gap:5px; transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-muted, #9ca3af)'">
+                        <span>Open Link</span> <i class="fas fa-external-link-alt" style="font-size:10px;"></i>
+                    </a>
+                </div>
+            `;
+
+            let content = '';
+
+            if (info.platform === 'instagram') {
+                content = `
+                    <div style="padding: 16px; background: rgba(0,0,0,0.3); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <div style="width:100%; max-width:380px; height:500px; border-radius:12px; overflow:hidden; background:#000; box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+                            <iframe src="${info.embedUrl}" 
+                                style="width:100%; height:100%; border:none; display:block;" 
+                                frameborder="0" 
+                                scrolling="no" 
+                                allowtransparency="true" 
+                                allow="encrypted-media">
+                            </iframe>
+                        </div>
+                        <div style="margin-top:14px; text-align:center;">
+                            <a href="${info.rawUrl}" target="_blank" rel="noopener" 
+                               style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color:#fff; text-decoration:none; padding:9px 20px; border-radius:24px; font-weight:600; font-size:13px; box-shadow:0 4px 14px rgba(225,48,108,0.35); transition:transform .2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                                <i class="fab fa-instagram" style="font-size:15px;"></i> Watch Reel on Instagram <i class="fas fa-external-link-alt" style="font-size:10px;"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            } else if (info.platform === 'youtube-short') {
+                content = `
+                    <div style="padding: 16px; background: rgba(0,0,0,0.3); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                        <div style="width:100%; max-width:340px; height:540px; border-radius:12px; overflow:hidden; background:#000; box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+                            <iframe src="${info.embedUrl}" 
+                                style="width:100%; height:100%; border:none;" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        <div style="margin-top:14px; text-align:center;">
+                            <a href="${info.rawUrl}" target="_blank" rel="noopener" 
+                               style="display:inline-flex; align-items:center; gap:8px; background:#ff0000; color:#fff; text-decoration:none; padding:9px 20px; border-radius:24px; font-weight:600; font-size:13px; box-shadow:0 4px 14px rgba(255,0,0,0.35); transition:transform .2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                                <i class="fab fa-youtube" style="font-size:15px;"></i> Watch Short on YouTube <i class="fas fa-external-link-alt" style="font-size:10px;"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            } else if (info.platform === 'youtube') {
+                content = `
+                    <div style="position:relative; width:100%; padding-bottom:56.25%; height:0; overflow:hidden; background:#000;">
+                        <iframe src="${info.embedUrl}" 
+                            style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                `;
+            } else if (info.platform === 'direct') {
+                content = `
+                    <div style="background:#000; text-align:center;">
+                        <video controls preload="metadata" playsinline style="width:100%; max-height:440px; display:block;">
+                            <source src="${info.rawUrl}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                `;
+            } else {
+                content = `
+                    <div style="padding:28px 20px; text-align:center; background:rgba(0,0,0,0.2);">
+                        <p style="color:var(--text-muted, #9ca3af); font-size:13px; margin-bottom:14px;">Watch the build modification video via external link:</p>
+                        <a href="${info.rawUrl}" target="_blank" rel="noopener" 
+                           style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,#ff3333,#cc0000); color:white; text-decoration:none; padding:12px 28px; border-radius:8px; font-weight:600; font-size:14px; transition:transform .2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+                            <i class="fas fa-play-circle" style="font-size:18px;"></i> Watch Build Video
+                        </a>
+                    </div>
+                `;
+            }
+
+            return '<div class="build-video-showcase" style="margin: 20px 0; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.25);">' + header + content + '</div>';
+        }
+
         // Current active modal build state
         let currentModalBuild = null;
         let currentGalleryIndex = 0;
@@ -714,9 +910,12 @@
                                 <small>Estimated Investment</small>
                                 ${item.cost}
                             </div>
-                            <button type="button" class="build-view-btn">
-                                <span>Explore</span> <i class="fas fa-arrow-right"></i>
-                            </button>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                ${renderVideoBadge(item.videoUrl)}
+                                <button type="button" class="build-view-btn">
+                                    <span>Explore</span> <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -806,6 +1005,9 @@
                         `).join('')}
                     </div>
                 </div>
+
+                <!-- Video Showcase (only if videoUrl exists) -->
+                ${buildVideoShowcaseHtml(build.videoUrl)}
 
                 <!-- Details & Breakdown -->
                 <div class="build-modal-body-grid">
@@ -944,7 +1146,8 @@
                         categoryLabel: b.categoryLabel || b.category,
                         beforeImg: b.beforeImg || (b.images && b.images[0] && b.images[0].url) || "",
                         afterImg: b.afterImg || (b.images && b.images[0] && b.images[0].url) || "",
-                        likes: b.likes || 0
+                        likes: b.likes || 0,
+                        videoUrl: b.videoUrl || b.video_url || b.videoLink || ""
                     }));
                     buildsData = normalized;
                 } else {

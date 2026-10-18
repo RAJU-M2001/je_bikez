@@ -552,6 +552,7 @@ def get_service_history(user_id):
                 "date": date_val or "",
                 "status": doc.get("status", "Pending"),
                 "register_number": doc.get("register_number", ""),
+                "odo_km": doc.get("odo_km") or doc.get("odoKm") or "",
                 "bike_image_url": doc.get("bike_image_url", ""),
                 "bike": bike,
                 "created_at": created_at,
@@ -708,12 +709,16 @@ def book_service():
         }
 
         # --------------------------------------------------------
-        # OPTIONAL: REGISTER NUMBER
+        # OPTIONAL: REGISTER NUMBER & ODOMETER (KM)
         # --------------------------------------------------------
 
-        register_number = str(data.get("register_number") or "").strip()
+        register_number = str(data.get("register_number") or data.get("registerNumber") or "").strip().upper()
         if register_number:
             booking_data["register_number"] = register_number
+
+        odo_km = str(data.get("odo_km") or data.get("odoKm") or data.get("km") or "").strip()
+        if odo_km:
+            booking_data["odo_km"] = odo_km
 
         # --------------------------------------------------------
         # OPTIONAL: BIKE IMAGE (URL already uploaded by frontend)
@@ -971,6 +976,7 @@ def create_build():
         if not data.get("title"):
             return jsonify({"success": False, "error": "Title is required"}), 400
 
+        data["videoUrl"] = str(data.get("videoUrl") or data.get("video_url") or data.get("videoLink") or "").strip()
         data["created_at"] = datetime.now(UTC)
         data["updated_at"] = datetime.now(UTC)
         result = builds_collection.insert_one(data)
@@ -986,6 +992,8 @@ def update_build(build_id):
     try:
         data = request.get_json(silent=True) or {}
         data.pop("_id", None)
+        if "videoUrl" in data or "video_url" in data or "videoLink" in data:
+            data["videoUrl"] = str(data.get("videoUrl") or data.get("video_url") or data.get("videoLink") or "").strip()
         data["updated_at"] = datetime.now(UTC)
 
         query = {"$or": [{"_id": ObjectId(build_id)} if ObjectId.is_valid(build_id) else None, {"id": build_id}]}
@@ -1123,6 +1131,8 @@ def admin_get_services():
                 "serviceType": doc.get("serviceType") or doc.get("service_type", ""),
                 "date": date_val or "",
                 "status": doc.get("status", "Pending"),
+                "register_number": doc.get("register_number", ""),
+                "odo_km": doc.get("odo_km") or doc.get("odoKm") or "",
                 "bike": bike,
                 "created_at": created_at,
                 "updated_at": updated_at

@@ -69,6 +69,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    if (year && year.options.length <= 8) {
+        const currentYear = new Date().getFullYear();
+        const startYear = Math.max(currentYear + 1, 2026);
+        year.innerHTML = '<option value="">Select Year</option>';
+        for (let y = startYear; y >= 1980; y--) {
+            const opt = document.createElement("option");
+            opt.value = String(y);
+            opt.textContent = String(y);
+            year.appendChild(opt);
+        }
+        const vintageOpt = document.createElement("option");
+        vintageOpt.value = "Pre-1980";
+        vintageOpt.textContent = "Pre-1980 / Vintage";
+        year.appendChild(vintageOpt);
+    }
+
     manufacturer.addEventListener("change", function () {
 
         model.innerHTML = '<option value="">Select Model</option>';
@@ -135,5 +151,129 @@ document.addEventListener("DOMContentLoaded", () => {
     cc.addEventListener("change", function () {
         serviceType.disabled = !this.value;
     });
+
+    // ═══════════════════════════════════════════════════════════
+    // ✨ ENHANCED CUSTOM SELECT WITH ROUNDED OPTION CONTAINER
+    // ═══════════════════════════════════════════════════════════
+    function setupCustomSelect(select) {
+        if (!select || select.dataset.customized === "true") return;
+        select.dataset.customized = "true";
+        select.classList.add("custom-select-native");
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "custom-select-wrapper";
+        select.parentNode.insertBefore(wrapper, select);
+        wrapper.appendChild(select);
+
+        const trigger = document.createElement("div");
+        trigger.className = "custom-select-trigger" + (select.disabled ? " disabled" : "");
+        trigger.setAttribute("tabindex", select.disabled ? "-1" : "0");
+
+        const labelSpan = document.createElement("span");
+        labelSpan.className = "custom-select-label";
+
+        const arrow = document.createElement("span");
+        arrow.className = "custom-select-arrow";
+        arrow.innerHTML = `<i class="fas fa-chevron-down"></i>`;
+
+        trigger.appendChild(labelSpan);
+        trigger.appendChild(arrow);
+        wrapper.appendChild(trigger);
+
+        const dropdown = document.createElement("div");
+        dropdown.className = "custom-select-dropdown";
+        wrapper.appendChild(dropdown);
+
+        function syncFromSelect() {
+            trigger.className = "custom-select-trigger" + (select.disabled ? " disabled" : "");
+            trigger.setAttribute("tabindex", select.disabled ? "-1" : "0");
+
+            const selectedOpt = select.options[select.selectedIndex];
+            labelSpan.textContent = selectedOpt ? selectedOpt.textContent : "Select Option";
+
+            dropdown.innerHTML = "";
+            Array.from(select.options).forEach(opt => {
+                const optDiv = document.createElement("div");
+                optDiv.className = "custom-select-option";
+                if (!opt.value) optDiv.classList.add("placeholder");
+                if (opt.value === select.value && opt.value !== "") {
+                    optDiv.classList.add("selected");
+                }
+                optDiv.textContent = opt.textContent;
+
+                optDiv.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    if (select.value !== opt.value) {
+                        select.value = opt.value;
+                        select.dispatchEvent(new Event("change", { bubbles: true }));
+                    }
+                    wrapper.classList.remove("open");
+                    syncFromSelect();
+                });
+
+                dropdown.appendChild(optDiv);
+            });
+        }
+
+        trigger.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (select.disabled) return;
+            const isOpen = wrapper.classList.contains("open");
+            document.querySelectorAll(".custom-select-wrapper.open").forEach(w => {
+                if (w !== wrapper) w.classList.remove("open");
+            });
+            if (!isOpen) {
+                syncFromSelect();
+                wrapper.classList.add("open");
+            } else {
+                wrapper.classList.remove("open");
+            }
+        });
+
+        trigger.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                trigger.click();
+            } else if (e.key === "Escape") {
+                wrapper.classList.remove("open");
+            }
+        });
+
+        // Observe mutations (options rebuilt or disabled toggled)
+        const observer = new MutationObserver(() => {
+            syncFromSelect();
+        });
+        observer.observe(select, { childList: true, attributes: true, attributeFilter: ["disabled"] });
+
+        select.addEventListener("change", syncFromSelect);
+
+        syncFromSelect();
+    }
+
+    // Initialize all booking select dropdowns
+    document.querySelectorAll(".svc-form select").forEach(setupCustomSelect);
+
+    // Global listener to close dropdowns on outer click or Escape
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".custom-select-wrapper.open").forEach(w => w.classList.remove("open"));
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            document.querySelectorAll(".custom-select-wrapper.open").forEach(w => w.classList.remove("open"));
+        }
+    });
+
+    // Form reset sync
+    const bookForm = document.getElementById("bookServiceForm");
+    if (bookForm) {
+        bookForm.addEventListener("reset", () => {
+            setTimeout(() => {
+                document.querySelectorAll(".svc-form select").forEach(s => {
+                    s.dispatchEvent(new Event("change", { bubbles: true }));
+                });
+            }, 60);
+        });
+    }
 
 });

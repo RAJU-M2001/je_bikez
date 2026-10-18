@@ -288,6 +288,8 @@ function renderServices() {
     }
     tbody.innerHTML = allSvcs.map(s => {
         const bikeName = s.manufacturer ? `${s.manufacturer} ${s.model || ""}` : (s.bike ? `${s.bike.manufacturer || ""} ${s.bike.model || ""}` : "—");
+        const regInfo = s.register_number ? `<br><span style="display:inline-block;background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:0.5px;color:var(--text-primary);margin-top:3px;">${escapeHtml(s.register_number)}</span>` : "";
+        const odoInfo = s.odo_km ? `<span style="font-size:11px;color:var(--text-muted);margin-left:4px;">• ${escapeHtml(s.odo_km)} KM</span>` : "";
         const dateStr = s.date ? new Date(s.date).toLocaleDateString("en-GB") : "—";
         const currentStatus = s.status || "Pending";
         const optionsHtml = STATUS_OPTIONS.map(opt => `<option value="${opt}" ${opt === currentStatus ? "selected" : ""}>${opt}</option>`).join("");
@@ -295,7 +297,7 @@ function renderServices() {
             <tr>
                 <td data-label="Booking ID" style="font-size:11px;color:var(--text-muted);font-family:monospace">${s.booking_id ? s.booking_id.slice(-8) : "—"}</td>
                 <td data-label="User ID" style="font-size:12px;color:var(--text-muted)">${s.user_id ? s.user_id.slice(-8) : "—"}</td>
-                <td data-label="Bike Info"><strong>${escapeHtml(bikeName.trim() || "—")}</strong></td>
+                <td data-label="Bike Info"><strong>${escapeHtml(bikeName.trim() || "—")}</strong>${regInfo}${odoInfo}</td>
                 <td data-label="Service Package">${escapeHtml(s.serviceType || "—")}</td>
                 <td data-label="Date" style="font-size:12px">${dateStr}</td>
                 <td data-label="Current Status"><span class="badge-status ${statusClass(currentStatus)}">${currentStatus}</span></td>
@@ -319,12 +321,14 @@ function renderRecentBookings() {
     }
     tbody.innerHTML = recent.map(s => {
         const bikeName = s.manufacturer ? `${s.manufacturer} ${s.model || ""}` : "—";
+        const regBadge = s.register_number ? `<br><span style="font-size:10px;font-weight:600;color:var(--text-muted);">${escapeHtml(s.register_number)}</span>` : "";
+        const odoBadge = s.odo_km ? `<span style="font-size:10px;color:var(--text-muted);"> • ${escapeHtml(s.odo_km)} KM</span>` : "";
         const dateStr = s.date ? new Date(s.date).toLocaleDateString("en-GB") : "—";
         const currentStatus = s.status || "Pending";
         return `
             <tr>
                 <td data-label="User ID" style="font-size:12px;color:var(--text-muted);font-family:monospace">${s.user_id ? s.user_id.slice(-8) : "—"}</td>
-                <td data-label="Bike"><strong>${escapeHtml(bikeName.trim() || "—")}</strong></td>
+                <td data-label="Bike"><strong>${escapeHtml(bikeName.trim() || "—")}</strong>${regBadge}${odoBadge}</td>
                 <td data-label="Service Type">${escapeHtml(s.serviceType || "—")}</td>
                 <td data-label="Preferred Date" style="font-size:12px">${dateStr}</td>
                 <td data-label="Status"><span class="badge-status ${statusClass(currentStatus)}">${currentStatus}</span></td>
@@ -438,10 +442,23 @@ function renderBuilds() {
     }
     tbody.innerHTML = allBuilds.map(b => {
         const img = (b.images && b.images[0] && b.images[0].url) || b.afterImg || "";
+        let videoBadge = "";
+        if (b.videoUrl) {
+            const vUrl = String(b.videoUrl).trim();
+            if (/instagram\.com\/(?:reel|reels|p|tv)\//i.test(vUrl)) {
+                videoBadge = `<br><a href="${escapeHtml(vUrl)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:#E1306C;font-size:11px;font-weight:600;text-decoration:none;margin-top:4px;"><i class="fab fa-instagram"></i> Instagram Reel</a>`;
+            } else if (/youtube\.com\/shorts\//i.test(vUrl)) {
+                videoBadge = `<br><a href="${escapeHtml(vUrl)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:#ff3333;font-size:11px;font-weight:600;text-decoration:none;margin-top:4px;"><i class="fab fa-youtube"></i> YouTube Short</a>`;
+            } else if (/youtu\.be|youtube\.com/i.test(vUrl)) {
+                videoBadge = `<br><a href="${escapeHtml(vUrl)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:#ff3333;font-size:11px;font-weight:600;text-decoration:none;margin-top:4px;"><i class="fab fa-youtube"></i> YouTube Video</a>`;
+            } else {
+                videoBadge = `<br><a href="${escapeHtml(vUrl)}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:var(--primary);font-size:11px;font-weight:600;text-decoration:none;margin-top:4px;"><i class="fas fa-video"></i> Video Link</a>`;
+            }
+        }
         return `
             <tr>
                 <td data-label="Preview">${img ? `<img src="${img}" style="width:58px;height:42px;object-fit:cover;border-radius:6px;border:1px solid var(--border)">` : "—"}</td>
-                <td data-label="Project Title"><strong>${escapeHtml(b.title || "—")}</strong><br><span style="font-size:11px;color:var(--text-muted)">${escapeHtml(b.subtitle || "")}</span></td>
+                <td data-label="Project Title"><strong>${escapeHtml(b.title || "—")}</strong><br><span style="font-size:11px;color:var(--text-muted)">${escapeHtml(b.subtitle || "")}</span>${videoBadge}</td>
                 <td data-label="Category"><span class="badge-status pending" style="font-size:11px">${escapeHtml(b.categoryLabel || b.category || "—")}</span></td>
                 <td data-label="Approx Cost">${escapeHtml(b.cost || "—")}</td>
                 <td data-label="Duration">${escapeHtml(b.duration || "—")}</td>
@@ -454,15 +471,111 @@ function renderBuilds() {
     }).join("");
 }
 
+// Live Video URL detection and preview in Admin Modal
+window.previewBuildVideo = function () {
+    const input = document.getElementById("buildVideoUrl");
+    const container = document.getElementById("buildVideoPreviewContainer");
+    if (!input || !container) return;
+
+    let url = input.value.trim();
+    if (!url) {
+        container.style.display = "none";
+        container.innerHTML = "";
+        return;
+    }
+
+    // Auto-prepend https:// if omitted
+    if (!/^https?:\/\//i.test(url) && (url.includes("instagram.com") || url.includes("youtube.com") || url.includes("youtu.be"))) {
+        url = "https://" + url;
+        input.value = url;
+    }
+
+    container.style.display = "block";
+
+    const isInstagram = /instagram\.com\/(?:reel|reels|p|tv)\/([A-Za-z0-9_-]+)/i.test(url);
+    const isYtShort = /youtube\.com\/shorts\/([A-Za-z0-9_-]+)/i.test(url);
+    const isYt = /youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/)/i.test(url);
+    const isDirect = /\.(mp4|webm|ogg)(\?|$)/i.test(url) || url.includes('/video/upload/');
+
+    if (isInstagram) {
+        const match = url.match(/instagram\.com\/(?:reel|reels|p|tv)\/([A-Za-z0-9_-]+)/i);
+        const code = match ? match[1] : "";
+        container.innerHTML = `
+            <div style="margin-top:8px;padding:9px 13px;border-radius:8px;background:rgba(225,48,108,0.1);border:1px solid rgba(225,48,108,0.3);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:8px;color:#E1306C;font-size:12px;font-weight:600;">
+                    <i class="fab fa-instagram" style="font-size:16px;"></i>
+                    <span>Instagram Reel Identified (${escapeHtml(code)})</span>
+                </div>
+                <a href="${escapeHtml(url)}" target="_blank" rel="noopener" style="font-size:12px;color:#E1306C;font-weight:600;text-decoration:underline;display:inline-flex;align-items:center;gap:4px;">
+                    Test Reel Link <i class="fas fa-external-link-alt" style="font-size:10px;"></i>
+                </a>
+            </div>
+        `;
+    } else if (isYtShort) {
+        container.innerHTML = `
+            <div style="margin-top:8px;padding:9px 13px;border-radius:8px;background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:8px;color:#ff3333;font-size:12px;font-weight:600;">
+                    <i class="fab fa-youtube" style="font-size:16px;"></i>
+                    <span>YouTube Short Identified</span>
+                </div>
+                <a href="${escapeHtml(url)}" target="_blank" rel="noopener" style="font-size:12px;color:#ff3333;font-weight:600;text-decoration:underline;display:inline-flex;align-items:center;gap:4px;">
+                    Test Short Link <i class="fas fa-external-link-alt" style="font-size:10px;"></i>
+                </a>
+            </div>
+        `;
+    } else if (isYt) {
+        container.innerHTML = `
+            <div style="margin-top:8px;padding:9px 13px;border-radius:8px;background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:8px;color:#ff3333;font-size:12px;font-weight:600;">
+                    <i class="fab fa-youtube" style="font-size:16px;"></i>
+                    <span>YouTube Video Identified</span>
+                </div>
+                <a href="${escapeHtml(url)}" target="_blank" rel="noopener" style="font-size:12px;color:#ff3333;font-weight:600;text-decoration:underline;display:inline-flex;align-items:center;gap:4px;">
+                    Test Video Link <i class="fas fa-external-link-alt" style="font-size:10px;"></i>
+                </a>
+            </div>
+        `;
+    } else if (isDirect) {
+        container.innerHTML = `
+            <div style="margin-top:8px;padding:9px 13px;border-radius:8px;background:rgba(30,144,255,0.1);border:1px solid rgba(30,144,255,0.3);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:8px;color:#1e90ff;font-size:12px;font-weight:600;">
+                    <i class="fas fa-play" style="font-size:13px;"></i>
+                    <span>Direct Video URL Identified</span>
+                </div>
+                <a href="${escapeHtml(url)}" target="_blank" rel="noopener" style="font-size:12px;color:#1e90ff;font-weight:600;text-decoration:underline;display:inline-flex;align-items:center;gap:4px;">
+                    Test Link <i class="fas fa-external-link-alt" style="font-size:10px;"></i>
+                </a>
+            </div>
+        `;
+    } else {
+        container.innerHTML = `
+            <div style="margin-top:8px;padding:9px 13px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:12px;">
+                    <i class="fas fa-link"></i>
+                    <span>Video / External Link</span>
+                </div>
+                <a href="${escapeHtml(url)}" target="_blank" rel="noopener" style="font-size:12px;color:var(--primary);font-weight:600;text-decoration:underline;display:inline-flex;align-items:center;gap:4px;">
+                    Test Link <i class="fas fa-external-link-alt" style="font-size:10px;"></i>
+                </a>
+            </div>
+        `;
+    }
+};
+
 const addBuildBtn = document.getElementById("addBuildBtn");
 if (addBuildBtn) {
     addBuildBtn.onclick = () => {
         document.getElementById("buildEditId").value = "";
         document.getElementById("buildModalTitle").textContent = "Add Custom Build Project";
-        ["buildTitle", "buildSubtitle", "buildCost", "buildDuration", "buildEngine", "buildPower", "buildBeforeImg", "buildAfterImg", "buildMods"].forEach(id => {
+        ["buildTitle", "buildSubtitle", "buildCost", "buildDuration", "buildEngine", "buildPower", "buildBeforeImg", "buildAfterImg", "buildMods", "buildVideoUrl"].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.value = "";
         });
+        const prevContainer = document.getElementById("buildVideoPreviewContainer");
+        if (prevContainer) {
+            prevContainer.style.display = "none";
+            prevContainer.innerHTML = "";
+        }
         ["buildBeforeImgFile", "buildAfterImgFile"].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.value = "";
@@ -495,6 +608,11 @@ window.editBuild = function (id) {
     document.getElementById("buildBeforeImg").value = b.beforeImg || "";
     document.getElementById("buildAfterImg").value = b.afterImg || "";
     document.getElementById("buildMods").value = (b.mods || []).join("\n");
+    const videoInput = document.getElementById("buildVideoUrl");
+    if (videoInput) {
+        videoInput.value = b.videoUrl || b.video_url || b.videoLink || "";
+        window.previewBuildVideo();
+    }
     resetGallery('build');
     if (Array.isArray(b.images) && b.images.length) {
         b.images.forEach(img => galleryStore.build.push(img.url || img));
@@ -508,6 +626,10 @@ window.saveBuild = async function () {
     if (!title) { showToast("Title is required", "error"); return; }
     const id = document.getElementById("buildEditId").value;
     const catSelect = document.getElementById("buildCategory");
+    let videoUrl = document.getElementById("buildVideoUrl") ? document.getElementById("buildVideoUrl").value.trim() : "";
+    if (videoUrl && !/^https?:\/\//i.test(videoUrl)) {
+        videoUrl = "https://" + videoUrl;
+    }
     const payload = {
         title,
         subtitle: document.getElementById("buildSubtitle").value.trim(),
@@ -520,7 +642,8 @@ window.saveBuild = async function () {
         images: galleryStore.build.map(url => ({ url, caption: title })),
         beforeImg: document.getElementById("buildBeforeImg").value.trim(),
         afterImg: document.getElementById("buildAfterImg").value.trim(),
-        mods: document.getElementById("buildMods").value.split("\n").map(s => s.trim()).filter(Boolean)
+        mods: document.getElementById("buildMods").value.split("\n").map(s => s.trim()).filter(Boolean),
+        videoUrl
     };
     try {
         const path = id ? `/api/builds/${id}` : `/api/builds`;

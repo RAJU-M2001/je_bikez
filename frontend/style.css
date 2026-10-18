@@ -3273,409 +3273,8 @@ input:-webkit-autofill:active {
 }
 
 
-/* ============================================================
-   LOGOUT CONFIRMATION DIALOG
-   Modern / Professional UI
-============================================================ */
+/* (Logout confirmation dialog styles are defined below in the authoritative modern section) */
 
-.logout-dialog {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.78);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    z-index: 9999;
-}
-
-/* ============================================================
-   DIALOG BOX
-============================================================ */
-.logout-confirm-box {
-    position: relative;
-    width: min(440px, calc(100vw - 40px));
-    padding: 40px 32px 28px;
-    overflow: hidden;
-    text-align: center;
-    background: linear-gradient(145deg, #161616 0%, #0d0d0d 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    box-shadow:
-        0 30px 80px rgba(0, 0, 0, 0.8),
-        0 0 35px rgba(255, 102, 0, 0.08);
-    animation: logoutDialogIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ============================================================
-   TOP ACCENT LINE
-============================================================ */
-.logout-confirm-box::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #FF6600, #ff4444, #FF8533);
-}
-
-/* ============================================================
-   DECORATIVE GLOW
-============================================================ */
-.logout-glow {
-    position: absolute;
-    top: -80px;
-    left: 50%;
-    width: 200px;
-    height: 200px;
-    transform: translateX(-50%);
-    background: rgba(255, 102, 0, 0.12);
-    border-radius: 50%;
-    filter: blur(40px);
-    pointer-events: none;
-}
-
-/* ============================================================
-   CLOSE BUTTON
-============================================================ */
-.logout-close-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 34px;
-    height: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    background: #1c1c1c;
-    color: #a0a0a0;
-    font-size: 13px;
-    line-height: 1;
-    cursor: pointer;
-    z-index: 5;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-}
-
-.logout-close-btn i {
-    color: inherit;
-    font-size: 13px;
-}
-
-.logout-close-btn:hover {
-    background: #282828;
-    color: #ffffff;
-    border-color: rgba(255, 102, 0, 0.4);
-    transform: rotate(90deg);
-}
-
-.logout-close-btn:focus-visible {
-    outline: 3px solid rgba(255, 102, 0, 0.3);
-    outline-offset: 2px;
-}
-
-/* ============================================================
-   LOGOUT ICON
-============================================================ */
-.logout-icon {
-    position: relative;
-    width: 72px;
-    height: 72px;
-    margin: 4px auto 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(circle, rgba(255, 102, 0, 0.16) 0%, rgba(255, 68, 68, 0.08) 100%);
-    color: #FF6600;
-    border: 1px solid rgba(255, 102, 0, 0.35);
-    border-radius: 50%;
-    font-size: 26px;
-    box-shadow: 0 8px 25px rgba(255, 102, 0, 0.2);
-    z-index: 2;
-}
-
-.logout-icon::after {
-    content: "";
-    position: absolute;
-    inset: -6px;
-    border: 1px solid rgba(255, 102, 0, 0.15);
-    border-radius: 50%;
-}
-
-.logout-icon i {
-    color: #FF6600;
-}
-
-/* ============================================================
-   CONTENT
-============================================================ */
-.logout-content {
-    position: relative;
-    z-index: 2;
-}
-
-.logout-label {
-    display: inline-block;
-    margin-bottom: 8px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: #FF6600;
-    text-transform: uppercase;
-}
-
-.logout-confirm-box h2 {
-    margin: 0 0 10px;
-    color: #ffffff;
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-    font-family: 'Outfit', 'Inter', sans-serif;
-}
-
-.logout-confirm-box p {
-    max-width: 340px;
-    margin: 0 auto 26px;
-    color: #a0a0a0;
-    font-size: 13.5px;
-    line-height: 1.6;
-}
-
-/* ============================================================
-   ACTION BUTTONS
-============================================================ */
-.logout-actions {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    gap: 12px;
-    width: 100%;
-}
-
-.logout-actions button {
-    flex: 1;
-    min-height: 46px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 18px;
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: 13.5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.logout-actions button i {
-    font-size: 13px;
-}
-
-/* ============================================================
-   STAY LOGGED IN BUTTON
-============================================================ */
-.logout-actions .cancel-btn {
-    background: rgba(255, 255, 255, 0.06);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.logout-actions .cancel-btn span {
-    color: #ffffff;
-}
-
-.logout-actions .cancel-btn i {
-    color: #a0a0a0;
-}
-
-.logout-actions .cancel-btn:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.25);
-    transform: translateY(-1px);
-}
-
-/* ============================================================
-   CONFIRM LOGOUT BUTTON
-============================================================ */
-.logout-actions .logout-confirm-btn {
-    background: linear-gradient(135deg, #FF6600, #e65100);
-    color: #ffffff;
-    border: 1px solid #FF6600;
-    box-shadow: 0 4px 18px rgba(255, 102, 0, 0.35);
-}
-
-.logout-actions .logout-confirm-btn span,
-.logout-actions .logout-confirm-btn i {
-    color: #ffffff;
-}
-
-.logout-actions .logout-confirm-btn:hover {
-    background: linear-gradient(135deg, #ff7a1a, #f55a00);
-    box-shadow: 0 6px 22px rgba(255, 102, 0, 0.5);
-    transform: translateY(-1px);
-}
-
-.logout-actions .logout-confirm-btn:active {
-    transform: translateY(0);
-}
-
-/* ============================================================
-   SECURITY NOTE
-============================================================ */
-.logout-note {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    margin-top: 18px;
-    color: #777777;
-    font-size: 12px;
-}
-
-.logout-note i {
-    color: #FF6600;
-    font-size: 12px;
-}
-
-/* ============================================================
-   DISABLED STATE
-============================================================ */
-.logout-actions button:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-/* ============================================================
-   KEYBOARD ACCESSIBILITY
-============================================================ */
-.logout-actions button:focus-visible {
-    outline: 3px solid rgba(255, 102, 0, 0.3);
-    outline-offset: 2px;
-}
-
-/* ============================================================
-   LIGHT MODE OVERRIDES FOR LOGOUT
-============================================================ */
-:root.light-mode .logout-confirm-box {
-    background: #ffffff;
-    border-color: rgba(0, 0, 0, 0.1);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
-}
-
-:root.light-mode .logout-confirm-box h2 {
-    color: #111111;
-}
-
-:root.light-mode .logout-confirm-box p {
-    color: #555555;
-}
-
-:root.light-mode .logout-close-btn {
-    background: #f0f0f0;
-    border-color: #ddd;
-    color: #444;
-}
-
-:root.light-mode .logout-actions .cancel-btn {
-    background: #f3f3f3;
-    border-color: #d0d0d0;
-    color: #222222;
-}
-
-:root.light-mode .logout-actions .cancel-btn span {
-    color: #222222;
-}
-
-
-/* ============================================================
-   ANIMATION
-============================================================ */
-
-@keyframes logoutDialogIn {
-
-    from {
-        opacity: 0;
-        transform: translateY(12px) scale(0.97);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-
-/* ============================================================
-   MOBILE
-============================================================ */
-
-@media (max-width: 480px) {
-
-    .logout-dialog {
-        padding: 15px;
-    }
-
-    .logout-confirm-box {
-        width: 100%;
-
-        padding: 38px 20px 24px;
-
-        border-radius: 18px;
-    }
-
-    .logout-close-btn {
-        top: 13px;
-        right: 13px;
-
-        width: 34px;
-        height: 34px;
-    }
-
-    .logout-icon {
-        width: 68px;
-        height: 68px;
-
-        margin-bottom: 18px;
-
-        font-size: 25px;
-    }
-
-    .logout-confirm-box h2 {
-        font-size: 25px;
-    }
-
-    .logout-confirm-box p {
-        font-size: 13px;
-
-        margin-bottom: 24px;
-    }
-
-    .logout-actions {
-        flex-direction: column;
-
-        gap: 10px;
-    }
-
-    .logout-actions button {
-        width: 100%;
-
-        min-height: 48px;
-    }
-
-    .logout-note {
-        margin-top: 16px;
-    }
-}
 
 /* ============================================================
    NAVBAR PROFILE SYSTEM
@@ -4199,415 +3798,200 @@ input:-webkit-autofill:active {
 
 
 /* ============================================================
-   LOGOUT DIALOG
+   LOGOUT DIALOG - MODERN MINIMALIST (PILL UI)
+   Matches screenshot UI model using JE BikeZ brand colors
 ============================================================ */
 
 .logout-dialog {
     position: fixed;
-
     inset: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     padding: 20px;
-
-    background: rgba(0, 0, 0, 0.68);
-
+    background: rgba(10, 10, 15, 0.65);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-
     z-index: 9999;
 }
 
-
-/* ============================================================
-   LOGOUT BOX
-============================================================ */
-
 .logout-confirm-box {
     position: relative;
-
-    width: min(440px, calc(100vw - 40px));
-
-    padding: 42px 34px 28px;
-
+    width: min(440px, calc(100vw - 32px));
+    padding: 32px 30px 28px;
+    background: #ffffff;
+    border-radius: 24px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 
+        0 24px 60px rgba(0, 0, 0, 0.28),
+        0 8px 24px rgba(0, 0, 0, 0.12);
+    text-align: left;
     overflow: hidden;
-
-    text-align: center;
-
-    background:
-        linear-gradient(145deg,
-            #ffffff,
-            #fafafa);
-
-    border: 1px solid rgba(0, 0, 0, 0.08);
-
-    border-radius: 22px;
-
-    box-shadow:
-        0 30px 80px rgba(0, 0, 0, 0.30),
-        0 8px 30px rgba(0, 0, 0, 0.12);
-
-    animation: logoutDialogIn 0.25s ease-out;
+    animation: logoutDialogIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-
-.logout-confirm-box::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-    right: 0;
-
-    height: 4px;
-
-    background:
-        linear-gradient(90deg,
-            #ff7043,
-            #ff4444,
-            #ff6b6b);
+/* Hide legacy elements if present */
+.logout-confirm-box::before,
+.logout-glow,
+.logout-icon,
+.logout-label,
+.logout-note {
+    display: none !important;
 }
 
-
-/* ============================================================
-   LOGOUT CLOSE
-============================================================ */
-
+/* Close button - Top right circular pill with soft orange tint */
 .logout-close-btn {
     position: absolute;
-
-    top: 16px;
-    right: 16px;
-
-    width: 36px;
-    height: 36px;
-
+    top: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-
     padding: 0;
-
-    border: 1px solid #e5e5e5;
+    border: none;
     border-radius: 50%;
-
-    background: #ffffff;
-
-    color: #333333;
-
+    background: rgba(255, 102, 0, 0.08);
+    color: var(--accent, #ff6600);
+    font-size: 13px;
     cursor: pointer;
-
     z-index: 5;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
 }
-
 
 .logout-close-btn:hover {
-    background: #fff1f1;
-
-    color: #ff4444;
-
-    border-color: #ffcccc;
-
-    transform: rotate(90deg);
+    background: rgba(255, 102, 0, 0.16);
+    transform: scale(1.06);
 }
 
-
-/* ============================================================
-   LOGOUT GLOW
-============================================================ */
-
-.logout-glow {
-    position: absolute;
-
-    top: -90px;
-    left: 50%;
-
-    width: 190px;
-    height: 190px;
-
-    transform: translateX(-50%);
-
-    background: rgba(255, 68, 68, 0.08);
-
-    border-radius: 50%;
-
-    filter: blur(35px);
-
-    pointer-events: none;
+.logout-close-btn:focus-visible {
+    outline: 2px solid var(--accent, #ff6600);
+    outline-offset: 2px;
 }
 
-
-/* ============================================================
-   LOGOUT ICON
-============================================================ */
-
-.logout-icon {
-    position: relative;
-
-    width: 76px;
-    height: 76px;
-
-    margin: 8px auto 22px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background:
-        linear-gradient(145deg,
-            #fff4f4,
-            #ffe9e9);
-
-    color: #ff4444;
-
-    border: 1px solid rgba(255, 68, 68, 0.22);
-
-    border-radius: 50%;
-
-    font-size: 28px;
-
-    box-shadow:
-        0 8px 25px rgba(255, 68, 68, 0.12);
-}
-
-
-.logout-icon::after {
-    content: "";
-
-    position: absolute;
-
-    inset: -7px;
-
-    border: 1px solid rgba(255, 68, 68, 0.10);
-
-    border-radius: 50%;
-}
-
-
-/* ============================================================
-   LOGOUT CONTENT
-============================================================ */
-
+/* Content */
 .logout-content {
     position: relative;
     z-index: 2;
+    text-align: left;
 }
-
-
-.logout-label {
-    display: inline-block;
-
-    margin-bottom: 7px;
-
-    color: #ff5a45;
-
-    font-size: 10px;
-    font-weight: 700;
-
-    letter-spacing: 1.8px;
-}
-
 
 .logout-confirm-box h2 {
-    margin: 0 0 12px;
-
-    color: #181818;
-
-    font-size: 28px;
-    font-weight: 750;
+    margin: 0 0 8px 0;
+    padding-right: 36px;
+    color: #1a1a2e;
+    font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+    text-align: left;
 }
-
 
 .logout-confirm-box p {
-    max-width: 340px;
-
-    margin: 0 auto 30px;
-
-    color: #666666;
-
-    font-size: 14px;
-
-    line-height: 1.65;
+    margin: 0 0 28px 0;
+    color: #64748b;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14.5px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
 }
 
+.logout-confirm-box p .logout-user-email {
+    font-weight: 600;
+    color: #1e293b;
+    word-break: break-all;
+}
 
-/* ============================================================
-   LOGOUT ACTIONS
-============================================================ */
-
+/* Actions Row - Rounded pill buttons */
 .logout-actions {
     position: relative;
     z-index: 2;
-
     display: flex;
-
+    align-items: center;
     gap: 12px;
-
     width: 100%;
 }
 
-
 .logout-actions button {
     flex: 1;
-
-    min-height: 48px;
-
-    display: flex;
+    min-height: 44px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-
     gap: 8px;
-
-    padding: 12px 16px;
-
-    border-radius: 10px;
-
-    font-family: inherit;
-
-    font-size: 14px;
-    font-weight: 700;
-
+    padding: 11px 22px;
+    border-radius: 9999px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
     cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    box-sizing: border-box;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-
-/* ============================================================
-   STAY LOGGED IN
-============================================================ */
-
+/* Cancel Button - Pill outline */
 .logout-actions .cancel-btn {
-    background: #ffffff;
-
-    color: #292929;
-
-    border: 1px solid #d8d8d8;
-
-    box-shadow:
-        0 2px 5px rgba(0, 0, 0, 0.04);
+    background: transparent;
+    color: var(--accent, #ff6600);
+    border: 1.5px solid var(--accent, #ff6600);
 }
 
+.logout-actions .cancel-btn span {
+    color: inherit;
+    font-weight: 600;
+}
 
 .logout-actions .cancel-btn:hover {
-    background: #f7f7f7;
-
-    border-color: #bdbdbd;
-
-    transform: translateY(-1px);
+    background: rgba(255, 102, 0, 0.08);
 }
 
+.logout-actions .cancel-btn:active {
+    transform: scale(0.98);
+}
 
-/* ============================================================
-   CONFIRM LOGOUT
-============================================================ */
-
+/* Log out Button - Filled pill */
 .logout-actions .logout-confirm-btn {
-    background:
-        linear-gradient(135deg,
-            #ff4b4b,
-            #f23838);
-
+    background: var(--accent, #ff6600);
     color: #ffffff;
-
-    border: 1px solid #ff4b4b;
-
-    box-shadow:
-        0 6px 16px rgba(255, 68, 68, 0.22);
+    border: 1.5px solid var(--accent, #ff6600);
+    box-shadow: 0 4px 14px rgba(255, 102, 0, 0.28);
 }
 
-
-.logout-actions .logout-confirm-btn span,
-.logout-actions .logout-confirm-btn i {
+.logout-actions .logout-confirm-btn span {
     color: #ffffff;
+    font-weight: 600;
 }
-
 
 .logout-actions .logout-confirm-btn:hover {
-    background:
-        linear-gradient(135deg,
-            #f23838,
-            #df2929);
-
+    background: #e65100;
+    border-color: #e65100;
+    box-shadow: 0 6px 18px rgba(255, 102, 0, 0.38);
     transform: translateY(-1px);
-
-    box-shadow:
-        0 9px 22px rgba(255, 68, 68, 0.30);
 }
 
-
-/* ============================================================
-   SECURITY NOTE
-============================================================ */
-
-.logout-note {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 7px;
-
-    margin-top: 20px;
-
-    color: #999999;
-
-    font-size: 11px;
+.logout-actions .logout-confirm-btn:active {
+    transform: translateY(0) scale(0.98);
 }
-
-
-.logout-note i {
-    color: #999999;
-
-    font-size: 11px;
-}
-
-
-/* ============================================================
-   DISABLED
-============================================================ */
 
 .logout-actions button:disabled {
-    opacity: 0.55;
-
+    opacity: 0.6;
     cursor: not-allowed;
-
     transform: none !important;
-
     box-shadow: none !important;
 }
 
-
-/* ============================================================
-   LOGOUT ANIMATION
-============================================================ */
-
 @keyframes logoutDialogIn {
-
     from {
         opacity: 0;
-        transform: translateY(12px) scale(0.97);
+        transform: translateY(10px) scale(0.97);
     }
-
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
     }
-
 }
 
 
@@ -4619,95 +4003,58 @@ input:-webkit-autofill:active {
 
     .navbar-auth-btn {
         height: 40px;
-
         padding: 0 13px;
-
         font-size: 12px;
     }
-
 
     .profile-avatar-btn {
         width: 40px;
         height: 40px;
     }
 
-
     .nav-profile-avatar {
         width: 38px;
         height: 38px;
     }
 
-
     .profile-dropdown {
         right: -4px;
-
         width: 245px;
     }
 
-
     .logout-dialog {
-        padding: 15px;
+        padding: 16px;
     }
-
 
     .logout-confirm-box {
         width: 100%;
-
-        padding: 38px 20px 24px;
-
-        border-radius: 18px;
+        padding: 28px 20px 22px;
+        border-radius: 20px;
     }
-
 
     .logout-close-btn {
-        top: 13px;
-        right: 13px;
-
-        width: 34px;
-        height: 34px;
+        top: 16px;
+        right: 16px;
     }
-
-
-    .logout-icon {
-        width: 68px;
-        height: 68px;
-
-        margin-bottom: 18px;
-
-        font-size: 25px;
-    }
-
 
     .logout-confirm-box h2 {
-        font-size: 25px;
+        font-size: 19px;
     }
-
 
     .logout-confirm-box p {
-        font-size: 13px;
-
-        margin-bottom: 24px;
+        font-size: 13.5px;
+        margin-bottom: 22px;
     }
 
-
     .logout-actions {
-        flex-direction: column;
-
         gap: 10px;
     }
 
-
     .logout-actions button {
-        width: 100%;
-
-        min-height: 48px;
+        min-height: 42px;
+        font-size: 14px;
+        padding: 10px 16px;
     }
-
-
-    .logout-note {
-        margin-top: 16px;
-    }
-
 }
 
 /* ═══════════════════════════════════════════

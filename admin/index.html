@@ -46,7 +46,8 @@
                 <i class="fas fa-bars"></i>
             </button>
             <div class="mobile-topbar-logo">
-                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png" alt="JE BikeZ" />
+                <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
+                    alt="JE BikeZ" />
                 <span>JE BikeZ Admin</span>
             </div>
             <button class="logout-btn-mobile" id="adminLogoutBtnMobile">
@@ -407,31 +408,54 @@
                     <input type="text" id="buildPower" placeholder="e.g. +4.2 HP Dyno" />
                 </div>
                 <div class="full-col">
-                    <label><i class="fas fa-images" style="color:var(--primary);margin-right:6px"></i>Project Showcase Gallery (Upload Multiple Images)</label>
+                    <label><i class="fas fa-images" style="color:var(--primary);margin-right:6px"></i>Project Showcase
+                        Gallery (Upload Multiple Images)</label>
                     <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
-                        <input type="file" id="buildImgFile" accept="image/*" multiple onchange="uploadMultipleImages(this, 'build', 'buildGallery', 'buildImgStatus')" style="padding:8px;" />
+                        <input type="file" id="buildImgFile" accept="image/*" multiple
+                            onchange="uploadMultipleImages(this, 'build', 'buildGallery', 'buildImgStatus')"
+                            style="padding:8px;" />
                     </div>
-                    <div id="buildImgStatus" style="font-size:12px;color:var(--primary);margin-top:4px;display:none;"></div>
+                    <div id="buildImgStatus" style="font-size:12px;color:var(--primary);margin-top:4px;display:none;">
+                    </div>
                     <div id="buildGallery" class="multi-img-gallery"></div>
                 </div>
                 <div>
-                    <label><i class="fas fa-image" style="color:var(--primary);margin-right:6px"></i>Before Image (Optional)</label>
-                    <input type="file" id="buildBeforeImgFile" accept="image/*" onchange="uploadImage(this, 'build', 'buildBeforeImg', 'buildBeforeImgPreview', 'buildBeforeStatus')" style="padding:6px;margin-bottom:6px;" />
-                    <input type="text" id="buildBeforeImg" placeholder="Before Image URL" oninput="previewImage('buildBeforeImg', 'buildBeforeImgPreview')" />
-                    <div id="buildBeforeStatus" style="font-size:12px;color:var(--primary);margin-top:4px;display:none;"></div>
+                    <label><i class="fas fa-image" style="color:var(--primary);margin-right:6px"></i>Before Image
+                        (Optional)</label>
+                    <input type="file" id="buildBeforeImgFile" accept="image/*"
+                        onchange="uploadImage(this, 'build', 'buildBeforeImg', 'buildBeforeImgPreview', 'buildBeforeStatus')"
+                        style="padding:6px;margin-bottom:6px;" />
+                    <input type="text" id="buildBeforeImg" placeholder="Before Image URL"
+                        oninput="previewImage('buildBeforeImg', 'buildBeforeImgPreview')" />
+                    <div id="buildBeforeStatus"
+                        style="font-size:12px;color:var(--primary);margin-top:4px;display:none;"></div>
                     <img id="buildBeforeImgPreview" class="img-preview" alt="Before Preview" />
                 </div>
                 <div>
-                    <label><i class="fas fa-image" style="color:var(--primary);margin-right:6px"></i>After Image (Optional)</label>
-                    <input type="file" id="buildAfterImgFile" accept="image/*" onchange="uploadImage(this, 'build', 'buildAfterImg', 'buildAfterImgPreview', 'buildAfterStatus')" style="padding:6px;margin-bottom:6px;" />
-                    <input type="text" id="buildAfterImg" placeholder="After Image URL" oninput="previewImage('buildAfterImg', 'buildAfterImgPreview')" />
-                    <div id="buildAfterStatus" style="font-size:12px;color:var(--primary);margin-top:4px;display:none;"></div>
+                    <label><i class="fas fa-image" style="color:var(--primary);margin-right:6px"></i>After Image
+                        (Optional)</label>
+                    <input type="file" id="buildAfterImgFile" accept="image/*"
+                        onchange="uploadImage(this, 'build', 'buildAfterImg', 'buildAfterImgPreview', 'buildAfterStatus')"
+                        style="padding:6px;margin-bottom:6px;" />
+                    <input type="text" id="buildAfterImg" placeholder="After Image URL"
+                        oninput="previewImage('buildAfterImg', 'buildAfterImgPreview')" />
+                    <div id="buildAfterStatus" style="font-size:12px;color:var(--primary);margin-top:4px;display:none;">
+                    </div>
                     <img id="buildAfterImgPreview" class="img-preview" alt="After Preview" />
                 </div>
                 <div class="full-col">
                     <label>Modifications / Work Done (One per line)</label>
                     <textarea id="buildMods"
                         placeholder="Hand-stitched leather seat&#10;Custom 2-into-1 stainless exhaust&#10;Ceramic coated fuel tank"></textarea>
+                </div>
+                <div class="full-col">
+                    <label><i class="fas fa-video" style="color:var(--primary);margin-right:6px"></i>Modification Video
+                        Link (Instagram Reel / YouTube / Shorts / MP4)</label>
+                    <input type="text" id="buildVideoUrl" oninput="previewBuildVideo()"
+                        placeholder="e.g. https://www.instagram.com/reel/... or https://youtube.com/shorts/... or https://youtu.be/..." />
+                    <div id="buildVideoPreviewContainer" style="display:none;"></div>
+                    <small style="color:var(--text-muted);font-size:11px;margin-top:4px;display:block;">Optional:
+                        Supports Instagram Reels/Posts, YouTube Shorts, YouTube Videos, or direct MP4 links.</small>
                 </div>
             </div>
             <div class="modal-actions">
@@ -469,7 +493,7 @@
                 </div>
                 <div>
                     <label>Selling Price *</label>
-                    <input type="text" id="salePrice" placeholder="e.g. ₹2,75,000"/>
+                    <input type="text" id="salePrice" placeholder="e.g. ₹2,75,000" />
                 </div>
                 <div>
                     <label>EMI Option</label>
@@ -492,11 +516,15 @@
                     <input type="text" id="saleOwners" placeholder="e.g. 1st Owner" />
                 </div>
                 <div class="full-col">
-                    <label><i class="fas fa-images" style="color:var(--primary);margin-right:6px"></i>Bike Images Gallery (Upload Multiple Images for Slider)</label>
+                    <label><i class="fas fa-images" style="color:var(--primary);margin-right:6px"></i>Bike Images
+                        Gallery (Upload Multiple Images for Slider)</label>
                     <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">
-                        <input type="file" id="saleImgFile" accept="image/*" multiple onchange="uploadMultipleImages(this, 'sales', 'saleGallery', 'saleImgStatus')" style="padding:8px;" />
+                        <input type="file" id="saleImgFile" accept="image/*" multiple
+                            onchange="uploadMultipleImages(this, 'sales', 'saleGallery', 'saleImgStatus')"
+                            style="padding:8px;" />
                     </div>
-                    <div id="saleImgStatus" style="font-size:12px;color:var(--primary);margin-top:4px;display:none;"></div>
+                    <div id="saleImgStatus" style="font-size:12px;color:var(--primary);margin-top:4px;display:none;">
+                    </div>
                     <div id="saleGallery" class="multi-img-gallery"></div>
                 </div>
                 <div class="full-col">

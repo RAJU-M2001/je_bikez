@@ -1198,6 +1198,12 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
 
+    const logoutUserEmailEl =
+        document.getElementById(
+            "logoutUserEmail"
+        );
+
+
     // ========================================================
     // HIDE ALL MODALS
     // ========================================================
@@ -1766,6 +1772,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
+                // Populate user email in dialog
+                if (logoutUserEmailEl) {
+                    logoutUserEmailEl.textContent = currentUserEmail || "";
+                }
+
+
                 // Open custom logout dialog
                 showModal(
                     logoutConfirmDialog
@@ -1929,13 +1941,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 // FULL PAGE REFRESH
                 // --------------------------------------------
 
-                showPageLoader();
-
                 setTimeout(() => {
 
                     window.location.reload();
 
-                }, 400);
+                }, 300);
 
             }
         );

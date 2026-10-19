@@ -3486,24 +3486,21 @@ input:-webkit-autofill:active {
     top: calc(100% + 12px);
     right: 0;
 
-    width: 260px;
+    width: 265px;
 
     display: none;
 
     padding: 8px;
 
-    background:
-        linear-gradient(145deg,
-            #171717,
-            #101010);
+    background: #1a1a1a;
 
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 102, 0, 0.18);
 
-    border-radius: 14px;
+    border-radius: 16px;
 
     box-shadow:
-        0 18px 50px rgba(0, 0, 0, 0.45),
-        0 5px 18px rgba(0, 0, 0, 0.25);
+        0 20px 56px rgba(0, 0, 0, 0.55),
+        0 4px 16px rgba(255, 102, 0, 0.08);
 
     z-index: 9998;
 
@@ -3526,10 +3523,10 @@ input:-webkit-autofill:active {
     width: 10px;
     height: 10px;
 
-    background: #171717;
+    background: #1a1a1a;
 
-    border-left: 1px solid rgba(255, 255, 255, 0.10);
-    border-top: 1px solid rgba(255, 255, 255, 0.10);
+    border-left: 1px solid rgba(255, 102, 0, 0.18);
+    border-top: 1px solid rgba(255, 102, 0, 0.18);
 
     transform: rotate(45deg);
 }
@@ -3798,8 +3795,7 @@ input:-webkit-autofill:active {
 
 
 /* ============================================================
-   LOGOUT DIALOG - MODERN MINIMALIST (PILL UI)
-   Matches screenshot UI model using JE BikeZ brand colors
+   LOGOUT DIALOG — CLEAN PILL UI (JE BikeZ Brand Colors)
 ============================================================ */
 
 .logout-dialog {
@@ -3809,29 +3805,28 @@ input:-webkit-autofill:active {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background: rgba(10, 10, 15, 0.65);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(5, 5, 10, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 9999;
 }
 
 .logout-confirm-box {
     position: relative;
-    width: min(440px, calc(100vw - 32px));
-    padding: 32px 30px 28px;
+    width: min(420px, calc(100vw - 32px));
+    padding: 34px 28px 28px;
     background: #ffffff;
-    border-radius: 24px;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 
-        0 24px 60px rgba(0, 0, 0, 0.28),
-        0 8px 24px rgba(0, 0, 0, 0.12);
+    border-radius: 22px;
+    border: none;
+    box-shadow:
+        0 32px 72px rgba(0, 0, 0, 0.35),
+        0 8px 28px rgba(0, 0, 0, 0.16);
     text-align: left;
     overflow: hidden;
-    animation: logoutDialogIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: logoutDialogIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Hide legacy elements if present */
-.logout-confirm-box::before,
+/* Hide legacy elements */
 .logout-glow,
 .logout-icon,
 .logout-label,
@@ -3839,79 +3834,71 @@ input:-webkit-autofill:active {
     display: none !important;
 }
 
-/* Close button - Top right circular pill with soft orange tint */
+/* ×  Close button */
 .logout-close-btn {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 32px;
-    height: 32px;
+    top: 18px;
+    right: 18px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
     border: none;
     border-radius: 50%;
-    background: rgba(255, 102, 0, 0.08);
-    color: var(--accent, #ff6600);
-    font-size: 13px;
+    background: rgba(0, 0, 0, 0.06);
+    color: #888;
+    font-size: 12px;
     cursor: pointer;
     z-index: 5;
-    transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    transition: background 0.18s ease, color 0.18s ease;
 }
 
 .logout-close-btn:hover {
-    background: rgba(255, 102, 0, 0.16);
-    transform: scale(1.06);
+    background: rgba(0, 0, 0, 0.12);
+    color: #333;
 }
 
-.logout-close-btn:focus-visible {
-    outline: 2px solid var(--accent, #ff6600);
-    outline-offset: 2px;
-}
-
-/* Content */
-.logout-content {
-    position: relative;
-    z-index: 2;
-    text-align: left;
-}
-
+/* Heading */
 .logout-confirm-box h2 {
     margin: 0 0 8px 0;
     padding-right: 36px;
-    color: #1a1a2e;
-    font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 21px;
+    color: #111827;
+    font-family: 'Outfit', 'Inter', sans-serif;
+    font-size: 20px;
     font-weight: 700;
     line-height: 1.3;
-    letter-spacing: -0.3px;
-    text-align: left;
+    letter-spacing: -0.2px;
 }
 
+/* Sub-text */
 .logout-confirm-box p {
-    margin: 0 0 28px 0;
-    color: #64748b;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 14.5px;
+    margin: 0 0 26px 0;
+    color: #6b7280;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 1.5;
-    text-align: left;
+    line-height: 1.55;
 }
 
 .logout-confirm-box p .logout-user-email {
     font-weight: 600;
-    color: #1e293b;
+    color: #374151;
     word-break: break-all;
 }
 
-/* Actions Row - Rounded pill buttons */
-.logout-actions {
+/* Legacy content wrapper (keep for compat) */
+.logout-content {
     position: relative;
     z-index: 2;
+}
+
+/* Action row */
+.logout-actions {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     width: 100%;
 }
 
@@ -3921,77 +3908,58 @@ input:-webkit-autofill:active {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 11px 22px;
+    gap: 7px;
+    padding: 11px 20px;
     border-radius: 9999px;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 14.5px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    box-sizing: border-box;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.18s ease;
 }
 
-/* Cancel Button - Pill outline */
+/* Cancel — outline pill */
 .logout-actions .cancel-btn {
     background: transparent;
-    color: var(--accent, #ff6600);
-    border: 1.5px solid var(--accent, #ff6600);
-}
-
-.logout-actions .cancel-btn span {
-    color: inherit;
-    font-weight: 600;
+    color: #374151;
+    border: 1.5px solid #d1d5db;
 }
 
 .logout-actions .cancel-btn:hover {
-    background: rgba(255, 102, 0, 0.08);
+    border-color: var(--accent, #ff6600);
+    color: var(--accent, #ff6600);
+    background: rgba(255, 102, 0, 0.04);
 }
 
-.logout-actions .cancel-btn:active {
-    transform: scale(0.98);
-}
+.logout-actions .cancel-btn:active { transform: scale(0.98); }
 
-/* Log out Button - Filled pill */
+/* Log Out — filled accent pill */
 .logout-actions .logout-confirm-btn {
     background: var(--accent, #ff6600);
-    color: #ffffff;
+    color: #fff;
     border: 1.5px solid var(--accent, #ff6600);
-    box-shadow: 0 4px 14px rgba(255, 102, 0, 0.28);
-}
-
-.logout-actions .logout-confirm-btn span {
-    color: #ffffff;
-    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(255, 102, 0, 0.30);
 }
 
 .logout-actions .logout-confirm-btn:hover {
     background: #e65100;
     border-color: #e65100;
-    box-shadow: 0 6px 18px rgba(255, 102, 0, 0.38);
+    box-shadow: 0 6px 20px rgba(255, 102, 0, 0.40);
     transform: translateY(-1px);
 }
 
-.logout-actions .logout-confirm-btn:active {
-    transform: translateY(0) scale(0.98);
-}
+.logout-actions .logout-confirm-btn:active { transform: scale(0.98); }
 
 .logout-actions button:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: not-allowed;
     transform: none !important;
     box-shadow: none !important;
 }
 
 @keyframes logoutDialogIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.97);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    from { opacity: 0; transform: translateY(12px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0)  scale(1);    }
 }
 
 

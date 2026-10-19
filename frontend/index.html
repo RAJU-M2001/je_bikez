@@ -111,27 +111,14 @@
     <div id="logoutConfirmDialog" class="dialog logout-dialog" aria-hidden="true" style="display: none;">
         <div class="dialog-box logout-confirm-box" role="dialog" aria-modal="true" aria-labelledby="logoutDialogTitle"
             aria-describedby="logoutDialogDescription">
-            <!-- CLOSE -->
-            <button id="cancelLogoutTop" type="button" class="logout-close-btn" aria-label="Close" title="Close">
+            <button id="cancelLogoutTop" type="button" class="logout-close-btn" aria-label="Close">
                 <i class="fas fa-times" aria-hidden="true"></i>
             </button>
-
-            <!-- CONTENT -->
-            <div class="logout-content">
-                <h2 id="logoutDialogTitle">Are you sure you want to log out?</h2>
-                <p id="logoutDialogDescription">
-                    Log out of JE BikeZ as <span class="logout-user-email">your account</span>?
-                </p>
-            </div>
-
-            <!-- ACTIONS -->
+            <h2 id="logoutDialogTitle">Are you sure you want to log out?</h2>
+            <p id="logoutDialogDescription">Log out of JE BikeZ as <span class="logout-user-email" id="logoutUserEmail"></span></p>
             <div class="logout-actions">
-                <button id="cancelLogoutBtn" type="button" class="cancel-btn">
-                    <span>Cancel</span>
-                </button>
-                <button id="confirmLogoutBtn" type="button" class="logout-confirm-btn">
-                    <span>Log out</span>
-                </button>
+                <button id="cancelLogoutBtn" type="button" class="cancel-btn">Cancel</button>
+                <button id="confirmLogoutBtn" type="button" class="logout-confirm-btn">Log out</button>
             </div>
         </div>
     </div>

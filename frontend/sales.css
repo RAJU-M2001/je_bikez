@@ -40,16 +40,6 @@
     color: #000000 !important;
 }
 
-/* Profile Dropdown fix */
-.svc-body .profile-dropdown button,
-.svc-body .profile-dropdown .profile-dropdown-btn {
-    color: #eeeeee !important;
-}
-
-.svc-body .profile-dropdown .logout-dropdown-btn {
-    color: #ff6b6b !important;
-}
-
 /* ── Hero Section ── */
 .sales-hero {
     background: linear-gradient(135deg, #fff5ed 0%, #ffe0c2 40%, #ffc89a 100%);

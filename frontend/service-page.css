@@ -25,32 +25,6 @@
     color: var(--accent) !important;
 }
 
-/* ── Profile Dropdown & Auth Visibility Fixes ── */
-.svc-body .profile-dropdown button,
-.svc-body .profile-dropdown .profile-dropdown-btn {
-    color: #eeeeee !important;
-}
-
-.svc-body .profile-dropdown .logout-dropdown-btn {
-    color: #ff6b6b !important;
-}
-
-.svc-body .profile-dropdown .profile-menu-icon {
-    color: #cccccc !important;
-}
-
-.svc-body .profile-dropdown .logout-dropdown-btn .profile-menu-icon {
-    color: #ff6b6b !important;
-}
-
-.svc-body .profile-dropdown-user strong {
-    color: #ffffff !important;
-}
-
-.svc-body .profile-dropdown-user span {
-    color: #888888 !important;
-}
-
 .svc-body .navbar .navbar-auth-btn {
     background: var(--accent) !important;
     color: #000000 !important;

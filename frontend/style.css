@@ -21,6 +21,10 @@
     --accent-glow: rgba(255, 102, 0, 0.3);
     --accent-subtle: rgba(255, 102, 0, 0.08);
 
+    /* Avatar */
+    --avatar-bg: #FF6600;
+    --avatar-color: #ffffff;
+
     /* Text */
     --text-primary: #FFFFFF;
     --text-secondary: #A0A0A0;
@@ -3428,9 +3432,9 @@ input:-webkit-autofill:active {
 
     border-radius: 50%;
 
-    background: #151515;
+    background: #FF6600;
 
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 2px solid rgba(255, 102, 0, 0.40);
 
     color: #ffffff;
 
@@ -3446,15 +3450,15 @@ input:-webkit-autofill:active {
 .profile-avatar-btn:hover .nav-profile-avatar {
     transform: scale(1.04);
 
-    border-color: rgba(255, 255, 255, 0.30);
+    border-color: rgba(255, 102, 0, 0.70);
 
     box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.20);
+        0 4px 14px rgba(255, 102, 0, 0.30);
 }
 
 
 .profile-avatar-btn:focus-visible .nav-profile-avatar {
-    outline: 2px solid rgba(255, 255, 255, 0.35);
+    outline: 2px solid rgba(255, 102, 0, 0.55);
 
     outline-offset: 3px;
 }
@@ -3492,15 +3496,18 @@ input:-webkit-autofill:active {
 
     padding: 8px;
 
-    background: #1a1a1a;
+    background: #ffffff;
 
-    border: 1px solid rgba(255, 102, 0, 0.18);
+    /* Lock text so page-level body color cannot cascade in */
+    color: #1a1a2e;
+
+    border: 1px solid rgba(255, 102, 0, 0.20);
 
     border-radius: 16px;
 
     box-shadow:
-        0 20px 56px rgba(0, 0, 0, 0.55),
-        0 4px 16px rgba(255, 102, 0, 0.08);
+        0 20px 56px rgba(0, 0, 0, 0.12),
+        0 4px 16px rgba(255, 102, 0, 0.10);
 
     z-index: 9998;
 
@@ -3523,10 +3530,10 @@ input:-webkit-autofill:active {
     width: 10px;
     height: 10px;
 
-    background: #1a1a1a;
+    background: #ffffff;
 
-    border-left: 1px solid rgba(255, 102, 0, 0.18);
-    border-top: 1px solid rgba(255, 102, 0, 0.18);
+    border-left: 1px solid rgba(255, 102, 0, 0.20);
+    border-top: 1px solid rgba(255, 102, 0, 0.20);
 
     transform: rotate(45deg);
 }
@@ -3564,9 +3571,9 @@ input:-webkit-autofill:active {
 
     border-radius: 50%;
 
-    background: #202020;
+    background: #ff6600;
 
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 102, 0, 0.25);
 
     color: #ffffff;
 
@@ -3603,7 +3610,7 @@ input:-webkit-autofill:active {
 .profile-dropdown-user strong {
     overflow: hidden;
 
-    color: #ffffff;
+    color: #1a1a2e;
 
     font-size: 14px;
     font-weight: 700;
@@ -3616,7 +3623,7 @@ input:-webkit-autofill:active {
 .profile-dropdown-user span {
     overflow: hidden;
 
-    color: #888888;
+    color: #777777;
 
     font-size: 11px;
 
@@ -3634,7 +3641,7 @@ input:-webkit-autofill:active {
 
     margin: 4px 4px 7px;
 
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.08);
 }
 
 
@@ -3659,7 +3666,7 @@ input:-webkit-autofill:active {
 
     background: transparent;
 
-    color: #eeeeee;
+    color: #1a1a2e;
 
     font-family: inherit;
     font-size: 13px;
@@ -3676,14 +3683,14 @@ input:-webkit-autofill:active {
 
 
 .profile-dropdown-btn:hover {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 102, 0, 0.07);
 
-    color: #ffffff;
+    color: #ff6600;
 }
 
 
 .profile-dropdown-btn:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.25);
+    outline: 2px solid rgba(255, 102, 0, 0.30);
 
     outline-offset: -2px;
 }
@@ -3705,9 +3712,9 @@ input:-webkit-autofill:active {
 
     border-radius: 8px;
 
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 102, 0, 0.08);
 
-    color: #cccccc;
+    color: #ff6600;
 
     font-size: 13px;
 
@@ -3718,9 +3725,9 @@ input:-webkit-autofill:active {
 
 
 .profile-dropdown-btn:hover .profile-menu-icon {
-    background: rgba(255, 255, 255, 0.10);
+    background: rgba(255, 102, 0, 0.15);
 
-    color: #ffffff;
+    color: #ff6600;
 }
 
 

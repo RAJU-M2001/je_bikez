@@ -26,7 +26,8 @@
 }
 
 .svc-body .navbar .navbar-auth-btn {
-    background: var(--accent) !important;
+    /* background: var(--accent) !important; */
+    background: #0000000d !important;
     color: #000000 !important;
     border: none !important;
     font-weight: 700 !important;
@@ -462,6 +463,7 @@
         opacity: 0;
         transform: translateY(-6px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);

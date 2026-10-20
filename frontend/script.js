@@ -1219,7 +1219,8 @@ document.addEventListener("DOMContentLoaded", function () {
             trackingDialog,
             profileDialog,
             deleteConfirmDialog,
-            logoutConfirmDialog
+            logoutConfirmDialog,
+            document.getElementById("serviceReviewDialog")
 
         ];
 
@@ -2430,6 +2431,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                             // Keep profile menu closed after login
                             closeProfileDropdown();
+
+                            // Check if user has an unreviewed completed service
+                            setTimeout(() => {
+                                checkUserPendingServiceReview(currentUserId);
+                            }, 500);
 
                         }, 1200);
 
@@ -3803,4 +3809,439 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     loadRecentEnquiries();
+
+
+    // ========================================================
+    // ========================================================
+    // 🌟 WHAT OUR RIDERS SAY - SCROLLABLE DYNAMIC REVIEWS
+    // ========================================================
+
+    function escapeHtml(str) {
+        if (!str) return "";
+        return String(str).replace(/[&<>"']/g, function (m) {
+            return {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            }[m];
+        });
+    }
+
+    function renderRiderAvatar(rev) {
+        const userName = rev.user_name || rev.name || "Rider";
+        const initial = userName.trim().charAt(0).toUpperCase() || "R";
+        const pic = (rev.user_avatar || rev.profile_picture || "").trim();
+
+        // Check if there is an actual uploaded user picture (do not use hardcoded favicon)
+        if (pic && !pic.includes("fav-icon") && !pic.includes("google-icon")) {
+            return `
+                <div class="testimonial-avatar" style="width: 38px; height: 38px; min-width: 38px; border-radius: 50%; overflow: hidden; background: #ff6600; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <img src="${escapeHtml(pic)}" alt="${escapeHtml(userName)}" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.parentElement.innerHTML='<span style=\\\'color:#fff;font-weight:700;font-size:14px;\\\'>${escapeHtml(initial)}</span>'">
+                </div>
+            `;
+        }
+
+        // Clean user profile initial in brand accent background
+        return `
+            <div class="testimonial-avatar" style="width: 38px; height: 38px; min-width: 38px; border-radius: 50%; background: #ff6600; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(255,102,0,0.3);">
+                ${escapeHtml(initial)}
+            </div>
+        `;
+    }
+
+    function renderReviewsList(reviews) {
+        const container = document.getElementById("ridersReviewsContainer");
+        const badge = document.getElementById("reviewsCountBadge");
+        if (!container) return;
+
+        if (!reviews || reviews.length === 0) {
+            container.innerHTML = `
+                <div class="testimonial-card" style="padding: 14px 16px; border-radius: 10px; background: var(--bg-tertiary); border: 1px solid var(--border);">
+                    <p class="testimonial-text" style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 0 0 12px; font-style: italic;">
+                        "Amazing service and perfect modification! My bike feels brand new. Highly recommended!"
+                    </p>
+                    <div class="testimonial-author" style="display: flex; align-items: center; gap: 10px;">
+                        <div class="testimonial-avatar" style="width: 38px; height: 38px; min-width: 38px; border-radius: 50%; background: #ff6600; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0;">
+                            A
+                        </div>
+                        <div class="testimonial-info" style="min-width: 0; flex: 1;">
+                            <h5 style="margin: 0; font-size: 13px; font-weight: 700;">Arun Karthik</h5>
+                            <p style="margin: 0; font-size: 11px; color: var(--text-muted);">Yamaha R15 V4</p>
+                            <div class="testimonial-stars" style="color: var(--accent); font-size: 11px; margin-top: 3px; display: flex; gap: 2px;">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            if (badge) badge.textContent = "1 Review";
+            return;
+        }
+
+        if (badge) badge.textContent = `${reviews.length} Review${reviews.length > 1 ? 's' : ''}`;
+
+        container.innerHTML = reviews.map(rev => {
+            const rating = Math.min(5, Math.max(1, parseInt(rev.rating) || 5));
+            let starsHtml = "";
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHtml += '<i class="fas fa-star" style="color: var(--accent);"></i>';
+                } else {
+                    starsHtml += '<i class="far fa-star" style="color: #444;"></i>';
+                }
+            }
+
+            const userName = rev.user_name || rev.name || "Happy Rider";
+            const bikeInfo = rev.bike || rev.service_type || "Motorcycle Service";
+            const comment = rev.description || rev.comment || "Great service experience!";
+            const avatarHtml = renderRiderAvatar(rev);
+
+            return `
+                <div class="testimonial-card" style="padding: 14px 16px; border-radius: 10px; background: var(--bg-tertiary); border: 1px solid var(--border); transition: transform 0.2s, border-color 0.2s;">
+                    <p class="testimonial-text" style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 0 0 12px; font-style: italic;">
+                        "${escapeHtml(comment)}"
+                    </p>
+                    <div class="testimonial-author" style="display: flex; align-items: center; gap: 10px;">
+                        ${avatarHtml}
+                        <div class="testimonial-info" style="min-width: 0; flex: 1;">
+                            <h5 style="margin: 0; font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(userName)}</h5>
+                            <p style="margin: 0; font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(bikeInfo)}</p>
+                            <div class="testimonial-stars" style="font-size: 11px; margin-top: 3px; display: flex; gap: 2px;">
+                                ${starsHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    async function loadRidersReviews() {
+        const container = document.getElementById("ridersReviewsContainer");
+        if (!container) return;
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/reviews`);
+            const data = await res.json();
+            if (data.success && Array.isArray(data.reviews) && data.reviews.length > 0) {
+                renderReviewsList(data.reviews);
+            } else {
+                renderReviewsList([]);
+            }
+        } catch (e) {
+            console.error("Failed to load reviews:", e);
+            renderReviewsList([]);
+        }
+    }
+
+    loadRidersReviews();
+
+
+    // ========================================================
+    // ⭐ SERVICE COMPLETED REVIEW DIALOG SYSTEM
+    // ========================================================
+    let currentSelectedRating = 5;
+
+    const ratingLabels = {
+        1: "1.0 - Needs Improvement",
+        2: "2.0 - Fair Experience",
+        3: "3.0 - Good Service",
+        4: "4.0 - Very Good Service",
+        5: "5.0 - Excellent Experience"
+    };
+
+    function updateStarDisplay(rating) {
+        currentSelectedRating = rating;
+        const dialog = document.getElementById("serviceReviewDialog");
+        if (!dialog) return;
+
+        const stars = dialog.querySelectorAll("#reviewStarRating .review-star");
+        const label = dialog.querySelector("#reviewRatingLabel");
+        stars.forEach(s => {
+            const starVal = parseInt(s.dataset.rating) || 1;
+            if (starVal <= rating) {
+                s.className = "fas fa-star review-star";
+                s.style.color = "var(--accent)";
+            } else {
+                s.className = "far fa-star review-star";
+                s.style.color = "#444";
+            }
+        });
+        if (label) {
+            label.textContent = ratingLabels[rating] || `${rating}.0`;
+        }
+    }
+
+    function setupReviewDialogEvents(dialog) {
+        if (!dialog || dialog.dataset.eventsAttached === "true") return;
+        dialog.dataset.eventsAttached = "true";
+
+        const stars = dialog.querySelectorAll("#reviewStarRating .review-star");
+        stars.forEach(s => {
+            s.addEventListener("click", () => {
+                const r = parseInt(s.dataset.rating) || 5;
+                updateStarDisplay(r);
+            });
+            s.addEventListener("mouseenter", () => {
+                const r = parseInt(s.dataset.rating) || 5;
+                const starsList = dialog.querySelectorAll("#reviewStarRating .review-star");
+                starsList.forEach(st => {
+                    const v = parseInt(st.dataset.rating) || 1;
+                    if (v <= r) {
+                        st.className = "fas fa-star review-star";
+                        st.style.color = "var(--accent)";
+                    } else {
+                        st.className = "far fa-star review-star";
+                        st.style.color = "#444";
+                    }
+                });
+            });
+        });
+
+        const starRatingContainer = dialog.querySelector("#reviewStarRating");
+        if (starRatingContainer) {
+            starRatingContainer.addEventListener("mouseleave", () => {
+                updateStarDisplay(currentSelectedRating);
+            });
+        }
+
+        const cancelBtn = dialog.querySelector("#cancelReviewBtn");
+        const crossBtn = dialog.querySelector("#closeReviewDialogCross");
+        const closeDialog = () => {
+            const bookingId = dialog.querySelector("#reviewBookingId")?.value;
+            if (bookingId) {
+                sessionStorage.setItem("dismissed_review_" + bookingId, "true");
+            }
+            dialog.classList.remove("show");
+            dialog.style.display = "none";
+            setScrollLock(false);
+        };
+
+        if (cancelBtn) cancelBtn.addEventListener("click", closeDialog);
+        if (crossBtn) crossBtn.addEventListener("click", closeDialog);
+
+        const submitBtn = dialog.querySelector("#submitReviewBtn");
+        if (submitBtn) {
+            submitBtn.addEventListener("click", async () => {
+                const bookingId = dialog.querySelector("#reviewBookingId")?.value;
+                const desc = dialog.querySelector("#reviewDescription")?.value.trim();
+                const bikeName = dialog.querySelector("#reviewBikeName")?.textContent || "";
+                const serviceType = dialog.querySelector("#reviewServiceType")?.textContent || "";
+                const alertEl = dialog.querySelector("#reviewAlert");
+
+                if (!bookingId) {
+                    if (alertEl) {
+                        alertEl.style.display = "block";
+                        alertEl.style.background = "rgba(255, 0, 0, 0.15)";
+                        alertEl.style.color = "#ff6b6b";
+                        alertEl.style.border = "1px solid rgba(255, 0, 0, 0.3)";
+                        alertEl.textContent = "Service booking reference is missing.";
+                    }
+                    return;
+                }
+
+                if (!desc) {
+                    if (alertEl) {
+                        alertEl.style.display = "block";
+                        alertEl.style.background = "rgba(255, 0, 0, 0.15)";
+                        alertEl.style.color = "#ff6b6b";
+                        alertEl.style.border = "1px solid rgba(255, 0, 0, 0.3)";
+                        alertEl.textContent = "Please write a few words about your experience.";
+                    }
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+                try {
+                    const resp = await fetch(`${API_BASE_URL}/api/reviews`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            booking_id: bookingId,
+                            rating: currentSelectedRating,
+                            description: desc,
+                            user_id: currentUserId,
+                            name: currentUserName,
+                            user_avatar: currentUserProfilePic,
+                            bike: bikeName,
+                            service_type: serviceType
+                        })
+                    });
+
+                    const result = await resp.json();
+
+                    if (resp.ok && result.success) {
+                        localStorage.setItem("reviewed_booking_" + bookingId, "true");
+                        if (alertEl) {
+                            alertEl.style.display = "block";
+                            alertEl.style.background = "rgba(46, 204, 113, 0.15)";
+                            alertEl.style.color = "#2ecc71";
+                            alertEl.style.border = "1px solid rgba(46, 204, 113, 0.3)";
+                            alertEl.textContent = "✓ Review submitted! Thank you for your feedback.";
+                        }
+                        setTimeout(() => {
+                            dialog.classList.remove("show");
+                            dialog.style.display = "none";
+                            setScrollLock(false);
+                            loadRidersReviews();
+                        }, 1200);
+                    } else {
+                        if (result.already_reviewed) {
+                            localStorage.setItem("reviewed_booking_" + bookingId, "true");
+                        }
+                        if (alertEl) {
+                            alertEl.style.display = "block";
+                            alertEl.style.background = "rgba(255, 0, 0, 0.15)";
+                            alertEl.style.color = "#ff6b6b";
+                            alertEl.style.border = "1px solid rgba(255, 0, 0, 0.3)";
+                            alertEl.textContent = result.error || "Failed to submit review.";
+                        }
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = "Submit Review";
+                    }
+                } catch (err) {
+                    if (alertEl) {
+                        alertEl.style.display = "block";
+                        alertEl.style.background = "rgba(255, 0, 0, 0.15)";
+                        alertEl.style.color = "#ff6b6b";
+                        alertEl.style.border = "1px solid rgba(255, 0, 0, 0.3)";
+                        alertEl.textContent = "Connection error. Please try again.";
+                    }
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = "Submit Review";
+                }
+            });
+        }
+    }
+
+    function ensureReviewDialogInDOM() {
+        let dialog = document.getElementById("serviceReviewDialog");
+        if (!dialog) {
+            dialog = document.createElement("div");
+            dialog.id = "serviceReviewDialog";
+            dialog.className = "dialog";
+            dialog.setAttribute("role", "dialog");
+            dialog.setAttribute("aria-modal", "true");
+            dialog.style.display = "none";
+            dialog.innerHTML = `
+                <div class="dialog-box"
+                    style="position: relative; margin: auto; width: 92%; max-width: 440px; background: #0c0c0c; border: 1px solid rgba(255, 102, 0, 0.35); border-radius: 16px; padding: 28px 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.85), 0 0 35px rgba(255,102,0,0.15); animation: dialogPopup 0.4s var(--ease-out) forwards;">
+                    <button id="closeReviewDialogCross" type="button" aria-label="Close"
+                        style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: #777; font-size: 22px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                        onmouseover="this.style.color='white'" onmouseout="this.style.color='#777'">&times;</button>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 5px;">
+                            <i class="fas fa-check-circle"></i> Service Completed
+                        </span>
+                    </div>
+                    <h3 id="reviewDialogTitle" style="color: #ffffff; font-size: 20px; font-weight: 700; margin: 0 0 6px;">Rate Your Service</h3>
+                    <p style="color: #999; font-size: 13px; margin: 0 0 16px; line-height: 1.4;">
+                        Your motorcycle service is complete! How was your experience with JE Bikez?
+                    </p>
+                    <div id="reviewBookingDetailsPill" style="background: #141414; border: 1px solid #222; border-radius: 10px; padding: 10px 14px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 38px; height: 38px; border-radius: 8px; background: rgba(255, 102, 0, 0.12); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">
+                            <i class="fas fa-motorcycle"></i>
+                        </div>
+                        <div style="min-width: 0; flex: 1;">
+                            <div id="reviewBikeName" style="color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Your Motorcycle</div>
+                            <div id="reviewServiceType" style="color: #888; font-size: 11px;">Service Booking</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="reviewBookingId" value="">
+                    <div style="text-align: center; margin-bottom: 18px;">
+                        <label style="display: block; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; margin-bottom: 8px;">
+                            Tap a star to rate
+                        </label>
+                        <div id="reviewStarRating" style="display: inline-flex; gap: 8px; font-size: 28px; cursor: pointer;">
+                            <i class="fas fa-star review-star" data-rating="1" style="color: var(--accent); transition: transform 0.15s, color 0.15s;"></i>
+                            <i class="fas fa-star review-star" data-rating="2" style="color: var(--accent); transition: transform 0.15s, color 0.15s;"></i>
+                            <i class="fas fa-star review-star" data-rating="3" style="color: var(--accent); transition: transform 0.15s, color 0.15s;"></i>
+                            <i class="fas fa-star review-star" data-rating="4" style="color: var(--accent); transition: transform 0.15s, color 0.15s;"></i>
+                            <i class="fas fa-star review-star" data-rating="5" style="color: var(--accent); transition: transform 0.15s, color 0.15s;"></i>
+                        </div>
+                        <div id="reviewRatingLabel" style="font-size: 12px; color: var(--accent); margin-top: 6px; font-weight: 600;">5.0 - Excellent Experience</div>
+                    </div>
+                    <div id="reviewAlert" style="display: none; padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 12px; text-align: center;"></div>
+                    <div style="margin-bottom: 20px;">
+                        <label for="reviewDescription" style="display: block; font-size: 12px; color: #aaa; margin-bottom: 8px; font-weight: 500;">
+                            Your Feedback / Description <span style="color: var(--accent);">*</span>
+                        </label>
+                        <textarea id="reviewDescription" rows="3" placeholder="Tell us how your bike feels, workshop service quality, etc..."
+                            style="width: 100%; box-sizing: border-box; background: #111; border: 1px solid #282828; border-radius: 10px; padding: 12px 14px; color: #fff; font-size: 13px; line-height: 1.5; resize: vertical; outline: none; transition: border-color 0.2s;"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button id="cancelReviewBtn" type="button"
+                            style="flex: 1; padding: 12px 16px; background: transparent; border: 1px solid #333; color: #bbb; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                            Cancel
+                        </button>
+                        <button id="submitReviewBtn" type="button"
+                            style="flex: 1.5; padding: 12px 16px; background: var(--accent); border: none; color: #000; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            Submit Review
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(dialog);
+            setupReviewDialogEvents(dialog);
+        } else {
+            setupReviewDialogEvents(dialog);
+        }
+        return dialog;
+    }
+
+    async function checkUserPendingServiceReview(userId) {
+        if (!userId) return;
+        try {
+            const resp = await fetch(`${API_BASE_URL}/api/reviews/pending/${userId}`);
+            const data = await resp.json();
+            if (data.success && data.has_pending && data.booking) {
+                const b = data.booking;
+                if (localStorage.getItem("reviewed_booking_" + b.booking_id) === "true") {
+                    return;
+                }
+                if (sessionStorage.getItem("dismissed_review_" + b.booking_id) === "true") {
+                    return;
+                }
+
+                const dialog = ensureReviewDialogInDOM();
+                const bookingIdInput = dialog.querySelector("#reviewBookingId");
+                const bikeNameEl = dialog.querySelector("#reviewBikeName");
+                const serviceTypeEl = dialog.querySelector("#reviewServiceType");
+                const descInput = dialog.querySelector("#reviewDescription");
+                const alertEl = dialog.querySelector("#reviewAlert");
+
+                if (bookingIdInput) bookingIdInput.value = b.booking_id;
+                if (bikeNameEl) bikeNameEl.textContent = b.bike || "Your Motorcycle";
+                if (serviceTypeEl) serviceTypeEl.textContent = (b.serviceType || "Service") + " • Completed";
+                if (descInput) descInput.value = "";
+                if (alertEl) alertEl.style.display = "none";
+
+                updateStarDisplay(5);
+
+                setTimeout(() => {
+                    hideAllModals();
+                    dialog.classList.add("show");
+                    dialog.style.display = "flex";
+                    setScrollLock(true);
+                }, 1000);
+            }
+        } catch (e) {
+            console.error("Error checking pending service reviews:", e);
+        }
+    }
+
+    // Initialize existing dialog in DOM if present
+    const staticReviewDialog = document.getElementById("serviceReviewDialog");
+    if (staticReviewDialog) {
+        setupReviewDialogEvents(staticReviewDialog);
+    }
+
+    // Check on startup if current user has an unreviewed completed service
+    if (isLoggedIn && currentUserId) {
+        checkUserPendingServiceReview(currentUserId);
+    }
 });

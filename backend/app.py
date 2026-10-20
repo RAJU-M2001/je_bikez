@@ -65,7 +65,7 @@ collection_name = os.getenv("COLLECTION_NAME")
 user = os.getenv("USER")
 modification=os.getenv("MODIFICATION")
 book_sales = os.getenv("BOOK_SALES") or os.getenv("BOOK_SALE") or "book-sales"
-
+service_reviews = os.getenv("SERVICE_REVIEWS") or os.getenv("SERVICE_REVIEW") or "service-reviews"
 
 client = MongoClient(mongo_uri, tls=True)
 db = client[db_name]
@@ -76,6 +76,7 @@ book_sales_collection = db[book_sales]
 builds_collection = db["builds"]
 sales_collection = db["sales"]
 service_booking_collection = db["service-booking"]
+reviews_collection = db[service_reviews]
 
 
 # Health Check API
@@ -1226,6 +1227,252 @@ def recent_enquiries():
         return jsonify({"success": True, "enquiries": result, "total": len(result)}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e), "enquiries": []}), 500
+
+
+# ============================================================
+# ⭐ SERVICE REVIEWS API (SUBMIT, LIST, CHECK PENDING)
+# ============================================================
+
+# 1. POST /api/reviews - Submit review after service is completed
+@app.route("/api/reviews", methods=["POST", "OPTIONS"], strict_slashes=False)
+@app.route("/api/service-review", methods=["POST", "OPTIONS"], strict_slashes=False)
+def create_review():
+    if request.method == "OPTIONS":
+        return "", 204
+    try:
+        data = request.get_json(silent=True) or {}
+        booking_id = str(data.get("booking_id") or "").strip()
+        rating = data.get("rating")
+        description = str(data.get("description") or data.get("comment") or "").strip()
+        user_id = str(data.get("user_id") or "").strip()
+
+        if not booking_id:
+            return jsonify({"success": False, "error": "Booking ID is required"}), 400
+
+        if rating is None or rating == "":
+            return jsonify({"success": False, "error": "Star rating is required"}), 400
+
+        try:
+            rating_num = int(rating)
+            if rating_num < 1 or rating_num > 5:
+                return jsonify({"success": False, "error": "Rating must be between 1 and 5 stars"}), 400
+        except (ValueError, TypeError):
+            return jsonify({"success": False, "error": "Invalid rating format"}), 400
+
+        if not description:
+            return jsonify({"success": False, "error": "Review description is required"}), 400
+
+        # Check if already reviewed
+        existing_review = reviews_collection.find_one({"booking_id": booking_id})
+        if existing_review:
+            return jsonify({
+                "success": False,
+                "error": "Review has already been submitted for this service.",
+                "already_reviewed": True
+            }), 409
+
+        # Look up booking details to enrich review
+        booking_query = {"$or": [{"_id": ObjectId(booking_id)} if ObjectId.is_valid(booking_id) else None, {"booking_id": booking_id}]}
+        booking_query["$or"] = [q for q in booking_query["$or"] if q]
+        booking_doc = service_booking_collection.find_one(booking_query)
+
+        bike_name = data.get("bike") or ""
+        service_type = data.get("serviceType") or data.get("service_type") or ""
+        user_name = data.get("name") or data.get("user_name") or ""
+        user_avatar = data.get("user_avatar") or data.get("profile_picture") or ""
+
+        if booking_doc:
+            if not user_id:
+                user_id = str(booking_doc.get("user_id") or "")
+            if not bike_name:
+                bike = booking_doc.get("bike") if isinstance(booking_doc.get("bike"), dict) else {}
+                mfg = booking_doc.get("manufacturer") or bike.get("manufacturer", "")
+                mdl = booking_doc.get("model") or bike.get("model", "")
+                var = booking_doc.get("variant") or bike.get("variant", "")
+                parts = [p for p in [mfg, mdl] if p]
+                bike_name = " ".join(parts).strip()
+                if var:
+                    bike_name += f" ({var})"
+            if not service_type:
+                service_type = booking_doc.get("serviceType") or booking_doc.get("service_type") or "General Service"
+
+        # Lookup user name and avatar if missing
+        if user_id and (not user_name or not user_avatar):
+            user_query = {"$or": [{"_id": ObjectId(user_id)} if ObjectId.is_valid(user_id) else None, {"email": user_id}]}
+            user_query["$or"] = [q for q in user_query["$or"] if q]
+            u_doc = user_collection.find_one(user_query)
+            if u_doc:
+                if not user_name:
+                    user_name = u_doc.get("name", "Rider")
+                if not user_avatar:
+                    user_avatar = u_doc.get("profile_picture", "")
+
+        review_doc = {
+            "booking_id": booking_id,
+            "user_id": user_id,
+            "user_name": user_name or "Rider",
+            "user_avatar": user_avatar or "",
+            "bike": bike_name or "Motorcycle Service",
+            "service_type": service_type or "General Service",
+            "rating": rating_num,
+            "description": description,
+            "comment": description,
+            "created_at": datetime.now(UTC),
+            "updated_at": datetime.now(UTC)
+        }
+
+        res = reviews_collection.insert_one(review_doc)
+
+        # Mark service booking as reviewed in database
+        if booking_doc:
+            service_booking_collection.update_one(
+                booking_query,
+                {"$set": {"reviewed": True, "rating": rating_num, "review_id": str(res.inserted_id), "updated_at": datetime.now(UTC)}}
+            )
+
+        review_doc["_id"] = str(res.inserted_id)
+        review_doc["id"] = str(res.inserted_id)
+        if isinstance(review_doc.get("created_at"), datetime):
+            review_doc["created_at"] = review_doc["created_at"].isoformat()
+        if isinstance(review_doc.get("updated_at"), datetime):
+            review_doc["updated_at"] = review_doc["updated_at"].isoformat()
+
+        return jsonify({
+            "success": True,
+            "message": "Thank you! Your review has been submitted successfully.",
+            "review": review_doc
+        }), 201
+
+    except Exception as e:
+        print("❌ SUBMIT REVIEW ERROR:", str(e))
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+# 2. GET /api/reviews - List all user reviews for landing page
+@app.route("/api/reviews", methods=["GET", "OPTIONS"], strict_slashes=False)
+@app.route("/api/service-reviews", methods=["GET", "OPTIONS"], strict_slashes=False)
+def get_reviews():
+    if request.method == "OPTIONS":
+        return "", 204
+    try:
+        reviews = list(reviews_collection.find().sort("_id", -1))
+        serialized = []
+        for r in reviews:
+            serialized.append(serialize_doc(r))
+
+        # Initial fallback seed reviews if collection is completely fresh
+        if not serialized:
+            serialized = [
+                {
+                    "_id": "seed-1",
+                    "id": "seed-1",
+                    "user_name": "Arun Karthik",
+                    "user_avatar": "",
+                    "bike": "Yamaha R15 V4",
+                    "service_type": "Performance Tuning",
+                    "rating": 5,
+                    "description": "Amazing service and perfect modification! My bike feels brand new. Highly recommended!",
+                    "created_at": datetime.now(UTC).isoformat()
+                },
+                {
+                    "_id": "seed-2",
+                    "id": "seed-2",
+                    "user_name": "Vignesh Kumar",
+                    "user_avatar": "",
+                    "bike": "Royal Enfield Classic 350",
+                    "service_type": "Full General Service",
+                    "rating": 5,
+                    "description": "Super clean workshop and genuine parts used. The throttle response and engine smoothness are top tier.",
+                    "created_at": datetime.now(UTC).isoformat()
+                },
+                {
+                    "_id": "seed-3",
+                    "id": "seed-3",
+                    "user_name": "Rahul Sharma",
+                    "user_avatar": "",
+                    "bike": "KTM Duke 390",
+                    "service_type": "Brake & Suspension Overhaul",
+                    "rating": 5,
+                    "description": "Expert mechanics who truly understand performance machines. Fast turnaround and transparent pricing!",
+                    "created_at": datetime.now(UTC).isoformat()
+                }
+            ]
+
+        return jsonify({
+            "success": True,
+            "reviews": serialized,
+            "total": len(serialized)
+        }), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e), "reviews": []}), 500
+
+
+# 3. GET /api/reviews/pending/<user_id> - Check if user has an unreviewed completed service
+@app.route("/api/reviews/pending/<user_id>", methods=["GET", "OPTIONS"], strict_slashes=False)
+@app.route("/api/service-reviews/pending/<user_id>", methods=["GET", "OPTIONS"], strict_slashes=False)
+def check_pending_review(user_id):
+    if request.method == "OPTIONS":
+        return "", 204
+    try:
+        user_id = str(user_id).strip()
+        query_conditions = [{"user_id": user_id}, {"user_id": str(user_id)}]
+        if ObjectId.is_valid(user_id):
+            query_conditions.append({"user_id": ObjectId(user_id)})
+
+        # Find completed bookings for this user
+        bookings = list(service_booking_collection.find({
+            "$and": [
+                {"$or": query_conditions},
+                {"status": {"$regex": "^completed$", "$options": "i"}}
+            ]
+        }).sort("_id", -1))
+
+        for b in bookings:
+            booking_id = str(b.get("_id"))
+            # If already marked reviewed
+            if b.get("reviewed") is True:
+                continue
+
+            # Check reviews collection directly
+            existing = reviews_collection.find_one({"booking_id": booking_id})
+            if existing:
+                service_booking_collection.update_one({"_id": b["_id"]}, {"$set": {"reviewed": True}})
+                continue
+
+            # Found an unreviewed completed booking!
+            bike = b.get("bike") if isinstance(b.get("bike"), dict) else {}
+            mfg = b.get("manufacturer") or bike.get("manufacturer", "")
+            mdl = b.get("model") or bike.get("model", "")
+            var = b.get("variant") or bike.get("variant", "")
+            parts = [p for p in [mfg, mdl] if p]
+            bike_name = " ".join(parts).strip()
+            if var:
+                bike_name += f" ({var})"
+
+            date_val = b.get("date", "")
+            if isinstance(date_val, datetime):
+                date_val = date_val.isoformat()
+
+            return jsonify({
+                "success": True,
+                "has_pending": True,
+                "booking": {
+                    "booking_id": booking_id,
+                    "bike": bike_name or "Your Bike",
+                    "serviceType": b.get("serviceType") or b.get("service_type") or "General Service",
+                    "date": str(date_val),
+                    "status": b.get("status", "Completed")
+                }
+            }), 200
+
+        return jsonify({
+            "success": True,
+            "has_pending": False
+        }), 200
+
+    except Exception as e:
+        print("❌ CHECK PENDING REVIEW ERROR:", str(e))
+        return jsonify({"success": False, "error": str(e), "has_pending": False}), 500
 
 
 # ============================================================

@@ -217,20 +217,24 @@
                         </div>
 
                         <div class="panel-box testimonial-panel mt-3">
-                            <h3 class="panel-title">WHAT OUR RIDERS SAY</h3>
-                            <div class="testimonial-card">
-                                <p class="testimonial-text">"Amazing service and perfect modification! My bike feels
-                                    brand new. Highly recommended!"</p>
-                                <div class="testimonial-author">
-                                    <img src="https://res.cloudinary.com/dzyrruoda/image/upload/v1773771899/fav-icon_korsio.png"
-                                        alt="Arun Karthik" class="testimonial-avatar">
-                                    <div class="testimonial-info">
-                                        <h5 style="margin:0;">Arun Karthik</h5>
-                                        <p style="margin:0; color:#888;">Yamaha R15 V4</p>
-                                        <div class="testimonial-stars" style="color: var(--accent); font-size: 12px;">
-                                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                class="fas fa-star"></i>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px;">
+                                <h3 class="panel-title" style="margin:0;">WHAT OUR RIDERS SAY</h3>
+                                <span id="reviewsCountBadge" style="font-size: 11px; background: rgba(255, 102, 0, 0.15); color: var(--accent); padding: 3px 9px; border-radius: 20px; font-weight: 700; letter-spacing: 0.3px;">Verified Reviews</span>
+                            </div>
+                            <div id="ridersReviewsContainer" class="testimonial-scroll-container"
+                                style="max-height: 290px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px; scrollbar-width: thin; scrollbar-color: var(--accent) transparent;">
+                                <div class="testimonial-card" style="padding: 14px 16px; border-radius: 10px; background: var(--bg-tertiary); border: 1px solid var(--border);">
+                                    <p class="testimonial-text" style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 0 0 12px; font-style: italic;">"Amazing service and perfect modification! My bike feels brand new. Highly recommended!"</p>
+                                    <div class="testimonial-author" style="display: flex; align-items: center; gap: 10px;">
+                                        <div class="testimonial-avatar" style="width: 38px; height: 38px; min-width: 38px; border-radius: 50%; background: #ff6600; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0;">A</div>
+                                        <div class="testimonial-info" style="min-width: 0; flex: 1;">
+                                            <h5 style="margin:0; font-size: 13px; font-weight: 700;">Arun Karthik</h5>
+                                            <p style="margin:0; color: var(--text-muted); font-size: 11px;">Yamaha R15 V4</p>
+                                            <div class="testimonial-stars" style="color: var(--accent); font-size: 11px; margin-top: 3px; display: flex; gap: 2px;">
+                                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                                    class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                                    class="fas fa-star"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -549,6 +553,81 @@
         </section>
 
         <!-- ═══════════ MODALS ═══════════ -->
+        <!-- ═══════════ SERVICE REVIEW DIALOG ═══════════ -->
+        <div id="serviceReviewDialog" class="dialog" role="dialog" aria-modal="true" aria-labelledby="reviewDialogTitle" style="display: none;">
+            <div class="dialog-box"
+                style="position: relative; margin: auto; width: 92%; max-width: 440px; background: #0c0c0c; border: 1px solid rgba(255, 102, 0, 0.35); border-radius: 16px; padding: 28px 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.85), 0 0 35px rgba(255,102,0,0.15); animation: dialogPopup 0.4s var(--ease-out) forwards;">
+                
+                <button id="closeReviewDialogCross" type="button" aria-label="Close"
+                    style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: #777; font-size: 22px; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s;"
+                    onmouseover="this.style.color='white'" onmouseout="this.style.color='#777'">&times;</button>
+                
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 5px;">
+                        <i class="fas fa-check-circle"></i> Service Completed
+                    </span>
+                </div>
+                
+                <h3 id="reviewDialogTitle" style="color: #ffffff; font-size: 20px; font-weight: 700; margin: 0 0 6px;">Rate Your Service</h3>
+                <p style="color: #999; font-size: 13px; margin: 0 0 16px; line-height: 1.4;">
+                    Your motorcycle service is complete! How was your experience with JE Bikez?
+                </p>
+
+                <div id="reviewBookingDetailsPill" style="background: #141414; border: 1px solid #222; border-radius: 10px; padding: 10px 14px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 38px; height: 38px; border-radius: 8px; background: rgba(255, 102, 0, 0.12); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">
+                        <i class="fas fa-motorcycle"></i>
+                    </div>
+                    <div style="min-width: 0; flex: 1;">
+                        <div id="reviewBikeName" style="color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Your Motorcycle</div>
+                        <div id="reviewServiceType" style="color: #888; font-size: 11px;">Service Booking</div>
+                    </div>
+                </div>
+
+                <input type="hidden" id="reviewBookingId" value="">
+
+                <div style="text-align: center; margin-bottom: 18px;">
+                    <label style="display: block; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; margin-bottom: 8px;">
+                        Tap a star to rate
+                    </label>
+                    <div id="reviewStarRating" style="display: inline-flex; gap: 8px; font-size: 28px; cursor: pointer;" role="radiogroup" aria-label="Rating">
+                        <i class="fas fa-star review-star" data-rating="1" style="color: var(--accent); transition: transform 0.15s, color 0.15s;"></i>
+                        <i class="fas fa-star review-star" data-rating="2" style="color: var(--accent); transition: transform 0.15s, color 0.15s;"></i>
+                        <i class="fas fa-star review-star" data-rating="3" style="color: var(--accent); transition: transform 0.15s, color 0.15s;"></i>
+                        <i class="fas fa-star review-star" data-rating="4" style="color: var(--accent); transition: transform 0.15s, color 0.15s;"></i>
+                        <i class="fas fa-star review-star" data-rating="5" style="color: var(--accent); transition: transform 0.15s, color 0.15s;"></i>
+                    </div>
+                    <div id="reviewRatingLabel" style="font-size: 12px; color: var(--accent); margin-top: 6px; font-weight: 600;">5.0 - Excellent Experience</div>
+                </div>
+
+                <div id="reviewAlert" style="display: none; padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 12px; text-align: center;"></div>
+
+                <div style="margin-bottom: 20px;">
+                    <label for="reviewDescription" style="display: block; font-size: 12px; color: #aaa; margin-bottom: 8px; font-weight: 500;">
+                        Your Feedback / Description <span style="color: var(--accent);">*</span>
+                    </label>
+                    <textarea id="reviewDescription" rows="3" placeholder="Tell us how your bike feels, workshop service quality, etc..."
+                        style="width: 100%; box-sizing: border-box; background: #111; border: 1px solid #282828; border-radius: 10px; padding: 12px 14px; color: #fff; font-size: 13px; line-height: 1.5; resize: vertical; outline: none; transition: border-color 0.2s;"
+                        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#282828'"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 12px;">
+                    <button id="cancelReviewBtn" type="button"
+                        style="flex: 1; padding: 12px 16px; background: transparent; border: 1px solid #333; color: #bbb; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+                        onmouseover="this.style.borderColor='#555'; this.style.color='#fff';"
+                        onmouseout="this.style.borderColor='#333'; this.style.color='#bbb';">
+                        Cancel
+                    </button>
+                    <button id="submitReviewBtn" type="button"
+                        style="flex: 1.5; padding: 12px 16px; background: var(--accent); border: none; color: #000; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;"
+                        onmouseover="this.style.opacity='0.9'"
+                        onmouseout="this.style.opacity='1'">
+                        Submit Review
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
         <div id="loginDialog" class="dialog">
             <div class="dialog-box"
                 style="position: relative; margin: auto; width: 400px; background: #080808; border: 1px solid #222; border-radius: 12px; padding: 30px; animation: dialogPopup 0.4s var(--ease-out) forwards;">

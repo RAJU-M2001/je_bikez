@@ -132,9 +132,9 @@
                 </div>
             </div>
 
-            <a href="#" class="forgot-link"
+            <!-- <a href="#" class="forgot-link"
                 style="display: block; text-align: right; color: var(--accent); font-size: 12px; margin-bottom: 25px; text-decoration: none;">Forgot
-                Password?</a>
+                Password?</a> -->
 
             <button id="loginBtnAction"
                 style="width: 100%; background: var(--accent); color: black; border-radius: 8px; padding: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; margin-bottom: 20px;">Login</button>
@@ -253,7 +253,8 @@
                 <i class="fas fa-times" aria-hidden="true"></i>
             </button>
             <h2 id="logoutDialogTitle">Are you sure you want to log out?</h2>
-            <p id="logoutDialogDescription">Log out of JE BikeZ as <span class="logout-user-email" id="logoutUserEmail"></span></p>
+            <p id="logoutDialogDescription">Log out of JE BikeZ as <span class="logout-user-email"
+                    id="logoutUserEmail"></span></p>
             <div class="logout-actions">
                 <button id="cancelLogoutBtn" type="button" class="cancel-btn">Cancel</button>
                 <button id="confirmLogoutBtn" type="button" class="logout-confirm-btn">Log out</button>
@@ -945,14 +946,50 @@
         }
 
         // Open Login Modal from booking request gate
+        // Close the bike modal first (backdrop-filter creates a stacking context
+        // that traps dialogs regardless of z-index), then open login dialog.
+        // Store the bike ID so we can reopen the modal after a successful login.
         window.openLoginForBooking = function () {
-            const loginDialog = document.getElementById("loginDialog");
-            if (window.showModal && loginDialog) {
-                window.showModal(loginDialog);
-            } else if (loginDialog) {
-                loginDialog.classList.add("show");
-                loginDialog.style.display = "flex";
-            }
+            const pendingBikeId = currentModalBike ? currentModalBike.id : null;
+
+            // 1. Close the sales modal cleanly
+            closeSalesModalFunc();
+
+            // 2. Open the login dialog after a short delay to let the modal animate out
+            setTimeout(function () {
+                const loginDialog = document.getElementById("loginDialog");
+                if (!loginDialog) return;
+
+                if (window.showModal) {
+                    window.showModal(loginDialog);
+                } else {
+                    loginDialog.classList.add("show");
+                    loginDialog.style.display = "flex";
+                }
+
+                // 3. After successful login, reopen the bike modal automatically
+                if (pendingBikeId) {
+                    const onLoginSuccess = function () {
+                        // Check if now logged in
+                        if (localStorage.getItem("isLoggedIn") === "true") {
+                            // Close login dialog
+                            if (window.hideAllModals) window.hideAllModals();
+                            else {
+                                loginDialog.classList.remove("show");
+                                loginDialog.style.display = "none";
+                            }
+                            // Reopen the bike modal
+                            setTimeout(function () {
+                                window.openSalesModal(pendingBikeId);
+                            }, 300);
+                        }
+                        loginDialog.removeEventListener("click", onLoginSuccess);
+                        document.removeEventListener("authStateChanged", onLoginSuccess);
+                    };
+                    // Listen for custom auth event fired by script.js on login success
+                    document.addEventListener("authStateChanged", onLoginSuccess, { once: true });
+                }
+            }, 200);
         };
 
         // Submit Booking Request

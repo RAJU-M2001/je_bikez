@@ -2432,6 +2432,11 @@ document.addEventListener("DOMContentLoaded", function () {
                             // Keep profile menu closed after login
                             closeProfileDropdown();
 
+                            // Dispatch auth state event so other page scripts can react
+                            document.dispatchEvent(new CustomEvent("authStateChanged", {
+                                detail: { loggedIn: true, userId: currentUserId }
+                            }));
+
                             // Check if user has an unreviewed completed service
                             setTimeout(() => {
                                 checkUserPendingServiceReview(currentUserId);

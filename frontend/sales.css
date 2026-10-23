@@ -491,14 +491,13 @@
     border-radius: 20px;
     width: 100%;
     max-width: 1000px;
-    margin: auto;
-    max-height: calc(100vh - 60px);
-    overflow-y: auto;
+    margin: 20px auto;
     position: relative;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Close button: sticky so it stays visible while scrolling inside the modal */
 .sales-modal-close-btn {
     position: absolute;
     top: 18px;
@@ -516,6 +515,7 @@
     cursor: pointer;
     z-index: 100;
     transition: all 0.2s ease;
+
 }
 
 .sales-modal-close-btn:hover {
@@ -526,6 +526,12 @@
 
 .sales-modal-content {
     padding: 30px;
+}
+
+/* clear the floated close button */
+.sales-modal-content::before {
+    content: "";
+    display: table;
 }
 
 .sales-modal-header {
@@ -813,22 +819,32 @@
 }
 
 .sales-auth-login-trigger {
-    background: var(--accent, #ff6600);
-    color: #000000;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 800;
-    font-size: 0.9rem;
+    background: transparent;
+    color: var(--accent, #ff6600);
+    border: 1.5px solid var(--accent, #ff6600);
+    padding: 7px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.4px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    line-height: 1;
 }
 
 .sales-auth-login-trigger:hover {
-    background: #e65c00;
+    background: var(--accent, #ff6600);
+    color: #000;
+    box-shadow: 0 3px 10px rgba(255, 102, 0, 0.35);
+    transform: translateY(-1px);
+}
+
+.sales-auth-login-trigger:active {
+    transform: translateY(0);
+    box-shadow: none;
 }
 
 /* Booking Form Elements */

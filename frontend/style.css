@@ -1539,7 +1539,7 @@ html.auth-logged-out #profileContainer {
     backdrop-filter: blur(8px);
     justify-content: center;
     align-items: center;
-    z-index: 20000;
+    z-index: 200000;
 }
 
 .dialog-box {

@@ -65,7 +65,9 @@ collection_name = os.getenv("COLLECTION_NAME")
 user = os.getenv("USER")
 modification=os.getenv("MODIFICATION")
 book_sales = os.getenv("BOOK_SALES") or os.getenv("BOOK_SALE") or "book-sales"
-service_reviews = os.getenv("SERVICE_REVIEWS")
+# service_reviews = os.getenv("SERVICE_REVIEWS")
+service_reviews = os.getenv("SERVICE_REVIEWS") or os.getenv("SERVICE_REVIEW") or "service-reviews"
+
 
 client = MongoClient(mongo_uri, tls=True)
 db = client[db_name]

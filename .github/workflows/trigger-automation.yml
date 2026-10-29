@@ -1,0 +1,29 @@
+
+name: Trigger JE BikeZ Automation Tests
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  trigger-automation:
+    name: Trigger Automation Repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger JE BikeZ Automation
+        env:
+          GH_TOKEN: ${{ secrets.JE_BIKEZ_AUTOMATION_TOKEN }}
+        run: |
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --url https://api.github.com/repos/RAJU-M2001/je_bikez_automation/dispatches \
+            --header "Accept: application/vnd.github+json" \
+            --header "Authorization: Bearer $GH_TOKEN" \
+            --header "X-GitHub-Api-Version: 2022-11-28" \
+            --data '{"event_type":"je_bikez_app_updated"}'
